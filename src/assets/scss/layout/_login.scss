@@ -1,0 +1,239 @@
+.form {
+  &-login {
+    background: url(../img/bg_login.png) no-repeat center center;
+    background-size: cover;
+    height: calc(100vh - 80px);
+    position: relative;
+    overflow-y: hidden;
+
+    @media screen and (max-width: 576px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 15px;
+    }
+
+    &-forgot {
+      .form-login-wrap {
+        padding: 90px 64px 180px;
+
+        @media screen and (max-width: 576px) {
+          padding: 90px 15px 180px;
+        }
+
+        @media screen and (max-width: 375px) {
+          padding: 22px 15px;
+        }
+      }
+
+      .form-login-field {
+        padding-bottom: 88px;
+
+        @media screen and (max-width: 576px) {
+          padding-bottom: 40px;
+        }
+      }
+    }
+
+    &-wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 580px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 48px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 90px 64px 40px;
+      box-shadow: 0px 4px 16px rgba(112, 144, 176, 0.25);
+      border-radius: 16px;
+      overflow: auto;
+      max-height: calc(100vh - 100px);
+
+      @media screen and (max-width: 991px) {
+        gap: 30px;
+        max-width: 480px;
+      }
+
+      @media screen and (max-width: 767px) {
+        padding: 40px;
+        max-width: 466px;
+      }
+
+      @media screen and (max-width: 576px) {
+        margin: unset;
+        position: unset;
+        transform: unset;
+        padding: 30px 15px;
+      }
+
+      @media screen and (max-width: 425px) {
+        padding: 25px 15px;
+      }
+
+      @media screen and (max-width: 375px) {
+        gap: 25px;
+        padding: 22px 15px;
+      }
+    }
+
+    &-field {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+
+      @media screen and (max-width: 991px) {
+        gap: 20px;
+      }
+
+      @media screen and (max-width: 425px) {
+        gap: 15px;
+      }
+
+      h3 {
+        font-family: sfProText700;
+        text-align: center;
+        font-size: 28px;
+        line-height: 42px;
+        text-align: center;
+        color: #25252b;
+
+        @media screen and (max-width: 991px) {
+          font-size: 27px;
+          line-height: 25px;
+        }
+
+        @media screen and (max-width: 767px) {
+          margin: 0;
+          font-size: 26px;
+        }
+
+        @media screen and (max-width: 576px) {
+          font-size: 24px;
+        }
+
+        @media screen and (max-width: 425px) {
+          font-size: 22px;
+        }
+      }
+
+      .form-box-id {
+        position: relative;
+
+        img {
+          position: absolute;
+          left: 19px;
+          top: 54%;
+
+          @media screen and (max-width: 767px) {
+            top: 54%;
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+
+      .form-box-password {
+        position: relative;
+
+        &-ic {
+          position: absolute;
+          left: 19px;
+          top: 54%;
+
+          @media screen and (max-width: 767px) {
+            width: 16px;
+            height: 16px;
+          }
+        }
+
+        &-btn {
+          border: none;
+          background: none;
+          position: absolute;
+          right: 19px;
+          top: 50%;
+        }
+
+        &-desc {
+          @media screen and (max-width: 767px) {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+
+      div > .form-control {
+        height: 48px;
+        padding-left: 44px;
+
+        @media screen and (max-width: 767px) {
+          height: 42px;
+          font-size: 14px;
+          background-size: 16px 16px;
+        }
+
+        @media screen and (max-width: 375px) {
+          font-size: 13px;
+        }
+      }
+
+      div:last-child > .form-control {
+        @media screen and (max-width: 767px) {
+          background-size: 16px 16px;
+        }
+      }
+    }
+
+    &-sup {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 12px;
+
+      @media screen and (max-width: 767px) {
+        gap: 10px;
+      }
+
+      @media screen and (max-width: 425px) {
+        gap: 0;
+      }
+
+      small {
+        font-family: sfProText400;
+        padding-left: 0;
+        margin: 0;
+        font-size: 14px;
+        line-height: 20px;
+        color: #666670;
+
+        @media screen and (max-width: 767px) {
+          font-size: 13px;
+        }
+
+        @media screen and (max-width: 425px) {
+          font-size: 12px;
+        }
+
+        @media screen and (max-width: 375px) {
+          font-size: 11px;
+          line-height: 17px;
+        }
+
+        a {
+          font-family: sfProText600;
+          line-height: 26px;
+          text-decoration: underline;
+          text-underline-offset: 3px;
+          text-decoration-thickness: 2px;
+          color: #104b86;
+        }
+      }
+    }
+  }
+}

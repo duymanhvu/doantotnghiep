@@ -1,0 +1,17 @@
+// Ví dụ tạo 1 animation có tên là fadeIn
+@include keyframes(fadeIn) {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+// Kết thúc base viết tiếp xuống bên dưới 24/5/2022
+// Lần lượt các keyframe được viết bên dưới..
+
+.fixed-top {
+    transition: all .5s ease-in-out;
+}

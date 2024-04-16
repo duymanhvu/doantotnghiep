@@ -1,0 +1,154 @@
+.btn {
+  font-family: "Nunito";
+  font-weight: 700;
+  line-height: 24px;
+  text-transform: uppercase;
+  padding: 14px 24px;
+  font-size: 16px;
+  color: #ffffff;
+  background: #f37021;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  max-width: 320px;
+  width: 100%;
+  border-color: transparent !important;
+
+  &:hover,
+  &:focus,
+  &:focus-visible,
+  &:active {
+    background-color: #fc7420 !important;
+    opacity: 0.9;
+    border-color: transparent !important;
+    color: #ffffff !important;
+    transition: all 0.3s ease-in-out;
+  }
+
+  &-home {
+    max-width: 220px;
+    width: 100%;
+    height: 48px;
+    text-transform: unset;
+
+    @media screen and (max-width: 991px) {
+      height: 44px;
+    }
+
+    @media screen and (max-width: 767px) {
+      height: 42px;
+    }
+
+    @media screen and (max-width: 425px) {
+      height: 40px;
+    }
+  }
+
+  &-up {
+    background-color: #87a5c2;
+    max-width: 40px;
+    width: 100%;
+    height: 40px;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 110px;
+    right: 68px;
+    padding: 0;
+    z-index: 99;
+
+    @media screen and (max-width: 991px) {
+      right: 28px;
+    }
+
+    img {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover,
+    &:focus,
+    &:focus-visible,
+    &:active {
+      border-color: transparent !important;
+      background-color: #104b86 !important;
+    }
+  }
+
+  &-detail {
+    background-color: transparent;
+    color: #f37021;
+    padding: 0;
+    height: 24px;
+    text-transform: unset;
+    justify-content: flex-start;
+
+    &:hover img {
+      transform: translateX(5px);
+    }
+
+    img {
+      transition: all 0.3s ease-in-out;
+      filter: invert(46%) sepia(84%) saturate(1224%) hue-rotate(348deg)
+        brightness(99%) contrast(93%);
+    }
+
+    &:hover,
+    &:focus,
+    &:focus-visible,
+    &:active {
+      border-color: transparent !important;
+      color: #f37021 !important;
+      background-color: transparent !important;
+    }
+  }
+
+  &-login {
+    @media screen and (max-width: 991px) {
+      padding: 12px 0;
+      max-width: 260px;
+    }
+
+    @media screen and (max-width: 767px) {
+      padding: 10px 0;
+      font-size: 15px;
+      font-weight: 500;
+      max-width: 240px;
+      max-height: 38px;
+    }
+
+    @media screen and (max-width: 425px) {
+      max-width: 220px;
+    }
+  }
+
+  &-download {
+    position: absolute;
+    top: 60%;
+    right: 0;
+    transform: translateY(-50%);
+    background: transparent;
+    padding: 0;
+    color: #2180a6;
+    font-size: 16px;
+    font-family: "sfProText400";
+    margin: 0 !important;
+    text-transform: capitalize;
+    max-width: max-content !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    img {
+      width: 16px !important;
+      height: 16px !important;
+    }
+
+    &:hover {
+      background: transparent !important;
+      color: #2180a6 !important;
+    }
+  }
+}

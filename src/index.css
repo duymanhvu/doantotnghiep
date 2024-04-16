@@ -1,0 +1,142 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap");
+
+/* Font SF Pro Display */
+@font-face {
+  font-family: sfProDisplay400;
+  src: url(./assets/fonts/SFPro/OpenType/SF-Pro-Display-Regular.otf);
+}
+
+@font-face {
+  font-family: sfProDisplay500;
+  src: url(./assets/fonts/SFPro/OpenType/SF-Pro-Display-Medium.otf);
+}
+
+@font-face {
+  font-family: sfProDisplay600;
+  src: url(./assets/fonts/SFPro/OpenType/SF-Pro-Display-Semibold.otf);
+}
+
+@font-face {
+  font-family: sfProDisplay700;
+  src: url(./assets/fonts/SFPro/OpenType/SF-Pro-Display-Bold.otf);
+}
+
+@font-face {
+  font-family: sfProDisplay900;
+  src: url(./assets/fonts/SFPro/OpenType/SF-Pro-Display-Black.otf);
+}
+
+/* Font SF Pro Text */
+
+@font-face {
+  font-family: sfProText400;
+  src: url(./assets/fonts/SFPro/OpenType/SF-Pro-Text-Regular.otf);
+}
+
+@font-face {
+  font-family: sfProText500;
+  src: url(./assets/fonts/SFPro/OpenType/SF-Pro-Text-Medium.otf);
+}
+
+@font-face {
+  font-family: sfProText600;
+  src: url(./assets/fonts/SFPro/OpenType/SF-Pro-Text-Semibold.otf);
+}
+
+@font-face {
+  font-family: sfProText700;
+  src: url(./assets/fonts/SFPro/OpenType/SF-Pro-Text-Bold.otf);
+}
+
+@font-face {
+  font-family: sfProText800;
+  src: url(./assets/fonts/SFPro/OpenType/SF-Pro-Text-Heavy.otf);
+}
+
+/*  */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  line-height: 1.4;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-height: 100vh;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: sfProText400;
+  color: #25252b;
+  overflow-x: hidden;
+}
+
+a,
+a:hover {
+  text-decoration: none;
+}
+
+img {
+  border-style: none;
+}
+
+p,
+label {
+  margin: 0;
+}
+
+i {
+  transition: all 0.5s;
+}
+
+ul,
+ol,
+li {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+  list-style-type: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  margin: 0;
+}
+
+textarea {
+  overflow: auto;
+}
+
+[type="button"]:not(:disabled),
+[type="reset"]:not(:disabled),
+[type="submit"]:not(:disabled),
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+[type="checkbox"],
+[type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+button,
+button:active,
+button:focus {
+  outline: 1px solid transparent;
+}
+
+.styles-module_wrapper__1I_qj.react-simple-image-viewer__modal {
+  z-index: 99999;
+}

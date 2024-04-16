@@ -1,0 +1,246 @@
+.header {
+  .navbar {
+    background: linear-gradient(
+      180deg,
+      rgba(243, 112, 33, 0.3) -95.54%,
+      rgba(255, 255, 255, 0.3) 128.57%
+    );
+    padding: 4px 0;
+
+    &-brand {
+      padding: 0;
+    }
+
+    > img {
+      padding-left: 10px;
+    }
+
+    &-nav > .nav-link {
+      font-size: 14px;
+      font-family: sfProText600;
+      color: #ffffff;
+      line-height: 20px;
+      padding: 8px 18px;
+
+      &:hover,
+      &:focus {
+        color: #ffffff;
+      }
+    }
+
+    &-login {
+      justify-content: center;
+    }
+
+    &-toggler {
+      padding: 2px 6px;
+      border: none;
+
+      &:focus {
+        box-shadow: none;
+      }
+
+      &-icon {
+        width: 20px;
+        height: 20px;
+
+        @media screen and (max-width: 425px) {
+          width: 25px;
+          height: 25px;
+        }
+
+        @media screen and (max-width: 375px) {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+
+    &-nav > .nav-item > a::before {
+      content: "";
+      position: absolute;
+      width: calc(100% - 36px);
+      height: 2px;
+      bottom: 2px;
+      left: 18px;
+      background: #ffffff;
+      border-radius: 20px;
+      visibility: hidden;
+      -webkit-transform: scaleX(0);
+      transform: scaleX(0);
+      -webkit-transition: all 0.3s ease-in-out 0s;
+      transition: all 0.3s ease-in-out 0s;
+    }
+
+    &-nav .nav-item a:focus::before,
+    &-nav .nav-item a:hover::before {
+      visibility: visible;
+      -webkit-transform: scaleX(1);
+      transform: scaleX(1);
+    }
+  }
+
+  .active.nav-item > .nav-link {
+    color: #ffffff;
+  }
+
+  .dropdown-menu {
+    padding: 10px 0;
+    left: 18px;
+    border: none;
+    min-width: max-content;
+    border-radius: 10px;
+    box-shadow: 0px 10.5288px 31.5864px rgba(0, 0, 0, 0.3);
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: -12px;
+      width: 100%;
+      height: 22px;
+      background: transparent;
+    }
+
+    @media screen and (max-width: 991px) {
+      box-shadow: -2px 2px 13px 6px rgba(190, 190, 190, 0.15);
+    }
+
+    .nav-link {
+      font-family: sfProText500;
+      font-size: 14px;
+      color: #25252b;
+      line-height: 20px;
+      padding: 0 16px;
+
+      &:not(:last-child) {
+        margin-bottom: 8px;
+      }
+
+      &:hover,
+      &:focus {
+        color: #104b86;
+      }
+    }
+  }
+
+  .dropdown > .dropdown-toggle {
+    font-size: 14px;
+    font-family: sfProText600;
+    color: #ffffff;
+    line-height: 20px;
+    padding: 8px 12px;
+
+    &:hover,
+    &:focus {
+      color: #ffffff;
+    }
+  }
+}
+
+@keyframes fadeInHeader {
+  0% {
+    opacity: 0;
+    top: -100px;
+  }
+
+  100% {
+    opacity: 1;
+    top: 0;
+  }
+}
+
+.bg-light {
+  box-shadow: 0px 2px 2px rgba(154, 154, 154, 0.25);
+  background: #fff !important;
+
+  .navbar-toggler {
+    img {
+      filter: invert(23%) sepia(95%) saturate(617%) hue-rotate(171deg)
+        brightness(58%) contrast(99%);
+    }
+  }
+
+  .dropdown {
+    > .dropdown-toggle {
+      color: #666670;
+
+      &:hover,
+      &:focus {
+        color: #2350bd;
+      }
+    }
+  }
+
+  .nav-link {
+    color: #666670 !important;
+
+    &:hover,
+    &:focus {
+      color: #2350bd !important;
+    }
+  }
+
+  .navbar-nav > .nav-item > a::before {
+    background: #2350bd;
+  }
+}
+
+.is-mobile {
+  box-shadow: 0px 2px 2px rgba(154, 154, 154, 0.25);
+  background: #fff !important;
+
+  .navbar-toggler {
+    img {
+      filter: invert(23%) sepia(95%) saturate(617%) hue-rotate(171deg)
+        brightness(58%) contrast(99%);
+    }
+  }
+
+  .navbar {
+    &-collapse {
+      padding-top: 16px;
+    }
+  }
+
+  .dropdown {
+    &-menu {
+      box-shadow: unset;
+      border-radius: 0;
+      padding-top: 0;
+
+      .nav-link {
+        padding-left: 32px;
+      }
+    }
+
+    > .dropdown-toggle {
+      color: #666670;
+
+      &:hover,
+      &:focus {
+        color: #2350bd;
+      }
+    }
+  }
+
+  .navbar-nav > .nav-item > a::before {
+    display: none;
+  }
+
+  .nav-link {
+    color: #666670 !important;
+
+    &:hover,
+    &:focus {
+      color: #2350bd !important;
+    }
+  }
+
+  .navbar-nav > .nav-item > a::before {
+    background: #2350bd;
+  }
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+}
