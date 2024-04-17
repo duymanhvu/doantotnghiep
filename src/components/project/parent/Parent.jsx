@@ -1,15 +1,19 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { toast } from "react-toastify";
-import scroll_down from "../../../assets/img/ic_scroll_down.svg";
-import add_photo from "../../../assets/img/ic_add_photo.svg";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../../contexts/AuthContext";
-import { Input, Form, Tooltip, Button, Popconfirm, Table } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Popconfirm,
+  Row,
+  Table,
+  Tooltip,
+} from "antd";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import scroll_down from "../../../assets/img/ic_scroll_down.svg";
+import { useAxios } from "../../apiCore/apiHelper";
 import { useShareOrderApi } from "../../apiCore/apiProcess";
 import { convertToArray, notificationShare } from "../../apiCore/convertObject";
-import { useAxios } from "../../apiCore/apiHelper";
 
 const Parent = () => {
   const { t } = useTranslation();
@@ -19,7 +23,6 @@ const Parent = () => {
   const axios = useAxios();
   const [selectedRow, setSelectedRow] = useState(false);
   const [checkFinish, setCheckFinish] = useState(false);
-
 
   const columns = [
     {
@@ -63,9 +66,15 @@ const Parent = () => {
               <img src="/ic_edit.svg" alt="img" />
             </Button>
           </Tooltip>
-          <Tooltip placement="top" title={t("xoa")}>
+          <Tooltip placement="top" title={"Xóa"}>
             <Button type="actions" disabled={selectedRow}>
-              <Popconfirm cancelText={t("dong")} cancelButtonProps={{ type: "secondary" }} okText={t("xacNhan")} title={t("chacChanXoa")} onConfirm={() => handleDelete(record.autoId)}>
+              <Popconfirm
+                cancelText={t("dong")}
+                cancelButtonProps={{ type: "secondary" }}
+                okText={t("xacNhan")}
+                title={t("chacChanXoa")}
+                onConfirm={() => handleDelete(record.autoId)}
+              >
                 <img src="/ic_delete.svg" alt="img" />
               </Popconfirm>
             </Button>
@@ -87,6 +96,9 @@ const Parent = () => {
   //       setListData([]);
   //     });
   // }, []);
+  useEffect(() => {
+    handleGetLisDigitalSignature();
+  }, []);
   const handleGetLisDigitalSignature = () => {
     AxiosAPI.getParentGetList()
       .then((res) => {
@@ -104,7 +116,7 @@ const Parent = () => {
     setSelectedRow(true);
 
     formCASign.setFieldsValue({
-      Id: record?.Id, 
+      Id: record?.Id,
       Fullname: record?.Fullname,
       Dob: record?.Dob,
       Phone: record?.Phone,
@@ -218,73 +230,93 @@ const Parent = () => {
         <div className="registration__form">
           <div className="registration__form-wrap">
             <div className="heading v1 text-center">Parent</div>
-
-            <>
-              <Form id="form" className="form" form={formCASign}>
-                <Form.Item name={"Id"} hidden></Form.Item>
-
-                <div className="row">
+            <div className="heading v2">Thông Tin</div>
+            <Form id="form" className="form" form={formCASign}>
+              <Form.Item name={"Id"} hidden></Form.Item>
+              <Row gutter={[16, 16]}>
+                <Col xxl={6} xl={6} lg={12} md={24} sm={24} xs={24}>
+                  <Form.Item
+                    label={"Họ và Tên"}
+                    name={"Fullname"}
+                    className="req"
+                  >
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col xxl={6} xl={6} lg={12} md={24} sm={24} xs={24}>
+                  <Form.Item label={"Ngày sinh"} name={"Dob"} className="req">
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col xxl={6} xl={6} lg={12} md={24} sm={24} xs={24}>
+                  <Form.Item
+                    label={"Số điện thoại"}
+                    name={"Phone"}
+                    className="req"
+                  >
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col xxl={6} xl={6} lg={12} md={24} sm={24} xs={24}>
+                  <Form.Item label={"Email"} name={"Email"} className="req">
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col xxl={6} xl={6} lg={12} md={24} sm={24} xs={24}>
+                  <Form.Item
+                    label={"Mật khẩu"}
+                    name={"Password"}
+                    className="req"
+                  >
+                    <Input />
+                  </Form.Item>
+                </Col>
+              </Row>
+              {/* <div className="row">
                   <div className="col-lg-12">
                     <div className="heading v2">Thông Tin</div>
                   </div>
                   <div className="col-lg-12"></div>
                   <div className="form-grid form-grid-10-2">
                     <div className="">
-                      <div className="row">
-                        <div className="col-lg-4">
-                          <Form.Item label={"Họ và Tên"} name={"Fullname"} className="req">
-                            <Input />
-                          </Form.Item>
-                        </div>
-                        <div className="col-lg-4">
-                          <Form.Item label={"Ngày sinh"} name={"Dob"} className="req">
-                            <Input />
-                          </Form.Item>
-                        </div>
-                        <div className="col-lg-4">
-                          <Form.Item label={"Số điện thoại"} name={"Phone"} className="req">
-                            <Input />
-                          </Form.Item>
-                        </div>
-                      </div>
-                      <div className="row p-0">
-                        <div className="col-lg-4">
-                          <Form.Item label={"Email"} name={"Email"} className="req">
-                            <Input />
-                          </Form.Item>
-                        </div>
-
-                        <div className="col-lg-4">
-                          <Form.Item label={"Mật khẩu"} name={"Password"} className="req">
-                            <Input />
-                          </Form.Item>
-                        </div>
-                      </div>
                       <div className="d-flex" style={{ gap: "12px" }}>
-                        <Button type="primary" onClick={selectedRow ? handleEditDigitalSignature : handleAddDigitalSignature}>
-                          {selectedRow ? <span>{t("Lưu")}</span> : <span>{t("Thêm")}</span>}
+                        <Button
+                          type="primary"
+                          onClick={
+                            selectedRow
+                              ? handleEditDigitalSignature
+                              : handleAddDigitalSignature
+                          }
+                        >
+                          {selectedRow ? (
+                            <span>{t("Lưu")}</span>
+                          ) : (
+                            <span>{t("Thêm")}</span>
+                          )}
                         </Button>
-                        <Button type="primary" onClick={() => handleGetLisDigitalSignature()}>
+                        <Button
+                          type="primary"
+                          onClick={() => handleGetLisDigitalSignature()}
+                        >
                           <span>{t("Tìm kiếm")}</span>
                         </Button>
                       </div>
                     </div>
                   </div>
-                </div>
-              </Form>
-              <Table
-                className="ant-table-default"
-                columns={columns}
-                dataSource={listData?.map((e, i) => ({
-                  ...e,
-                  key: e?.autoId,
-                }))}
-                pagination={false}
-                scroll={{
-                  x: "100%",
-                }}
-              />
-            </>
+                </div> */}
+            </Form>
+            <Table
+              className="ant-table-default"
+              columns={columns}
+              dataSource={listData?.map((e, i) => ({
+                ...e,
+                key: e?.autoId,
+              }))}
+              pagination={false}
+              scroll={{
+                x: "100%",
+              }}
+            />
           </div>
         </div>
       </div>
