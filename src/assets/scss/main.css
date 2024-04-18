@@ -1115,7 +1115,7 @@
   overflow: hidden;
 }
 .home .background {
-  background: url(../img/home/banner_1920.png) no-repeat center center;
+  background: url(../img/home/1920.jpg) no-repeat center center;
   height: 100vh;
   background-size: cover;
 }
@@ -1124,25 +1124,25 @@
 }
 @media screen and (max-width: 1536px) {
   .home .background {
-    background: url(../img/home/banner_1536.png) no-repeat center center;
+    background: url(../img/home/1536.jpg) no-repeat center center;
     background-size: cover;
   }
 }
 @media screen and (max-width: 1280px) {
   .home .background {
-    background: url(../img/home/banner_1280.png) no-repeat center center;
+    background: url(../img/home/1280.jpg) no-repeat center center;
     background-size: cover;
   }
 }
 @media screen and (max-width: 1024px) {
   .home .background {
-    background: url(../img/home/banner_1024.png) no-repeat center center;
+    background: url(../img/home/1024.jpg) no-repeat center center;
     background-size: cover;
   }
 }
 @media screen and (max-width: 991px) {
   .home .background {
-    background: url(../img/home/banner_991.png) no-repeat center center;
+    background: url(../img/home/991.jpg) no-repeat center center;
     background-size: cover;
   }
 }
