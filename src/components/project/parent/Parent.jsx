@@ -1,13 +1,6 @@
-import {
-  Button,
-  Col,
-  Form,
-  Input,
-  Popconfirm,
-  Row,
-  Table,
-  Tooltip,
-} from "antd";
+import { Button, Col, Input, Popconfirm, Row, Table, Tooltip } from "antd";
+import { Form } from "react-bootstrap";
+import { useForm, Controller } from "react-hook-form";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import scroll_down from "../../../assets/img/ic_scroll_down.svg";
@@ -19,7 +12,8 @@ const Parent = () => {
   const { t } = useTranslation();
   const [listData, setListData] = useState([]);
   const AxiosAPI = useShareOrderApi();
-  const [formCASign] = Form.useForm();
+  // const [formCASign] = Form.useForm();
+  const formCASign = {};
   const axios = useAxios();
   const [selectedRow, setSelectedRow] = useState(false);
   const [checkFinish, setCheckFinish] = useState(false);
@@ -230,93 +224,87 @@ const Parent = () => {
         <div className="registration__form">
           <div className="registration__form-wrap">
             <div className="heading v1 text-center">Parent</div>
-            <div className="heading v2">Thông Tin</div>
-            <Form id="form" className="form" form={formCASign}>
-              <Form.Item name={"Id"} hidden></Form.Item>
-              <Row gutter={[16, 16]}>
-                <Col xxl={6} xl={6} lg={12} md={24} sm={24} xs={24}>
-                  <Form.Item
-                    label={"Họ và Tên"}
-                    name={"Fullname"}
-                    className="req"
+            <div className="row">
+              <div className="col-lg-12">
+                <div className="heading v2">Thông Tin</div>
+              </div>
+              <div className="col-lg-4">
+                <Form.Group className="mb-4">
+                  <Form.Label>Họ và tên</Form.Label>
+                  <Form.Select
+                    aria-label="Default select example"
+                    // {...register("spouse_title", {})}
                   >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col xxl={6} xl={6} lg={12} md={24} sm={24} xs={24}>
-                  <Form.Item label={"Ngày sinh"} name={"Dob"} className="req">
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col xxl={6} xl={6} lg={12} md={24} sm={24} xs={24}>
-                  <Form.Item
-                    label={"Số điện thoại"}
-                    name={"Phone"}
-                    className="req"
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col xxl={6} xl={6} lg={12} md={24} sm={24} xs={24}>
-                  <Form.Item label={"Email"} name={"Email"} className="req">
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col xxl={6} xl={6} lg={12} md={24} sm={24} xs={24}>
-                  <Form.Item
-                    label={"Mật khẩu"}
-                    name={"Password"}
-                    className="req"
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-              </Row>
-              {/* <div className="row">
-                  <div className="col-lg-12">
-                    <div className="heading v2">Thông Tin</div>
-                  </div>
-                  <div className="col-lg-12"></div>
-                  <div className="form-grid form-grid-10-2">
-                    <div className="">
-                      <div className="d-flex" style={{ gap: "12px" }}>
-                        <Button
-                          type="primary"
-                          onClick={
-                            selectedRow
-                              ? handleEditDigitalSignature
-                              : handleAddDigitalSignature
-                          }
-                        >
-                          {selectedRow ? (
-                            <span>{t("Lưu")}</span>
-                          ) : (
-                            <span>{t("Thêm")}</span>
-                          )}
-                        </Button>
-                        <Button
-                          type="primary"
-                          onClick={() => handleGetLisDigitalSignature()}
-                        >
-                          <span>{t("Tìm kiếm")}</span>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
-            </Form>
-            <Table
-              className="ant-table-default"
-              columns={columns}
-              dataSource={listData?.map((e, i) => ({
-                ...e,
-                key: e?.autoId,
-              }))}
-              pagination={false}
-              scroll={{
-                x: "100%",
-              }}
-            />
+                    <option value=""></option>
+                    <option value="Mr.">Mr.</option>
+                    <option value="Mrs.">Mrs.</option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
+              <div className="col-lg-4">
+                <Form.Group className="mb-4">
+                  <Form.Label>Ngày sinh</Form.Label>
+                  <Form.Control
+                    type="text"
+                    // {...register("spouse_first_name", {})}
+                  />
+                </Form.Group>
+              </div>
+              <div className="col-lg-4">
+                <Form.Group className="mb-4">
+                  <Form.Label>Số điện thoại</Form.Label>
+                  <Form.Control
+                    type="text"
+                    // {...register("spouse_last_name", {})}
+                  />
+                </Form.Group>
+              </div>
+              <div className="col-lg-4">
+                <Form.Group className="mb-4">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="text"
+                    // {...register("spouse_last_name", {})}
+                  />
+                </Form.Group>
+              </div>
+              <div className="col-lg-4">
+                <Form.Group className="mb-4">
+                  <Form.Label>Mật khẩu</Form.Label>
+                  <Form.Control
+                    type="text"
+                    // {...register("spouse_last_name", {})}
+                  />
+                </Form.Group>
+              </div>
+              <div className="col-lg-4">
+                <Form.Label>Thao tác</Form.Label>
+
+                <Form.Group className="mb-4">
+                  <button className="btn btn-home" type="submit">
+                    Gửi
+                  </button>
+                </Form.Group>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-lg-12">
+                <div className="heading v2">Danh sách</div>
+                <Table
+                  className="ant-table-default"
+                  columns={columns}
+                  dataSource={listData?.map((e, i) => ({
+                    ...e,
+                    key: e?.autoId,
+                  }))}
+                  pagination={false}
+                  scroll={{
+                    x: "100%",
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
