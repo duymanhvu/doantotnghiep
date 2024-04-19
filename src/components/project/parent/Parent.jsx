@@ -1,22 +1,33 @@
-import { Button, Col, Input, Popconfirm, Row, Table, Tooltip } from "antd";
-import { Form } from "react-bootstrap";
-import { useForm, Controller } from "react-hook-form";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Popconfirm,
+  Row,
+  Table,
+  Tooltip,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import scroll_down from "../../../assets/img/ic_scroll_down.svg";
 import { useAxios } from "../../apiCore/apiHelper";
 import { useShareOrderApi } from "../../apiCore/apiProcess";
 import { convertToArray, notificationShare } from "../../apiCore/convertObject";
+import Modal from "react-bootstrap/Modal";
 
 const Parent = () => {
   const { t } = useTranslation();
   const [listData, setListData] = useState([]);
   const AxiosAPI = useShareOrderApi();
-  // const [formCASign] = Form.useForm();
-  const formCASign = {};
+  const [formCASign] = Form.useForm();
   const axios = useAxios();
   const [selectedRow, setSelectedRow] = useState(false);
   const [checkFinish, setCheckFinish] = useState(false);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const columns = [
     {
@@ -55,24 +66,24 @@ const Parent = () => {
       align: "center",
       render: (_, record) => (
         <div className="d-flex justify-content-center align-items-center">
-          <Tooltip placement="top" title={t("sua")}>
-            <Button type="actions" onClick={() => handleEditClick(record)}>
-              <img src="/ic_edit.svg" alt="img" />
-            </Button>
-          </Tooltip>
-          <Tooltip placement="top" title={"Xóa"}>
-            <Button type="actions" disabled={selectedRow}>
-              <Popconfirm
-                cancelText={t("dong")}
-                cancelButtonProps={{ type: "secondary" }}
-                okText={t("xacNhan")}
-                title={t("chacChanXoa")}
-                onConfirm={() => handleDelete(record.autoId)}
-              >
-                <img src="/ic_delete.svg" alt="img" />
-              </Popconfirm>
-            </Button>
-          </Tooltip>
+          {/* <Button type="actions" onClick={() => handleEditClick(record)}> */}
+          <div>
+            <img src="/ic_edit.svg" alt="img" />
+          </div>
+          {/* </Button> */}
+          {/* <Button type="actions" disabled={selectedRow}> */}
+          <div onClick={handleShow}>
+            {/* <Popconfirm
+              cancelText={t("dong")}
+              cancelButtonProps={{ type: "secondary" }}
+              okText={t("xacNhan")}
+              title={t("Chắc chắn xóa?")}
+              onConfirm={() => handleDelete(record.autoId)}
+            > */}
+            <img src="/ic_delete.svg" alt="img" />
+            {/* </Popconfirm> */}
+          </div>
+          {/* </Button> */}
         </div>
       ),
     },
@@ -205,6 +216,11 @@ const Parent = () => {
       });
   };
 
+  const handleFinishForm = () => {
+    formCASign.validateFields().then((values) => {
+      console.log(values);
+    });
+  };
   return (
     <div className="registration">
       <div className="registration__container">
@@ -220,76 +236,64 @@ const Parent = () => {
             </div>
           </div>
         </div>
-
-        <div className="registration__form">
-          <div className="registration__form-wrap">
-            <div className="heading v1 text-center">Parent</div>
-            <div className="row">
-              <div className="col-lg-12">
-                <div className="heading v2">Thông Tin</div>
-              </div>
-              <div className="col-lg-4">
-                <Form.Group className="mb-4">
-                  <Form.Label>Họ và tên</Form.Label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    // {...register("spouse_title", {})}
+        <Form
+          id="form"
+          className="form"
+          form={formCASign}
+          onFinish={handleFinishForm}
+        >
+          <div className="registration__form">
+            <div className="registration__form-wrap">
+              <div className="heading v1 text-center">Parent</div>
+              <div className="heading v2">Thông Tin</div>
+              <Form.Item name={"Id"} hidden></Form.Item>
+              <div className="row">
+                <div className="col-lg-4">
+                  <Form.Item
+                    label={"Họ và Tên"}
+                    name={"Fullname"}
+                    className="req"
                   >
-                    <option value=""></option>
-                    <option value="Mr.">Mr.</option>
-                    <option value="Mrs.">Mrs.</option>
-                  </Form.Select>
-                </Form.Group>
+                    <Input />
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Ngày sinh"} name={"Dob"} className="req">
+                    <Input type="date" />
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item
+                    label={"Số điện thoại"}
+                    name={"Phone"}
+                    className="req"
+                  >
+                    <Input />
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Email"} name={"Email"} className="req">
+                    <Input />
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item
+                    label={"Mật khẩu"}
+                    name={"Password"}
+                    className="req"
+                  >
+                    <Input />
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Thao tác"} className="req">
+                    <button className="btn btn-action" type="submit">
+                      Tìm kiếm
+                    </button>
+                  </Form.Item>
+                </div>
               </div>
-              <div className="col-lg-4">
-                <Form.Group className="mb-4">
-                  <Form.Label>Ngày sinh</Form.Label>
-                  <Form.Control
-                    type="text"
-                    // {...register("spouse_first_name", {})}
-                  />
-                </Form.Group>
-              </div>
-              <div className="col-lg-4">
-                <Form.Group className="mb-4">
-                  <Form.Label>Số điện thoại</Form.Label>
-                  <Form.Control
-                    type="text"
-                    // {...register("spouse_last_name", {})}
-                  />
-                </Form.Group>
-              </div>
-              <div className="col-lg-4">
-                <Form.Group className="mb-4">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    type="text"
-                    // {...register("spouse_last_name", {})}
-                  />
-                </Form.Group>
-              </div>
-              <div className="col-lg-4">
-                <Form.Group className="mb-4">
-                  <Form.Label>Mật khẩu</Form.Label>
-                  <Form.Control
-                    type="text"
-                    // {...register("spouse_last_name", {})}
-                  />
-                </Form.Group>
-              </div>
-              <div className="col-lg-4">
-                <Form.Label>Thao tác</Form.Label>
-
-                <Form.Group className="mb-4">
-                  <button className="btn btn-home" type="submit">
-                    Gửi
-                  </button>
-                </Form.Group>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-lg-12">
+              <div className="mt-4">
                 <div className="heading v2">Danh sách</div>
                 <Table
                   className="ant-table-default"
@@ -306,8 +310,22 @@ const Parent = () => {
               </div>
             </div>
           </div>
-        </div>
+        </Form>
       </div>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Xác nhận xóa</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có chắc chắn xóa!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Đóng
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Lưu
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
