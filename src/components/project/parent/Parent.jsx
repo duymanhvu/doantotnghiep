@@ -1,13 +1,4 @@
-import {
-  Button,
-  Col,
-  Form,
-  Input,
-  Popconfirm,
-  Row,
-  Table,
-  Tooltip,
-} from "antd";
+import { Button, Col, Form, Input, Popconfirm, Row, Table, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import scroll_down from "../../../assets/img/ic_scroll_down.svg";
@@ -27,7 +18,11 @@ const Parent = () => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [recordToDelete, setRecordToDelete] = useState(null);
+  const handleShow = (autoId) => {
+    setRecordToDelete(autoId);
+    setShow(true);
+  };
 
   const columns = [
     {
@@ -61,46 +56,22 @@ const Parent = () => {
       align: "center",
     },
     {
-      title: t("chucNang"),
+      title: t("Chức năng"),
       key: "action",
       align: "center",
       render: (_, record) => (
         <div className="d-flex justify-content-center align-items-center">
-          {/* <Button type="actions" onClick={() => handleEditClick(record)}> */}
-          <div>
+          <div onClick={() => handleEditClick(record)}>
             <img src="/ic_edit.svg" alt="img" />
           </div>
-          {/* </Button> */}
-          {/* <Button type="actions" disabled={selectedRow}> */}
-          <div onClick={handleShow}>
-            {/* <Popconfirm
-              cancelText={t("dong")}
-              cancelButtonProps={{ type: "secondary" }}
-              okText={t("xacNhan")}
-              title={t("Chắc chắn xóa?")}
-              onConfirm={() => handleDelete(record.autoId)}
-            > */}
+          <div onClick={() => handleShow(record.Id)}>
             <img src="/ic_delete.svg" alt="img" />
-            {/* </Popconfirm> */}
           </div>
-          {/* </Button> */}
         </div>
       ),
     },
   ];
-  // useEffect(() => {
-  //   AxiosAPI.getParentGetList()
-  //     .then((res) => {
-  //       if (res.status === 200) {
-  //         setListData(convertToArray(res?.data?.Data));
-  //       } else {
-  //         setListData([]);
-  //       }
-  //     })
-  //     .catch(function (err) {
-  //       setListData([]);
-  //     });
-  // }, []);
+
   useEffect(() => {
     handleGetLisDigitalSignature();
   }, []);
@@ -142,10 +113,8 @@ const Parent = () => {
           email: values?.Email,
           password: values?.Password,
         };
-        console.log(newData, "newDatanewDatanewData", values);
         if (values) {
           const response = await axios.post("/api/Parent/Insert", newData);
-          console.log(response, "response");
 
           if (response.data?.errorCode >= 0) {
             notificationShare(0, response.data?.ErrorMessage, t("thanhCong"));
@@ -195,12 +164,12 @@ const Parent = () => {
   };
   const handleDelete = (autoId) => {
     axios
-      .post(`/api/Parent/Delete?id=${autoId}?Token=abcd123`)
+      .post(`/api/Parent/Delete?id=${autoId}&Token=abcd123`)
       .then((response) => {
         if (response.status === 200 && response.data.errorCode >= 0) {
-          notificationShare(0, response.data.errorMsg, t("thanhCong"));
+          notificationShare(0, t("thanhCong"));
         } else {
-          notificationShare(-1, response.data.errorMsg, t("thatBai"));
+          notificationShare(-1, t("thatBai"));
         }
       })
       .catch((err) => {
@@ -218,7 +187,7 @@ const Parent = () => {
 
   const handleFinishForm = () => {
     formCASign.validateFields().then((values) => {
-      console.log(values);
+      
     });
   };
   return (
@@ -236,12 +205,7 @@ const Parent = () => {
             </div>
           </div>
         </div>
-        <Form
-          id="form"
-          className="form"
-          form={formCASign}
-          onFinish={handleFinishForm}
-        >
+        <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm}>
           <div className="registration__form">
             <div className="registration__form-wrap">
               <div className="heading v1 text-center">Parent</div>
@@ -249,11 +213,7 @@ const Parent = () => {
               <Form.Item name={"Id"} hidden></Form.Item>
               <div className="row">
                 <div className="col-lg-4">
-                  <Form.Item
-                    label={"Họ và Tên"}
-                    name={"Fullname"}
-                    className="req"
-                  >
+                  <Form.Item label={"Họ và Tên"} name={"Fullname"} className="req">
                     <Input />
                   </Form.Item>
                 </div>
@@ -263,11 +223,7 @@ const Parent = () => {
                   </Form.Item>
                 </div>
                 <div className="col-lg-4">
-                  <Form.Item
-                    label={"Số điện thoại"}
-                    name={"Phone"}
-                    className="req"
-                  >
+                  <Form.Item label={"Số điện thoại"} name={"Phone"} className="req">
                     <Input />
                   </Form.Item>
                 </div>
@@ -277,18 +233,17 @@ const Parent = () => {
                   </Form.Item>
                 </div>
                 <div className="col-lg-4">
-                  <Form.Item
-                    label={"Mật khẩu"}
-                    name={"Password"}
-                    className="req"
-                  >
+                  <Form.Item label={"Mật khẩu"} name={"Password"} className="req">
                     <Input />
                   </Form.Item>
                 </div>
                 <div className="col-lg-4">
+                 
+                </div>
+                <div className="col-lg-4">
                   <Form.Item label={"Thao tác"} className="req">
-                    <button className="btn btn-action" type="submit">
-                      Tìm kiếm
+                    <button className="btn btn-action" type="submit" onClick={selectedRow ? handleEditDigitalSignature : handleAddDigitalSignature}>
+                      {selectedRow ? <span>{t("Lưu")}</span> : <span>{t("Thêm")}</span>}
                     </button>
                   </Form.Item>
                 </div>
@@ -321,8 +276,14 @@ const Parent = () => {
           <Button variant="secondary" onClick={handleClose}>
             Đóng
           </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Lưu
+          <Button
+            variant="primary"
+            onClick={() => {
+              handleDelete(recordToDelete);
+              handleClose();
+            }}
+          >
+            Xác nhận
           </Button>
         </Modal.Footer>
       </Modal>
