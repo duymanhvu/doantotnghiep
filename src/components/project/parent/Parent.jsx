@@ -6,6 +6,7 @@ import { useAxios } from "../../apiCore/apiHelper";
 import { useShareOrderApi } from "../../apiCore/apiProcess";
 import { convertToArray, notificationShare } from "../../apiCore/convertObject";
 import Modal from "react-bootstrap/Modal";
+import moment from "moment";
 
 const Parent = () => {
   const { t } = useTranslation();
@@ -94,7 +95,7 @@ const Parent = () => {
     formCASign.setFieldsValue({
       Id: record?.Id,
       Fullname: record?.Fullname,
-      Dob: record?.Dob,
+      Dob:  moment(record?.Dob).format('YYYY-MM-DD'),
       Phone: record?.Phone,
       Email: record?.Email,
       Password: record?.Password,
@@ -108,7 +109,7 @@ const Parent = () => {
       .then(async (values) => {
         const newData = {
           fullname: values?.Fullname,
-          dob: values?.Dob,
+          dob:  moment(values?.Dob).format('YYYY-MM-DDTHH:mm:ss'),
           phone: values?.Phone,
           email: values?.Email,
           password: values?.Password,
@@ -116,20 +117,20 @@ const Parent = () => {
         if (values) {
           const response = await axios.post("/api/Parent/Insert", newData);
 
-          if (response.data?.errorCode >= 0) {
-            notificationShare(0, response.data?.ErrorMessage, t("thanhCong"));
+          if (response.data?.StatusCode >= 0) {
+            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.ErrorMessage, t("thatBai"));
+            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.ErrorMessage, t("thatBai"));
+          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
         }
       });
   };
@@ -140,19 +141,20 @@ const Parent = () => {
       .then(async (values) => {
         const newData = {
           ...values,
+          dob:  moment(values?.Dob).format('YYYY-MM-DDTHH:mm:ss'),
         };
         if (values) {
           const response = await axios.post("/api/Parent/Update", newData);
 
-          if (response.data?.errorCode >= 0) {
-            notificationShare(0, response.data?.ErrorMessage, t("thanhCong"));
+          if (response.data?.StatusCode >= 0) {
+            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
 
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.ErrorMessage, t("thatBai"));
+            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
           }
         }
       })
@@ -161,6 +163,7 @@ const Parent = () => {
           notificationShare(-1, err.response?.data?.ErrorMessage, t("thatBai"));
         }
       });
+      
   };
   const handleDelete = (autoId) => {
     axios
