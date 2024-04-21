@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import scroll_down from "../../../assets/img/ic_scroll_down.svg";
-import { Input, Form, Tooltip, Button, Popconfirm, Table, Checkbox, Select } from "antd";
+import {
+  Input,
+  Form,
+  Tooltip,
+  Button,
+  Popconfirm,
+  Table,
+  Checkbox,
+  Select,
+} from "antd";
 import { useTranslation } from "react-i18next";
 import { useShareOrderApi } from "../../apiCore/apiProcess";
 import { convertToArray, notificationShare } from "../../apiCore/convertObject";
@@ -237,7 +246,12 @@ const Student = () => {
             </div>
           </div>
         </div>
-        <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm}>
+        <Form
+          id="form"
+          className="form"
+          form={formCASign}
+          onFinish={handleFinishForm}
+        >
           <div className="registration__form">
             <div className="registration__form-wrap">
               <div className="heading v1 text-center">Student</div>
@@ -245,7 +259,11 @@ const Student = () => {
               <Form.Item name={"Id"} hidden></Form.Item>
               <div className="row">
                 <div className="col-lg-4">
-                  <Form.Item label={"Họ và Tên"} name={"Fullname"} className="req">
+                  <Form.Item
+                    label={"Họ và Tên"}
+                    name={"Fullname"}
+                    className="req"
+                  >
                     <Input />
                   </Form.Item>
                 </div>
@@ -256,7 +274,7 @@ const Student = () => {
                 </div>
                 <div className="col-lg-4">
                   <Form.Item label={"Cha mẹ"} name={"ParentId"} className="req">
-                    <Select>
+                    <Select className="select--modify" placeholder="Choose">
                       {convertToArray(listParent).map((e, key) => (
                         <Option key={key} value={e.Id}>
                           {`${e.Fullname}`}
@@ -271,17 +289,31 @@ const Student = () => {
                   </Form.Item>
                 </div>
                 <div className="col-lg-4">
-                  <Form.Item label={"Mật khẩu"} name={"Password"} className="req">
+                  <Form.Item
+                    label={"Mật khẩu"}
+                    name={"Password"}
+                    className="req"
+                  >
                     <Input />
                   </Form.Item>
                 </div>
-                <div className="col-lg-4">
-                  
-                </div>
+                <div className="col-lg-4"></div>
                 <div className="col-lg-4">
                   <Form.Item label={"Thao tác"} className="req">
-                    <button className="btn btn-action" type="submit" onClick={selectedRow ? handleEditDigitalSignature : handleAddDigitalSignature}>
-                      {selectedRow ? <span>{t("Lưu")}</span> : <span>{t("Thêm")}</span>}
+                    <button
+                      className="btn btn-action"
+                      type="submit"
+                      onClick={
+                        selectedRow
+                          ? handleEditDigitalSignature
+                          : handleAddDigitalSignature
+                      }
+                    >
+                      {selectedRow ? (
+                        <span>{t("Lưu")}</span>
+                      ) : (
+                        <span>{t("Thêm")}</span>
+                      )}
                     </button>
                   </Form.Item>
                 </div>
