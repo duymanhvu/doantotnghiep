@@ -160,7 +160,7 @@ const Parent = () => {
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.ErrorMessage, t("thatBai"));
+          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
         }
       });
       

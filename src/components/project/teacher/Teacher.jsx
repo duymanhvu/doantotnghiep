@@ -5,6 +5,9 @@ import { useTranslation } from "react-i18next";
 import { useShareOrderApi } from "../../apiCore/apiProcess";
 import { convertToArray, notificationShare } from "../../apiCore/convertObject";
 import { useAxios } from "../../apiCore/apiHelper";
+import moment from "moment";
+import Modal from "react-bootstrap/Modal";
+
 const { Option } = Select;
 const Teacher = () => {
   const { t } = useTranslation();
@@ -14,6 +17,13 @@ const Teacher = () => {
   const axios = useAxios();
   const [selectedRow, setSelectedRow] = useState(false);
   const [checkFinish, setCheckFinish] = useState(false);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const [recordToDelete, setRecordToDelete] = useState(null);
+  const handleShow = (autoId) => {
+    setRecordToDelete(autoId);
+    setShow(true);
+  };
 
   const columns = [
     {
@@ -65,27 +75,24 @@ const Teacher = () => {
       align: "center",
     },
     {
-      title: t("chucNang"),
+      title: t("Chức năng"),
       key: "action",
       align: "center",
       render: (_, record) => (
         <div className="d-flex justify-content-center align-items-center">
-          <Tooltip placement="top" title={t("sua")}>
-            <Button type="actions" onClick={() => handleEditClick(record)}>
-              <img src="/ic_edit.svg" alt="img" />
-            </Button>
-          </Tooltip>
-          <Tooltip placement="top" title={t("xoa")}>
-            <Button type="actions" disabled={selectedRow}>
-              <Popconfirm cancelText={t("dong")} cancelButtonProps={{ type: "secondary" }} okText={t("xacNhan")} title={t("chacChanXoa")} onConfirm={() => handleDelete(record.autoId)}>
-                <img src="/ic_delete.svg" alt="img" />
-              </Popconfirm>
-            </Button>
-          </Tooltip>
+          <div onClick={() => handleEditClick(record)}>
+            <img src="/ic_edit.svg" alt="img" />
+          </div>
+          <div onClick={() => handleShow(record.Id)}>
+            <img src="/ic_delete.svg" alt="img" />
+          </div>
         </div>
       ),
     },
   ];
+  useEffect(() => {
+    handleGetLisDigitalSignature();
+  }, []);
 
   const handleGetLisDigitalSignature = () => {
     AxiosAPI.getTeacherGetList()
@@ -102,14 +109,13 @@ const Teacher = () => {
   };
   const handleEditClick = (record) => {
     setSelectedRow(true);
-
     formCASign.setFieldsValue({
       Fullname: record?.Fullname,
-      Dob: record?.Dob,
+      Phone: record?.Phone,
       Email: record?.Email,
       Password: record?.Password,
-      ParentId: record?.ParentId,
-      IsDeleted: record?.IsDeleted,
+      Username: record?.Username,
+      SubjectType: record?.SubjectType,
     });
   };
 
@@ -120,31 +126,32 @@ const Teacher = () => {
       .then(async (values) => {
         const newData = {
           fullname: values?.Fullname,
-          dob: values?.Dob,
+          phone: values?.Phone,
           email: values?.Email,
           password: values?.Password,
-          parentId: values?.ParentId,
-          isDeleted: values?.IsDeleted,
+          subjectType: values?.SubjectType,
+          username: values?.Username,
+          isAdmin: true,
+          status: true,
         };
-        console.log(newData, "newDatanewDatanewData", values);
         if (values) {
           const response = await axios.post("/api/Teacher/Insert", newData);
           console.log(response, "response");
 
-          if (response.data?.errorCode >= 0) {
-            notificationShare(0, response.data?.ErrorMessage, t("thanhCong"));
+          if (response.data?.StatusCode >= 0) {
+            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.ErrorMessage, t("thatBai"));
+            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.ErrorMessage, t("thatBai"));
+          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
         }
       });
   };
@@ -154,31 +161,25 @@ const Teacher = () => {
       .validateFields()
       .then(async (values) => {
         const newData = {
-          fullname: values?.Fullname,
-          dob: values?.Dob,
-          email: values?.Email,
-          password: values?.Password,
-          parentId: values?.ParentId,
-          isDeleted: values?.IsDeleted,
+          ...values,
         };
         if (values) {
           const response = await axios.post("/api/Teacher/Update", newData);
-
-          if (response.data?.errorCode >= 0) {
-            notificationShare(0, response.data?.ErrorMessage, t("thanhCong"));
+          if (response.data?.StatusCode >= 0) {
+            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
 
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.ErrorMessage, t("thatBai"));
+            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.ErrorMessage, t("thatBai"));
+          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
         }
       });
   };
@@ -186,7 +187,7 @@ const Teacher = () => {
     axios
       .post(`/api/Teacher/Delete?id=${autoId}?Token=abcd123`)
       .then((response) => {
-        if (response.status === 200 && response.data.errorCode >= 0) {
+        if (response.status === 200 && response.data.StatusCode >= 0) {
           notificationShare(0, response.data.errorMsg, t("thanhCong"));
         } else {
           notificationShare(-1, response.data.errorMsg, t("thatBai"));
@@ -204,6 +205,9 @@ const Teacher = () => {
         formCASign.resetFields();
       });
   };
+  const handleFinishForm = () => {
+    formCASign.validateFields().then((values) => {});
+  };
 
   return (
     <div className="registration">
@@ -220,108 +224,95 @@ const Teacher = () => {
             </div>
           </div>
         </div>
-
-        <div className="registration__form">
-          <div className="registration__form-wrap">
-            <div className="heading v1 text-center">Teacher</div>
-
-            <>
-              <Form id="form" className="form" form={formCASign}>
-                <Form.Item name={"Id"} hidden></Form.Item>
-
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="heading v2">Thông Tin</div>
-                  </div>
-                  <div className="col-lg-12"></div>
-                  <div className="form-grid form-grid-10-2">
-                    <div className="">
-                      <div className="row">
-                        <div className="col-lg-4">
-                          <Form.Item label={"Họ và Tên"} name={"Fullname"} className="req">
-                            <Input />
-                          </Form.Item>
-                        </div>
-                        <div className="col-lg-4">
-                          <Form.Item label={"Số điện thoại"} name={"Phone"} className="req">
-                            <Input />
-                          </Form.Item>
-                        </div>
-                        <div className="col-lg-4">
-                          <Form.Item label={"Email"} name={"Email"} className="req">
-                            <Input />
-                          </Form.Item>
-                        </div>
-                      </div>
-                      <div className="row p-0">
-                        <div className="col-lg-4">
-                          <Form.Item label={"Tài Khoản"} name={"Username"} className="req">
-                            <Input />
-                          </Form.Item>
-                        </div>
-
-                        <div className="col-lg-4">
-                          <Form.Item label={"Mật khẩu"} name={"Password"} className="req">
-                            <Input />
-                          </Form.Item>
-                        </div>
-                        <div className="col-lg-4">
-                          <Form.Item name={"Status"} className="req">
-                            <Checkbox
-                              value={"Status"}
-                              onChange={(e) => {
-                                return e.target.Status;
-                              }}
-                            >
-                              {t("Trạng thái")}
-                            </Checkbox>
-                          </Form.Item>
-                        </div>
-                      </div>
-                      <div className="row p-0">
-                        <div className="col-lg-4">
-                          <Form.Item label="Môn dạy" name="SubjectType" className="req">
-                            <Select placeholder="">
-                              <Option value="0">Toán</Option>
-                              <Option value="1">Văn</Option>
-                              <Option value="2">Tiếng Anh</Option>
-                            </Select>
-                          </Form.Item>
-                        </div>
-                        <div className="col-lg-4">
-                          <Form.Item label={"Trạng thái Admin"} name={"IsAdmin"} className="req">
-                            <Input />
-                          </Form.Item>
-                        </div>
-                      </div>
-                      <div className="d-flex" style={{ gap: "12px" }}>
-                        <Button type="primary" onClick={selectedRow ? handleEditDigitalSignature : handleAddDigitalSignature}>
-                          {selectedRow ? <span>{t("Lưu")}</span> : <span>{t("Thêm")}</span>}
-                        </Button>
-                        <Button type="primary" onClick={() => handleGetLisDigitalSignature()}>
-                          <span>{t("Tìm kiếm")}</span>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
+        <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm}>
+          <div className="registration__form">
+            <div className="registration__form-wrap">
+              <div className="heading v1 text-center">Teacher</div>
+              <div className="heading v2">Thông Tin</div>
+              <Form.Item name={"Id"} hidden></Form.Item>
+              <div className="row">
+                <div className="col-lg-4">
+                  <Form.Item label={"Họ và Tên"} name={"Fullname"} className="req">
+                    <Input />
+                  </Form.Item>
                 </div>
-              </Form>
-              <Table
-                className="ant-table-default"
-                columns={columns}
-                dataSource={listData?.map((e, i) => ({
-                  ...e,
-                  key: e?.autoId,
-                }))}
-                pagination={false}
-                scroll={{
-                  x: "100%",
-                }}
-              />
-            </>
+                <div className="col-lg-4">
+                  <Form.Item label={"Số điện thoại"} name={"Phone"} className="req">
+                    <Input />
+                  </Form.Item>
+                </div>
+
+                <div className="col-lg-4">
+                  <Form.Item label={"Email"} name={"Email"} className="req">
+                    <Input />
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Tài Khoản"} name={"Username"} className="req">
+                    <Input />
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Mật khẩu"} name={"Password"} className="req">
+                    <Input.Password />
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Môn dạy"} name={"SubjectType"} className="req">
+                    <Select className="select--modify" placeholder="Choose">
+                      <Option value="0">Toán</Option>
+                      <Option value="1">Văn</Option>
+                      <Option value="2">Tiếng Anh</Option>
+                    </Select>
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Thao tác"} className="req">
+                    <button className="btn btn-action" type="submit" onClick={selectedRow ? handleEditDigitalSignature : handleAddDigitalSignature}>
+                      {selectedRow ? <span>{t("Lưu")}</span> : <span>{t("Thêm")}</span>}
+                    </button>
+                  </Form.Item>
+                </div>
+              </div>
+              <div className="mt-4">
+                <div className="heading v2">Danh sách</div>
+                <Table
+                  className="ant-table-default"
+                  columns={columns}
+                  dataSource={listData?.map((e, i) => ({
+                    ...e,
+                    key: e?.autoId,
+                  }))}
+                  pagination={false}
+                  scroll={{
+                    x: "100%",
+                  }}
+                />
+              </div>
+            </div>
           </div>
-        </div>
+        </Form>
       </div>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Xác nhận xóa</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có chắc chắn xóa!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Đóng
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              handleDelete(recordToDelete);
+              handleClose();
+            }}
+          >
+            Xác nhận
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

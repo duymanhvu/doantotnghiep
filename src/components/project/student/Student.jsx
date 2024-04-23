@@ -15,6 +15,8 @@ import { useShareOrderApi } from "../../apiCore/apiProcess";
 import { convertToArray, notificationShare } from "../../apiCore/convertObject";
 import { useAxios } from "../../apiCore/apiHelper";
 import Modal from "react-bootstrap/Modal";
+import { useGlobalConst } from "../../apiCore/useGlobalConst";
+import moment from "moment";
 
 const { Option } = Select;
 
@@ -28,6 +30,7 @@ const Student = () => {
   const [checkFinish, setCheckFinish] = useState(false);
   const [listParent, setlistParent] = useState([]);
   const [show, setShow] = useState(false);
+  const globalConst = useGlobalConst(t);
 
   const handleClose = () => setShow(false);
   const [recordToDelete, setRecordToDelete] = useState(null);
@@ -128,7 +131,7 @@ const Student = () => {
     formCASign.setFieldsValue({
       Id: record?.Id,
       Fullname: record?.Fullname,
-      Dob: record?.Dob,
+      Dob: moment(record?.Dob).format('YYYY-MM-DD'),
       Email: record?.Email,
       Password: record?.Password,
       ParentId: record?.ParentId,
@@ -143,31 +146,29 @@ const Student = () => {
       .then(async (values) => {
         const newData = {
           fullname: values?.Fullname,
-          dob: values?.Dob,
+          dob: moment(values?.Dob).format('YYYY-MM-DDTHH:mm:ss'),
           email: values?.Email,
           password: values?.Password,
           parentId: values?.ParentId,
-          isDeleted: values?.IsDeleted,
+          isDeleted: true
         };
-        console.log(newData, "newDatanewDatanewData", values);
         if (values) {
           const response = await axios.post("/api/Student/Insert", newData);
-          console.log(response, "response");
 
-          if (response.data?.errorCode >= 0) {
+          if (response.data?.StatusCode >= 0) {
             notificationShare(0, response.data?.ErrorMessage, t("thanhCong"));
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.ErrorMessage, t("thatBai"));
+            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.ErrorMessage, t("thatBai"));
+          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
         }
       });
   };
@@ -177,31 +178,27 @@ const Student = () => {
       .validateFields()
       .then(async (values) => {
         const newData = {
-          fullname: values?.Fullname,
-          dob: values?.Dob,
-          email: values?.Email,
-          password: values?.Password,
-          parentId: values?.ParentId,
-          isDeleted: values?.IsDeleted,
+          ...values,
+          dob:  moment(values?.Dob).format('YYYY-MM-DDTHH:mm:ss'),
         };
         if (values) {
           const response = await axios.post("/api/Student/Update", newData);
 
           if (response.data?.errorCode >= 0) {
-            notificationShare(0, response.data?.ErrorMessage, t("thanhCong"));
+            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
 
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.ErrorMessage, t("thatBai"));
+            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.ErrorMessage, t("thatBai"));
+          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
         }
       });
   };
@@ -274,10 +271,10 @@ const Student = () => {
                 </div>
                 <div className="col-lg-4">
                   <Form.Item label={"Cha mẹ"} name={"ParentId"} className="req">
-                    <Select className="select--modify" placeholder="Choose">
+                    <Select  className="select--modify" placeholder="Choose">
                       {convertToArray(listParent).map((e, key) => (
                         <Option key={key} value={e.Id}>
-                          {`${e.Fullname}`}
+                          {e.Fullname}
                         </Option>
                       ))}
                     </Select>
@@ -294,7 +291,7 @@ const Student = () => {
                     name={"Password"}
                     className="req"
                   >
-                    <Input />
+                    <Input.Password />
                   </Form.Item>
                 </div>
                 <div className="col-lg-4"></div>

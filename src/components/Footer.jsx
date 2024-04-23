@@ -27,7 +27,7 @@ const Footer = () => {
           <Navbar>
             <Row>
               <Nav as={Col} xxl xl lg md sm xs className="flex-column">
-                <h3 className="nav-head">About the 25th AGM</h3>
+                <h3 className="nav-head">Về Sen Center</h3>
                 <Link className="nav-link" to="/overview">
                   Overview
                 </Link>
@@ -36,7 +36,7 @@ const Footer = () => {
                 </Link>
               </Nav>
               <Nav as={Col} xxl xl lg md sm xs className="flex-column">
-                <h3 className="nav-head">Agenda</h3>
+                <h3 className="nav-head">Thông tin</h3>
                 <Link className="nav-link" to="/program">
                   Program
                 </Link>
@@ -48,7 +48,7 @@ const Footer = () => {
                 </Link>
               </Nav>
               <Nav as={Col} xxl xl lg md sm className="flex-column">
-                <h3 className="nav-head">Resources</h3>
+                <h3 className="nav-head">Khóa Học</h3>
                 <Link className="nav-link" to="/photos">
                   Conference Photos
                 </Link>
@@ -62,27 +62,27 @@ const Footer = () => {
             </Row>
             <Row>
               <Nav as={Col} xxl={8} xl={8} lg={8} className="flex-column">
-                <h3 className="nav-head">Contact us</h3>
+                <h3 className="nav-head">Liên hệ với chúng tôi</h3>
                 <Link to="mailto:ACG25contact@vsd.vn" className="nav-link">
                   <img src={contact_email} alt="email" />
-                  ACG25contact@vsd.vn (The 25th AGM Organizing Team)
+                  senenglishcenter@gmail.com
                 </Link>
                 <Link
-                  to="https://goo.gl/maps/qBeW1r2WGUrUzeTg9"
+                  to="https://www.google.com/maps/place/SEN+English+Center/@20.9788841,105.8302392,17z/data=!3m1!4b1!4m6!3m5!1s0x3135adf98071d895:0xb4bbe1f4acc1def5!8m2!3d20.9788791!4d105.8328141!16s%2Fg%2F11jszln6sp?hl=vi-VN&entry=ttu"
                   target="_blank"
                   className="nav-link"
                 >
                   <img src={contact_location} alt="location" />
-                  112 Hoang Quoc Viet, Nghia Tan ward, Cau Giay district, Hanoi,
-                  Vietnam
+                  Số 36, ngõ 245, ngách 96, Định Công, Hoàng Mai, Hà Nội,
+                  Việt Nam
                 </Link>
                 <Link
-                  to="https://goo.gl/maps/qBeW1r2WGUrUzeTg9"
+                  to="https://www.google.com/maps/place/SEN+English+Center/@20.9788841,105.8302392,17z/data=!3m1!4b1!4m6!3m5!1s0x3135adf98071d895:0xb4bbe1f4acc1def5!8m2!3d20.9788791!4d105.8328141!16s%2Fg%2F11jszln6sp?hl=vi-VN&entry=ttu"
                   target="_blank"
                   className="nav-link"
                 >
                   <img src={ic_phone} alt="phone" />
-                  (+84) 2439740870
+                  090 329 52 18
                 </Link>
               </Nav>
             </Row>
@@ -90,8 +90,7 @@ const Footer = () => {
         </Container>
         <div className="copyright">
           <div className="copyright__text">
-            Copyright (c) The 25th General Meeting of Asia-Pacific Central
-            Securities Depository Group. All Rights Reserved
+            Copyright (c) Duymanhvu. All Rights Reserved
           </div>
         </div>
       </Navbar>
