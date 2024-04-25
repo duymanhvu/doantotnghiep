@@ -74,6 +74,17 @@ export const useShareOrderApi = () => {
 
       return httpRequest.post(`/api/Teacher/GetList`, params);
     },
+    getSubjectGetList: () => {
+      const params = {
+        pageSize: 10,
+        pageIndex: 1,
+        sortBy: "Id",
+        orderBy: "desc",
+        keyword: "",
+      };
+
+      return httpRequest.post(`/api/Subject/GetList`, params);
+    },
     getAllCode: (jsonData) => {
       const { cdType, cdCode } = jsonData;
       return httpRequest.get(`/HomeMobile/GetAllCode?CDTYPE=${cdType}&CDCODE=${cdCode}`);

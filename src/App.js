@@ -12,6 +12,8 @@ import { CalendarSchedule } from "./components/project/calendar";
 import Parent from "./components/project/parent/Parent";
 import Student from "./components/project/student/Student";
 import Teacher from "./components/project/teacher/Teacher";
+import Subject from "./components/project/subject/Subject";
+import ClassRoom from "./components/project/classroom/ClassRoom";
 import AuthContextProvider from "./contexts/AuthContext";
 import RegistrationAccommodation from "./scenes/auth/RegistrationAccommodation";
 import Registration from "./scenes/auth/RegistrationForm";
@@ -59,6 +61,8 @@ function App() {
           <Route path="/parent" element={<Parent />} />
           <Route path="/student" element={<Student />} />
           <Route path="/calendar" element={<CreateAccountjs />} />
+          <Route path="/subject" element={<Subject/>} />
+          <Route path="/classroom" element={<ClassRoom/>} />
         </Routes>
       </Router>
     </AuthContextProvider>

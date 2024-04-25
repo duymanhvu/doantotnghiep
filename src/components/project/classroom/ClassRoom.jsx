@@ -10,7 +10,7 @@ import Modal from "react-bootstrap/Modal";
 import { MapColumnsANT } from "../../apiCore/dataSetCollection";
 
 const { Option } = Select;
-const Teacher = () => {
+const ClassRoom = () => {
   const { t } = useTranslation();
   const [listData, setListData] = useState([]);
   const AxiosAPI = useShareOrderApi();
@@ -242,7 +242,7 @@ const Teacher = () => {
       <div className="registration__container">
         <div className="background">
           <div className="background__hook">
-            <h1 className="animate__animated animate__fadeInUp">Teacher</h1>
+            <h1 className="animate__animated animate__fadeInUp">ClassRoom</h1>
           </div>
 
           <div className="scroll">
@@ -255,7 +255,7 @@ const Teacher = () => {
         <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm}>
           <div className="registration__form">
             <div className="registration__form-wrap">
-              <div className="heading v1 text-center">Teacher</div>
+              <div className="heading v1 text-center">ClassRoom</div>
               <div className="heading v2">Thông Tin</div>
               <Form.Item name={"Id"} hidden></Form.Item>
               <div className="row">
@@ -346,4 +346,4 @@ const Teacher = () => {
   );
 };
 
-export default Teacher;
+export default ClassRoom;

@@ -284,6 +284,22 @@ const Header = () => {
                 >
                   Calendar
                 </Nav.Link>
+                <Nav.Link
+                  as={Link}
+                  to="/subject"
+                  onClick={handleLinkClick}
+                  eventKey="10"
+                >
+                  Subject
+                </Nav.Link>
+                <Nav.Link
+                  as={Link}
+                  to="/classroom"
+                  onClick={handleLinkClick}
+                  eventKey="10"
+                >
+                  ClassRoom
+                </Nav.Link>
               </NavDropdown>
               {isAuthenticated ? (
                 <Nav.Link onClick={logoutUser}>

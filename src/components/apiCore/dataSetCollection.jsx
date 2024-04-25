@@ -3,7 +3,6 @@
 import { Badge, Dropdown, Input, Menu, Space, Table, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useSelector, useStore } from "react-redux";
 
 import Moment from "react-moment";
 const Cell = ({ children }) => {
@@ -30,146 +29,9 @@ export const formatGia = (totalPrice) => {
     }
     return val;
   };
-export const StatusOrderInDay = ({ value, data }) => {
-  let keyValue = data?.orstatusvl + "";
-  const store = useStore();
-  const { gShared } = store.getState();
-  const changeColor = (keyValue) => {
-    switch (keyValue) {
-      case "1":
-        return "";
-      case "2":
-        return "#CCAC3D";
-      case "3":
-        return "#F04A47";
-      case "4":
-        return "#4FD08A";
-      case "8":
-        return "#E7AB21";
-      case "13":
-        return "#4FD08A";
-      default:
-        return "";
-    }
-  };
 
-  return (
-    <Tooltip placement="top" title={gShared?.language === "en" ? data?.orstatus_en : data?.orstatus}>
-      <span style={{ color: changeColor(keyValue) }}>{gShared?.language === "en" ? data?.orstatus_en : data?.orstatus}</span>
-    </Tooltip>
-  );
-};
-export const StatusOrderHistory = ({ value, data }) => {
-  let keyValue = value + "";
-  const store = useStore();
-  const { gShared } = store.getState();
-  const changeColor = (keyValue) => {
-    switch (keyValue) {
-      case "3":
-        return "#F04A47";
-      case "4":
-        return "#4FD08A";
-      case "5":
-        return "";
-      case "6":
-        return "";
-      case "7":
-        return "#4FD08A";
-      case "10":
-        return "#CCAC3D";
-      case "12":
-        return "";
-      case "13":
-        return "#4FD08A";
-      default:
-        return "";
-    }
-  };
 
-  return (
-    <Tooltip placement="top" title={gShared?.language === "en" ? data?.orstatus_texten : data?.orstatus_text}>
-      <span style={{ color: changeColor(keyValue) }}>{gShared?.language === "en" ? data?.orstatus_texten : data?.orstatus_text}</span>
-    </Tooltip>
-  );
-};
-export const StatusListTranfer = ({ value, data }) => {
-  let keyValue = value + "";
-  const store = useStore();
-  const { gShared } = store.getState();
-  const changeColor = (keyValue) => {
-    switch (keyValue) {
-      case "1":
-        return "#4FD08A";
-      case "4":
-        return "#E7AB21";
-      case "5":
-        return "#F04A47";
-      case "8":
-        return "#F04A47";
-      default:
-        return "";
-    }
-  };
 
-  return (
-    <Tooltip placement="top" title={gShared?.language === "en" ? data?.status_en : data?.status_vn}>
-      <span style={{ color: changeColor(keyValue) }}>{gShared?.language === "en" ? data?.status_en : data?.status_vn}</span>
-    </Tooltip>
-  );
-};
-export const Txstatus = ({ value, data }) => {
-  let keyValue = value + "";
-  const store = useStore();
-  const { gShared } = store.getState();
-  const changeColor = (keyValue) => {
-    switch (keyValue) {
-      case "1":
-        return "#4FD08A";
-      case "4":
-        return "#E7AB21";
-      case "5":
-        return "#F04A47";
-      case "8":
-        return "#F04A47";
-      default:
-        return "";
-    }
-  };
-
-  return (
-    <Tooltip placement="top" title={gShared?.language === "en" ? data?.txstatus_en : data?.txstatus_vn}>
-      <span>{gShared?.language === "en" ? data?.txstatus_en : data?.txstatus_vn}</span>
-    </Tooltip>
-  );
-};
-export const StatusDepositList = ({ value, data }) => {
-  let keyValue = data?.status + "";
-  const store = useStore();
-  const { gShared } = store.getState();
-  const changeColor = (keyValue) => {
-    switch (keyValue) {
-      case "A":
-        return "#4FD08A";
-      case "P":
-        return "#EE7420";
-      case "C":
-        return "#FFF";
-      case "R":
-        return "#F04A47";
-      case "U":
-        return "#F04A47";
-      case "X":
-        return "#F04A47";
-      default:
-        return "";
-    }
-  };
-  return (
-    <Tooltip placement="top" title={gShared?.language === "en" ? data?.status_Name_En : data?.status_Name}>
-      <span style={{ color: changeColor(keyValue) }}>{gShared?.language === "en" ? data?.status_Name_En : data?.status_Name}</span>
-    </Tooltip>
-  );
-};
 
 export const ViaChannel = ({ value, data }) => {
   let keyValue = data?.via + "";
@@ -201,127 +63,7 @@ export const ViaChannel = ({ value, data }) => {
   );
 };
 
-export const StatusRight = ({ value, data }) => {
-  let keyValue = data?.status + "";
-  const store = useStore();
-  const { gShared } = store.getState();
-  const changeColor = (keyValue) => {
-    switch (keyValue) {
-      // case "F":
-      //   return "#E7AB21";
-      // case "F":
-      case "D":
-      case "G":
-        return "#CCAC3D";
-      // case "D":
-      //   return "#";
-      // case "G":
-      //   return "#F04A47";
-      case "C":
-        return "#0BDF39";
-      default:
-        return "";
-    }
-  };
-  return (
-    <>
-      <Tooltip placement="top" title={gShared?.language === "en" ? data?.status_texten : data?.status_text}>
-        <span style={{ color: changeColor(keyValue) }}>{gShared?.language === "en" ? data?.status_texten : data?.status_text}</span>
-      </Tooltip>
-    </>
-  );
-};
 
-export const StatusOrderDK = ({ value, data }) => {
-  let keyValue = data?.status + "";
-  const store = useStore();
-  const { gShared } = store.getState();
-  const changeColor = (keyValue) => {
-    switch (keyValue) {
-      case "0":
-        return "#E7AB21";
-      case "1":
-        return "#0BDF39";
-      case "2":
-        return "#CCAC3D";
-      case "3":
-        return "#F04A47";
-      case "4":
-        return "#4FD08A";
-      case "8":
-        return "#E7AB21";
-      case "9":
-        return "#ff0210";
-      case "13":
-        return "#4FD08A";
-      default:
-        return "";
-    }
-  };
-
-  return (
-    <>
-      <Tooltip placement="top" title={gShared?.language === "en" ? data?.orstatus_en : data?.orstatus}>
-        <span style={{ color: changeColor(keyValue) }}>{gShared?.language === "en" ? data?.status_en : data?.status_text}</span>
-      </Tooltip>
-      {(data.status === "9" || data.status === "5") && data.errdesc !== "" && data.en_errdesc !== "" && (
-        <Tooltip placement="top" title={gShared?.language === "vn" ? data.errdesc : data.en_errdesc}>
-          <img src="/static/img/icon/ic_info.svg" alt="img" />
-        </Tooltip>
-      )}
-    </>
-  );
-};
-export const StatusSignCA = ({ value, data }) => {
-  let keyValue = data?.status + "";
-  const store = useStore();
-  const { gShared } = store.getState();
-  const changeColor = (keyValue) => {
-    switch (keyValue) {
-      case "N":
-        return "#FFF";
-      case "H":
-        return "#4FD08A";
-      case "A":
-        return "#E7AB21";
-      case "E":
-        return "#F04A47";
-      default:
-        return "";
-    }
-  };
-
-  return (
-    <Tooltip placement="top" title={gShared?.language === "en" ? data?.status_En : data?.status_Vn}>
-      <span style={{ color: changeColor(keyValue) }}>{gShared?.language === "en" ? data?.status_En : data?.status_Vn}</span>
-    </Tooltip>
-  );
-};
-// export const StatusGetMoney = ({ value, data }) => {
-//   let keyValue = data?.status + "";
-//   const store = useStore();
-//   const { gShared } = store.getState();
-//   const changeColor = (keyValue) => {
-//     switch (keyValue) {
-//       case "N":
-//         return "#FFF";
-//       case "H":
-//         return "#4FD08A";
-//       case "A":
-//         return "#E7AB21";
-//       case "E":
-//         return "#F04A47";
-//       default:
-//         return "";
-//     }
-//   };
-
-//   return (
-//     <Tooltip placement="top" title={gShared?.language === "en" ? data?.status_En : data?.status_Vn}>
-//       <span style={{ color: changeColor(keyValue) }}>{gShared?.language === "en" ? data?.status_En : data?.status_Vn}</span>
-//     </Tooltip>
-//   );
-// };
 export const PriceOrder = ({ value, data }) => {
   return (
     <Tooltip placement="top" title={!isNaN(value) ? Number(value) / 1000 : value}>
@@ -329,40 +71,8 @@ export const PriceOrder = ({ value, data }) => {
     </Tooltip>
   );
 };
-export const PeriodOrderDK = ({ value, data }) => {
-  let keyValue = data?.period + "";
-  const store = useStore();
-  const { gShared } = store.getState();
 
-  return (
-    <Tooltip placement="top" title={gShared?.language === "en" ? data?.orstatus_en : data?.orstatus}>
-      <span>{gShared?.language === "en" ? data?.perIod_Name_En : data?.perIod_Name}</span>
-    </Tooltip>
-  );
-};
-export const StatusTransactionHistoryMoneyTranfer = ({ value, data }) => {
-  let keyValue = data?.txstatus + "";
-  const store = useStore();
-  const { gShared } = store.getState();
-  const changeColor = (keyValue) => {
-    switch (keyValue) {
-      case "8":
-        return "#FFF";
-      case "1":
-        return "#4FD08A";
-      case "4":
-        return "#E7AB21";
-      default:
-        return "";
-    }
-  };
 
-  return (
-    <Tooltip placement="top" title={gShared?.language === "en" ? data?.txstatus_en : data?.txstatus_vn}>
-      <span style={{ color: changeColor(keyValue) }}>{gShared?.language === "en" ? data?.txstatus_en : data?.txstatus_vn}</span>
-    </Tooltip>
-  );
-};
 
 export const MapColumnsANT = (columnList) => {
   const { t } = useTranslation();
@@ -378,75 +88,14 @@ export const MapColumnsANT = (columnList) => {
           </Cell>
         );
       });
-    if (e.key?.toUpperCase() === "exectype".toUpperCase()) {
+    if (e.key?.toUpperCase() === "SUBJECT".toUpperCase()) {
       render = (value, data) => {
+        console.log(value, data,"kkkkkkkkkkkkkkkkkkkkkkkkkkk");
         return (
           <Cell>
-            
-          </Cell>
-        );
-      };
-    } else if (e.key?.toUpperCase() === "orstatusvl".toUpperCase()) {
-      render = (value, data) => {
-        return (
-          <Cell>
-            <StatusOrderInDay value={value} data={data} />
-          </Cell>
-        );
-      };
-    } else if (e.key?.toUpperCase() === "orstatus".toUpperCase()) {
-      render = (value, data) => {
-        return (
-          <Cell>
-            <StatusOrderHistory value={value} data={data} />
-          </Cell>
-        );
-      };
-    } else if (e.key?.toUpperCase() === "statusvl".toUpperCase()) {
-      render = (value, data) => {
-        return (
-          <Cell>
-            <StatusListTranfer value={value} data={data} />
-          </Cell>
-        );
-      };
-    } else if (e.key?.toUpperCase() === "txstatus".toUpperCase() && e.dataType === "TXSTATUS_TRANSACTION") {
-      render = (value, data) => {
-        return (
-          <Cell>
-            <StatusTransactionHistoryMoneyTranfer value={value} data={data} />
-          </Cell>
-        );
-      };
-    } else if (e.key?.toUpperCase() === "txstatus".toUpperCase()) {
-      render = (value, data) => {
-        return (
-          <Cell>
-            <Txstatus value={value} data={data} />
-          </Cell>
-        );
-      };
-    } else if (e.dataType === "STATUS_ORDER_CON") {
-      render = (value, data) => {
-        return (
-          <Cell>
-            <StatusOrderDK value={value} data={data} />
-          </Cell>
-        );
-      };
-    } else if (e.dataType === "STATUS_SIGN_CA") {
-      render = (value, data) => {
-        return (
-          <Cell>
-            <StatusSignCA value={value} data={data} />
-          </Cell>
-        );
-      };
-    } else if (e.key?.toUpperCase() === "status".toUpperCase() && e.dataType !== "RIGHT_STATUS" && e.dataType !== "STATUS_ORDER_CON") {
-      render = (value, data) => {
-        return (
-          <Cell>
-            <StatusDepositList value={value} data={data} />
+            <Tooltip placement="top" title={value}>
+              <span> {value}</span>
+            </Tooltip>
           </Cell>
         );
       };
@@ -722,23 +371,7 @@ export const MapColumnsANT = (columnList) => {
           );
         }
       };
-    } else if (e?.dataType?.toUpperCase() === "RIGHT_STATUS".toUpperCase()) {
-      render = (value, data) => {
-        return (
-          <Cell>
-            <StatusRight value={value} data={data} />
-          </Cell>
-        );
-      };
-    } else if (e.key?.toUpperCase() === "period".toUpperCase() && e.dataType !== "RIGHT_STATUS") {
-      render = (value, data) => {
-        return (
-          <Cell>
-            <PeriodOrderDK value={value} data={data} />
-          </Cell>
-        );
-      };
-    } else if (e.dataType?.toUpperCase() === "PERCENT_VALUE".toUpperCase()) {
+    }  else if (e.dataType?.toUpperCase() === "PERCENT_VALUE".toUpperCase()) {
       render = (value, data) => {
         if (Number(value) && value) {
           return (

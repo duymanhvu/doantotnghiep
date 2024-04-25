@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
 import scroll_down from "../../../assets/img/ic_scroll_down.svg";
-import { Input, Form, Tooltip, Button, Popconfirm, Table, Checkbox, Select } from "antd";
+import { Input, Form, Tooltip, Button, Popconfirm, Table, message, Select, InputNumber } from "antd";
 import { useTranslation } from "react-i18next";
 import { useShareOrderApi } from "../../apiCore/apiProcess";
 import { convertToArray, notificationShare } from "../../apiCore/convertObject";
 import { useAxios } from "../../apiCore/apiHelper";
-import moment from "moment";
 import Modal from "react-bootstrap/Modal";
-import { MapColumnsANT } from "../../apiCore/dataSetCollection";
+import { useGlobalConst } from "../../apiCore/useGlobalConst";
+import moment from "moment";
 
 const { Option } = Select;
-const Teacher = () => {
+
+const Subject = () => {
   const { t } = useTranslation();
   const [listData, setListData] = useState([]);
   const AxiosAPI = useShareOrderApi();
@@ -18,74 +19,54 @@ const Teacher = () => {
   const axios = useAxios();
   const [selectedRow, setSelectedRow] = useState(false);
   const [checkFinish, setCheckFinish] = useState(false);
+  const [listParent, setlistParent] = useState([]);
   const [show, setShow] = useState(false);
+  const globalConst = useGlobalConst(t);
+
   const handleClose = () => setShow(false);
   const [recordToDelete, setRecordToDelete] = useState(null);
   const handleShow = (autoId) => {
     setRecordToDelete(autoId);
     setShow(true);
   };
-  
 
-  const columns = MapColumnsANT([
-    {
-      title: t("Họ và tên"),
-      dataIndex: "Fullname",
-      key: "Fullname",
-      align: "center",
-    },
-    {
-      title: t("Số điện thoại"),
-      dataIndex: "Phone",
-      key: "Phone",
-      align: "center",
-    },
-    {
-      title: t("Email"),
-      dataIndex: "Email",
-      key: "Email",
-      align: "center",
-    },
-    {
-      title: t("Tài Khoản"),
-      dataIndex: "Username",
-      key: "Username",
-      align: "center",
-    },
-    {
-      title: t("Mật khẩu"),
-      dataIndex: "Password",
-      key: "Password",
-      align: "center",
-    },
-    {
-      title: t("Môn dạy"),
-      dataIndex: "SubjectType",
-      key: "SubjectType",
-      align: "center",
-      render: (value) => {
-        switch (value) {
-          case 0:
-            return "Toán";
-          case 1:
-            return "Văn";
-          case 2:
-            return "Tiếng Anh";
-          default:
-            return value;
+  useEffect(() => {
+    AxiosAPI.getParentGetList()
+      .then((res) => {
+        if (res.status === 200) {
+          setlistParent(convertToArray(res?.data?.Data));
+        } else {
+          setlistParent([]);
         }
-      }
-    },
+      })
+      .catch(function (err) {
+        setlistParent([]);
+      });
+  }, []);
+
+  const columns = [
     {
-      title: t("Trạng thái"),
-      dataIndex: "Status",
-      key: "Status",
+      title: t("Tên Môn"),
+      dataIndex: "Name",
+      key: "Name",
       align: "center",
     },
     {
-      title: t("Trạng thái Admin"),
-      dataIndex: "IsAdmin",
-      key: "IsAdmin",
+      title: t("Mô tả môn học"),
+      dataIndex: "Description",
+      key: "Description",
+      align: "center",
+    },
+    {
+      title: t("Giá môn học"),
+      dataIndex: "CurrentPrice",
+      key: "CurrentPrice",
+      align: "center",
+    },
+    {
+      title: t("Tổng số buổi"),
+      dataIndex: "TotalSlot",
+      key: "TotalSlot",
       align: "center",
     },
     {
@@ -103,13 +84,13 @@ const Teacher = () => {
         </div>
       ),
     },
-  ]);
+  ];
   useEffect(() => {
     handleGetLisDigitalSignature();
   }, []);
 
   const handleGetLisDigitalSignature = () => {
-    AxiosAPI.getTeacherGetList()
+    AxiosAPI.getSubjectGetList()
       .then((res) => {
         if (res.status === 200) {
           setListData(convertToArray(res?.data?.Data));
@@ -124,25 +105,35 @@ const Teacher = () => {
   const handleEditClick = (record) => {
     setSelectedRow(true);
     const subjectTypeString = (() => {
-      switch (record?.SubjectType) {
-        case 0:
-          return "Toán";
-        case 1:
-          return "Văn";
-        case 2:
-          return "Tiếng Anh";
-        default:
-          return record?.SubjectType;
-      }
-    })();
+        switch (record?.SubjectType) {
+          case 0:
+            return "Toán";
+          case 1:
+            return "Văn";
+          case 2:
+            return "Tiếng Anh";
+          default:
+            return record?.SubjectType;
+        }
+      })();
+    const subjectLevelString = (() => {
+        switch (record?.SubjectLevel) {
+          case 1:
+            return "Khối 6";
+          case 2:
+            return "Khối 9";
+          default:
+            return record?.SubjectLevel;
+        }
+      })();
+
     formCASign.setFieldsValue({
       Id: record?.Id,
-      Fullname: record?.Fullname,
-      Phone: record?.Phone,
-      Email: record?.Email,
-      Password: record?.Password,
-      Username: record?.Username,
+      Description: record?.Description,
+      CurrentPrice: record?.CurrentPrice,
+      TotalSlot: record?.TotalSlot,
       SubjectType: subjectTypeString,
+      SubjectLevel: subjectLevelString,
     });
   };
 
@@ -151,22 +142,21 @@ const Teacher = () => {
     formCASign
       .validateFields()
       .then(async (values) => {
+        const name = formCASign.getFieldValue("Name");
         const newData = {
-          fullname: values?.Fullname,
-          phone: values?.Phone,
-          email: values?.Email,
-          password: values?.Password,
+          name: name,
+          description: values?.Description,
+          currentPrice: values?.CurrentPrice,
+          totalSlot: values?.TotalSlot,
           subjectType: values?.SubjectType,
-          username: values?.Username,
-          isAdmin: true,
-          status: true,
+          subjectLevel: values?.SubjectLevel,
+          isDeleted: 0,
         };
         if (values) {
-          const response = await axios.post("/api/Teacher/Insert", newData);
-          console.log(response, "response");
+          const response = await axios.post("/api/Subject/Insert", newData);
 
           if (response.data?.StatusCode >= 0) {
-            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
+            message.success("Processing complete!");
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
@@ -178,7 +168,7 @@ const Teacher = () => {
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
+          message.error("Error!");
         }
       });
   };
@@ -187,37 +177,41 @@ const Teacher = () => {
     formCASign
       .validateFields()
       .then(async (values) => {
+        const name = formCASign.getFieldValue("Name");
+
         const newData = {
           ...values,
+          name: name,
+          description: values?.Description,
         };
         if (values) {
-          const response = await axios.post("/api/Teacher/Update", newData);
-          if (response.data?.StatusCode >= 0) {
-            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
+          const response = await axios.post("/api/Subject/Update", newData);
 
+          if (response.data?.StatusCode >= 0) {
+            message.success("Processing complete!");
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
+            message.error("Error!");
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
+          message.error("Error!");
         }
       });
   };
   const handleDelete = (autoId) => {
     axios
-      .post(`/api/Teacher/Delete?id=${autoId}?Token=abcd123`)
+      .post(`/api/Subject/Delete?id=${autoId}&Token=abcd123`)
       .then((response) => {
         if (response.status === 200 && response.data.StatusCode >= 0) {
-          notificationShare(0, response.data.errorMsg, t("thanhCong"));
+          message.success("Processing complete!");
         } else {
-          notificationShare(-1, response.data.errorMsg, t("thatBai"));
+          message.error("Error!");
         }
       })
       .catch((err) => {
@@ -232,17 +226,38 @@ const Teacher = () => {
         formCASign.resetFields();
       });
   };
+
+  const updateNameFieldValue = () => {
+    const subjectType = formCASign.getFieldValue("SubjectType");
+    const subjectLevel = formCASign.getFieldValue("SubjectLevel");
+
+    let name;
+    if (subjectType === "0") {
+      name = "Toán";
+    } else if (subjectType === "1") {
+      name = "Văn";
+    } else if (subjectType === "2") {
+      name = "Tiếng Anh";
+    }
+
+    if (subjectLevel === "1") {
+      name += " khối 6";
+    } else if (subjectLevel === "2") {
+      name += " khối 9";
+    }
+
+    formCASign.setFieldsValue({ Name: name });
+  };
   const handleFinishForm = () => {
     formCASign.validateFields().then((values) => {});
   };
-  
 
   return (
     <div className="registration">
       <div className="registration__container">
         <div className="background">
           <div className="background__hook">
-            <h1 className="animate__animated animate__fadeInUp">Teacher</h1>
+            <h1 className="animate__animated animate__fadeInUp">Subject</h1>
           </div>
 
           <div className="scroll">
@@ -255,46 +270,62 @@ const Teacher = () => {
         <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm}>
           <div className="registration__form">
             <div className="registration__form-wrap">
-              <div className="heading v1 text-center">Teacher</div>
+              <div className="heading v1 text-center">Subject</div>
               <div className="heading v2">Thông Tin</div>
               <Form.Item name={"Id"} hidden></Form.Item>
               <div className="row">
                 <div className="col-lg-4">
-                  <Form.Item label={"Họ và Tên"} name={"Fullname"} className="req">
-                    <Input />
-                  </Form.Item>
-                </div>
-                <div className="col-lg-4">
-                  <Form.Item label={"Số điện thoại"} name={"Phone"} className="req">
-                    <Input />
-                  </Form.Item>
-                </div>
-
-                <div className="col-lg-4">
-                  <Form.Item label={"Email"} name={"Email"} className="req">
-                    <Input />
-                  </Form.Item>
-                </div>
-                <div className="col-lg-4">
-                  <Form.Item label={"Tài Khoản"} name={"Username"} className="req">
-                    <Input />
-                  </Form.Item>
-                </div>
-                <div className="col-lg-4">
-                  <Form.Item label={"Mật khẩu"} name={"Password"} className="req">
-                    <Input.Password />
-                  </Form.Item>
-                </div>
-                <div className="col-lg-4">
-                  <Form.Item label={"Môn dạy"} name={"SubjectType"} className="req">
-                    <Select className="select--modify" placeholder="Choose"
-                    >
+                  <Form.Item label={"Môn"} name={"SubjectType"} className="req">
+                    <Select className="select--modify" placeholder="Choose" onChange={updateNameFieldValue}>
                       <Option value="0">Toán</Option>
                       <Option value="1">Văn</Option>
                       <Option value="2">Tiếng Anh</Option>
                     </Select>
                   </Form.Item>
                 </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Khối"} name={"SubjectLevel"} className="req">
+                    <Select className="select--modify" placeholder="Choose" onChange={updateNameFieldValue}>
+                      <Option value="1">Khối 6</Option>
+                      <Option value="2">Khối 9</Option>
+                    </Select>
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Mô tả môn học"} name={"Description"} className="req">
+                    <Input />
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Giá"} name={"CurrentPrice"} className="req">
+                    <InputNumber
+                      {...globalConst.ANT.FORM.ITEM.INPUT.INPUTT_COMPLEX}
+                      formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                      parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                      onKeyPress={(event) => {
+                        if (!/[0-9]/.test(event.key)) {
+                          event.preventDefault();
+                        }
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Số buổi học"} name={"TotalSlot"} className="req">
+                    <InputNumber
+                      {...globalConst.ANT.FORM.ITEM.INPUT.INPUTT_COMPLEX}
+                      formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                      parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                      onKeyPress={(event) => {
+                        if (!/[0-9]/.test(event.key)) {
+                          event.preventDefault();
+                        }
+                      }}
+                      maxLength={3}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4"></div>
                 <div className="col-lg-4">
                   <Form.Item label={"Thao tác"} className="req">
                     <button className="btn btn-action" type="submit" onClick={selectedRow ? handleEditDigitalSignature : handleAddDigitalSignature}>
@@ -313,9 +344,6 @@ const Teacher = () => {
                     key: e?.autoId,
                   }))}
                   pagination={false}
-                  scroll={{
-                    x: "100%",
-                  }}
                 />
               </div>
             </div>
@@ -346,4 +374,4 @@ const Teacher = () => {
   );
 };
 
-export default Teacher;
+export default Subject;
