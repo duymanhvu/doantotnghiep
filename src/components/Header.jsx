@@ -267,13 +267,22 @@ const Header = () => {
                   eventKey="10"
                 >
                   Student
-                </Nav.Link><Nav.Link
+                </Nav.Link>
+                <Nav.Link
                   as={Link}
                   to="/parent"
                   onClick={handleLinkClick}
                   eventKey="10"
                 >
                   Parent
+                </Nav.Link>
+                <Nav.Link
+                  as={Link}
+                  to="/calendar"
+                  onClick={handleLinkClick}
+                  eventKey="10"
+                >
+                  Calendar
                 </Nav.Link>
               </NavDropdown>
               {isAuthenticated ? (

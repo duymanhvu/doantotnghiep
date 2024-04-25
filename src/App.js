@@ -24,6 +24,9 @@ import Photos from "./scenes/photos/Photos";
 import Program from "./scenes/program/Program";
 import Speakers from "./scenes/speakers/Speakers";
 import Tour from "./scenes/tour/Tour";
+import CreateAccount from "./components/CreateAccount/components/CreateAccount";
+import LoginForm from "./scenes/auth/LoginForm";
+import CreateAccountjs from "./scenes/auth/CreatAc";
 function App() {
   AOS.init();
   return (
@@ -48,14 +51,14 @@ function App() {
             <Route path="/program" element={<Program />} />
             <Route path="/tour" element={<Tour />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/speakers" element={<Speakers />} />
+            <Route path="/speakers" element={<LoginForm />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
-          <Route path="/test" element={<Registration />} />
+          <Route path="/test" element={<CreateAccount/>} />
           <Route path="/teacher" element={<Teacher />} />
           <Route path="/parent" element={<Parent />} />
           <Route path="/student" element={<Student />} />
-          <Route path="/calendar" element={<CalendarSchedule />} />
+          <Route path="/calendar" element={<CreateAccountjs />} />
         </Routes>
       </Router>
     </AuthContextProvider>

@@ -1,6 +1,35 @@
 import React from "react";
 
 import Notification from "rc-notification";
+import {  Modal } from "antd";
+import { useTranslation } from "react-i18next";
+
+const PopupSuccess = (props) => {
+  const { t } = useTranslation();
+  const { handleCancel, isModalOpen} = props;
+  // const { data, isOpen } = isModalOpen;
+
+
+  return (
+   <Modal  footer={null} centered className="ant-modal-success" onCancel={() => handleCancel()}>
+      <div className="group">
+        <div className="head">
+          <img src="/static/img/icon/ic_modal_success.svg" alt="img" />
+          {t("Success")}
+        </div>
+        <div className="body">
+          <div>
+            <div className="content">
+                {/* {t("huyThanhCong")} {data?.data?.filter(e => e.code === 200 || e.code === 0).length}/{data?.data?.length} {t("lenh2")} */}
+            </div>  
+          </div>
+        </div>
+      </div> 
+    </Modal>
+  );
+};
+
+export default PopupSuccess;
 
 
 let notification = null;
