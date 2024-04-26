@@ -134,6 +134,7 @@ const Subject = () => {
       TotalSlot: record?.TotalSlot,
       SubjectType: subjectTypeString,
       SubjectLevel: subjectLevelString,
+      Name: record?.Name,
     });
   };
 
@@ -178,11 +179,12 @@ const Subject = () => {
       .validateFields()
       .then(async (values) => {
         const name = formCASign.getFieldValue("Name");
-
+console.log(values,"llllllllllllllllllllllllll");
         const newData = {
           ...values,
           name: name,
-          description: values?.Description,
+          SubjectType: values?.SubjectType === "Toán" ? "0" : values?.SubjectType === "Văn" ? "1" : values?.SubjectType === "Tiếng Anh" ? "2" : values?.SubjectType,
+          SubjectLevel: values?.SubjectLevel === "Khối 6" ? "1" : values?.SubjectLevel === "Khối 9" ? "2" : values?.SubjectLevel 
         };
         if (values) {
           const response = await axios.post("/api/Subject/Update", newData);
@@ -299,7 +301,6 @@ const Subject = () => {
                 <div className="col-lg-4">
                   <Form.Item label={"Giá"} name={"CurrentPrice"} className="req">
                     <InputNumber
-                      {...globalConst.ANT.FORM.ITEM.INPUT.INPUTT_COMPLEX}
                       formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                       parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                       onKeyPress={(event) => {
@@ -313,7 +314,6 @@ const Subject = () => {
                 <div className="col-lg-4">
                   <Form.Item label={"Số buổi học"} name={"TotalSlot"} className="req">
                     <InputNumber
-                      {...globalConst.ANT.FORM.ITEM.INPUT.INPUTT_COMPLEX}
                       formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                       parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                       onKeyPress={(event) => {

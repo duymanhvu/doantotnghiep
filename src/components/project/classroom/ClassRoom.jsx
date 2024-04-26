@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import scroll_down from "../../../assets/img/ic_scroll_down.svg";
-import { Input, Form, Tooltip, Button, Popconfirm, Table, Checkbox, Select } from "antd";
+import { Input, Form, Tooltip, Button, Popconfirm, Table, Checkbox, Select, message, InputNumber } from "antd";
 import { useTranslation } from "react-i18next";
 import { useShareOrderApi } from "../../apiCore/apiProcess";
 import { convertToArray, notificationShare } from "../../apiCore/convertObject";
@@ -25,7 +25,8 @@ const ClassRoom = () => {
     setRecordToDelete(autoId);
     setShow(true);
   };
-  
+  const [listSubject, setListSubject] = useState([]);
+  const [listTeacher, setListTeacher] = useState([]);
 
   const columns = MapColumnsANT([
     {
@@ -74,7 +75,7 @@ const ClassRoom = () => {
           default:
             return value;
         }
-      }
+      },
     },
     {
       title: t("Trạng thái"),
@@ -105,11 +106,34 @@ const ClassRoom = () => {
     },
   ]);
   useEffect(() => {
+    AxiosAPI.getSubjectGetList()
+      .then((res) => {
+        if (res.status === 200) {
+          setListSubject(convertToArray(res?.data?.Data));
+        } else {
+          setListSubject([]);
+        }
+      })
+      .catch(function (err) {
+        setListSubject([]);
+      });
+    AxiosAPI.getTeacherGetList()
+      .then((res) => {
+        if (res.status === 200) {
+          setListTeacher(convertToArray(res?.data?.Data));
+        } else {
+          setListTeacher([]);
+        }
+      })
+      .catch(function (err) {
+        setListTeacher([]);
+      });
     handleGetLisDigitalSignature();
   }, []);
+  console.log(listSubject, "setListSubjectsetListSubjectsetListSubject",listTeacher);
 
   const handleGetLisDigitalSignature = () => {
-    AxiosAPI.getTeacherGetList()
+    AxiosAPI.getClassRoomGetList()
       .then((res) => {
         if (res.status === 200) {
           setListData(convertToArray(res?.data?.Data));
@@ -121,6 +145,7 @@ const ClassRoom = () => {
         setListData([]);
       });
   };
+  console.log(listData, "listDatalistData");
   const handleEditClick = (record) => {
     setSelectedRow(true);
     const subjectTypeString = (() => {
@@ -166,7 +191,7 @@ const ClassRoom = () => {
           console.log(response, "response");
 
           if (response.data?.StatusCode >= 0) {
-            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
+            message.success("Processing complete!");
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
@@ -178,7 +203,7 @@ const ClassRoom = () => {
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
+          message.error("Error!");
         }
       });
   };
@@ -193,14 +218,13 @@ const ClassRoom = () => {
         if (values) {
           const response = await axios.post("/api/Teacher/Update", newData);
           if (response.data?.StatusCode >= 0) {
-            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
-
+            message.success("Processing complete!");
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
+            message.error("Error!");
           }
         }
       })
@@ -235,7 +259,6 @@ const ClassRoom = () => {
   const handleFinishForm = () => {
     formCASign.validateFields().then((values) => {});
   };
-  
 
   return (
     <div className="registration">
@@ -260,39 +283,55 @@ const ClassRoom = () => {
               <Form.Item name={"Id"} hidden></Form.Item>
               <div className="row">
                 <div className="col-lg-4">
-                  <Form.Item label={"Họ và Tên"} name={"Fullname"} className="req">
+                  <Form.Item label={"Tên Phòng"} name={"ClassroomNo"} className="req">
                     <Input />
                   </Form.Item>
                 </div>
                 <div className="col-lg-4">
-                  <Form.Item label={"Số điện thoại"} name={"Phone"} className="req">
-                    <Input />
+                  <Form.Item label={"Ngày bắt đầu"} name={"StartDate"} className="req">
+                    <Input type="date" />
                   </Form.Item>
                 </div>
 
                 <div className="col-lg-4">
-                  <Form.Item label={"Email"} name={"Email"} className="req">
-                    <Input />
+                  <Form.Item label={"Ngày kết thúc"} name={"EndDate"} className="req">
+                    <Input type="date" />
                   </Form.Item>
                 </div>
                 <div className="col-lg-4">
-                  <Form.Item label={"Tài Khoản"} name={"Username"} className="req">
-                    <Input />
-                  </Form.Item>
-                </div>
-                <div className="col-lg-4">
-                  <Form.Item label={"Mật khẩu"} name={"Password"} className="req">
-                    <Input.Password />
-                  </Form.Item>
-                </div>
-                <div className="col-lg-4">
-                  <Form.Item label={"Môn dạy"} name={"SubjectType"} className="req">
-                    <Select className="select--modify" placeholder="Choose"
-                    >
-                      <Option value="0">Toán</Option>
-                      <Option value="1">Văn</Option>
-                      <Option value="2">Tiếng Anh</Option>
+                  <Form.Item label={"Môn học"} name={"SubjectId"} className="req">
+                    <Select className="select--modify" placeholder="Choose">
+                      {convertToArray(listSubject).map((e, key) => (
+                        <Option key={key} value={e.Id}>
+                          {e.Name}
+                        </Option>
+                      ))}
                     </Select>
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Người dạy"} name={"TeacherId"} className="req">
+                    <Select className="select--modify" placeholder="Choose">
+                      {convertToArray(listTeacher).map((e, key) => (
+                        <Option key={key} value={e.Id}>
+                          {e.Fullname}
+                        </Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Số lượng hs"} name={"Capacity"} className="req">
+                    <InputNumber
+                      formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                      parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                      onKeyPress={(event) => {
+                        if (!/[0-9]/.test(event.key)) {
+                          event.preventDefault();
+                        }
+                      }}
+                      maxLength={2}
+                    />
                   </Form.Item>
                 </div>
                 <div className="col-lg-4">

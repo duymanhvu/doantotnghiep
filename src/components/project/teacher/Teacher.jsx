@@ -182,6 +182,7 @@ const Teacher = () => {
         }
       });
   };
+  
   const handleEditDigitalSignature = async () => {
     formCASign.submit();
     formCASign
@@ -189,6 +190,7 @@ const Teacher = () => {
       .then(async (values) => {
         const newData = {
           ...values,
+          SubjectType: values?.SubjectType === "Toán" ? "0" : values?.SubjectType === "Văn" ? "1" : values?.SubjectType === "Tiếng Anh" ? "2" : values?.SubjectType
         };
         if (values) {
           const response = await axios.post("/api/Teacher/Update", newData);
@@ -212,7 +214,7 @@ const Teacher = () => {
   };
   const handleDelete = (autoId) => {
     axios
-      .post(`/api/Teacher/Delete?id=${autoId}?Token=abcd123`)
+      .post(`/api/Teacher/Delete?id=${autoId}&Token=abcd123`)
       .then((response) => {
         if (response.status === 200 && response.data.StatusCode >= 0) {
           notificationShare(0, response.data.errorMsg, t("thanhCong"));
