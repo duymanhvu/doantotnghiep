@@ -7,16 +7,17 @@ import {
 
 import AOS from "aos";
 
+import CreateAccount from "./components/CreateAccount/components/CreateAccount";
 import Layout from "./components/Layout";
-import { CalendarSchedule } from "./components/project/calendar";
+import ClassRoom from "./components/project/classroom/ClassRoom";
 import Parent from "./components/project/parent/Parent";
 import Student from "./components/project/student/Student";
-import Teacher from "./components/project/teacher/Teacher";
 import Subject from "./components/project/subject/Subject";
-import ClassRoom from "./components/project/classroom/ClassRoom";
+import Teacher from "./components/project/teacher/Teacher";
 import AuthContextProvider from "./contexts/AuthContext";
+import CreateAccountjs from "./scenes/auth/CreatAc";
+import LoginForm from "./scenes/auth/LoginForm";
 import RegistrationAccommodation from "./scenes/auth/RegistrationAccommodation";
-import Registration from "./scenes/auth/RegistrationForm";
 import Contact from "./scenes/contact/Contact";
 import Home from "./scenes/home/Home";
 import Local from "./scenes/local/Local";
@@ -24,11 +25,7 @@ import Message from "./scenes/message/Message";
 import Overview from "./scenes/overview/Overview";
 import Photos from "./scenes/photos/Photos";
 import Program from "./scenes/program/Program";
-import Speakers from "./scenes/speakers/Speakers";
 import Tour from "./scenes/tour/Tour";
-import CreateAccount from "./components/CreateAccount/components/CreateAccount";
-import LoginForm from "./scenes/auth/LoginForm";
-import CreateAccountjs from "./scenes/auth/CreatAc";
 function App() {
   AOS.init();
   return (

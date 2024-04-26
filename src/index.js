@@ -17,10 +17,10 @@ import 'swiper/css/scrollbar';
 
 import "react-datepicker/dist/react-datepicker.css";
 
+import 'antd/dist/antd.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './assets/scss/main.css'
+import './assets/scss/main.css';
 import './index.css';
-import 'antd/dist/antd.css';  
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
