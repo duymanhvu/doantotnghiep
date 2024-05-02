@@ -9009,3 +9009,8 @@ ant-input-password-icon {
   border-radius: 10px;
   width: 100%;
 }
+.fc-timegrid-slots{
+  tr{
+    height: 400px;
+  }
+}

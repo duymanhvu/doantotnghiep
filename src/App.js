@@ -9,6 +9,7 @@ import AOS from "aos";
 
 import CreateAccount from "./components/CreateAccount/components/CreateAccount";
 import Layout from "./components/Layout";
+import { CalendarSchedule } from "./components/project/calendar";
 import ClassRoom from "./components/project/classroom/ClassRoom";
 import Parent from "./components/project/parent/Parent";
 import Student from "./components/project/student/Student";
@@ -60,6 +61,7 @@ function App() {
           <Route path="/calendar" element={<CreateAccountjs />} />
           <Route path="/subject" element={<Subject/>} />
           <Route path="/classroom" element={<ClassRoom/>} />
+          <Route path="/calender" element={<CalendarSchedule/>} />
         </Routes>
       </Router>
     </AuthContextProvider>

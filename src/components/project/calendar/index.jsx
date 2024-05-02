@@ -3,7 +3,27 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 
 import scroll_down from "../../../assets/img/ic_scroll_down.svg";
 
-const events = [{ title: "Meeting", start: new Date() }];
+const events = [
+  {
+    id: 1,
+    title: " Lịch học Toán",
+    start: "2024-05-01T09:30:00",
+    end: "2024-05-01T10:30:00",
+  },
+  {
+    id: 2,
+    title: " Lịch học Văn",
+    start: "2024-05-01T10:30:00",
+    end: "2024-05-01T11:30:00",
+  },
+  {
+    id: 3,
+    title: " Lịch học Tiếng anh",
+    start: "2024-05-01T11:30:00",
+    end: "2024-05-01T12:30:00",
+  },
+  { title: "Meeting", start: new Date() },
+];
 
 export function CalendarSchedule() {
   return (
@@ -22,6 +42,21 @@ export function CalendarSchedule() {
           </div>
         </div>
         <FullCalendar
+          locale={"vi"}
+          timeZone="local"
+          allDaySlot={false}
+          slotDuration={"06:00:00"}
+          slotMinTime={"07:00:00"}
+          slotMaxTime={"15:00:00"}
+          contentHeight={850}
+          eventMinHeight={40}
+          slotLabelContent={(e) => {
+            if (e.text === "07") {
+              return "Sáng";
+            } else {
+              return "Chiều";
+            }
+          }}
           plugins={[timeGridPlugin]}
           initialView="timeGridWeek"
           weekends={false}
