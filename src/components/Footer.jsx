@@ -7,7 +7,7 @@ import Navbar from "react-bootstrap/Navbar";
 
 import { Row, Col } from "react-bootstrap";
 
-import logo from "../assets/img/logo_footer.svg";
+import logo from "../assets/logoSen.png";
 import contact_email from "../assets/img/ic_contact_email.svg";
 import contact_location from "../assets/img/ic_contact_location.svg";
 import ic_phone from "../assets/img/ic_phone.svg";

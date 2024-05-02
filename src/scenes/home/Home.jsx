@@ -22,7 +22,7 @@ import speaker_7 from "../../assets/img/speakers/speaker_7.png";
 import speaker_8 from "../../assets/img/speakers/speaker_8.png";
 import speaker_9 from "../../assets/img/speakers/speaker_9.png";
 import speaker_2 from "../../assets/img/speakers/speaker_2.png";
-import speaker_4 from "../../assets/img/speakers/speaker_3.png";
+import speaker_4 from "../../assets/img/speakers/speaker_14.png";
 import speaker_5 from "../../assets/img/speakers/speaker_3.png";
 import speaker_10 from "../../assets/img/speakers/speaker_10.png";
 import speaker_11 from "../../assets/img/speakers/speaker_11.png";
@@ -53,44 +53,44 @@ const Home = () => {
   const people = [
     {
       id: 1,
-      name: "Yedil Medeu",
-      desc: ["WFC Chairman"],
+      name: "Thầy Nguyễn Văn A",
+      desc: ["Giáo viên dạy Toán","6 năm kinh nghiệm dạy học"],
       avatar: speaker_6,
     },
     {
       id: 2,
-      name: "Dominic Scriven OBE",
-      desc: ["Chairman", "Dragon Capital VietFund Management Joint Stock Company"],
+      name: "Thầy Dominic Scriven",
+      desc: ["Giáo viên dạy Tiếng Anh", "7.5 IELTS", "9 năm kinh nghiệm dạy học"],
       avatar: speaker_10,
     },
     {
       id: 3,
-      name: "Rajeev Tummala",
-      desc: ["Head of Digital, Asia & MENA", "HSBC Securities Services"],
+      name: "Thầy Rajeev Tummala",
+      desc: ["Giáo viên dạy Tiếng Anh", "8.0 IELTS", "8 năm kinh nghiệm dạy học"],
       avatar: speaker_11,
     },
     {
       id: 4,
       name: "Duong Ngoc Tuan",
-      desc: ["Senior Managing Director", "Viet Nam Securities Depository & Clearing Corporation", "Moderator"],
+      desc: ["Giáo viên dạy Văn", "9 năm kinh nghiệm dạy học"],
       avatar: speaker_1,
     },
     {
       id: 5,
-      name: "Pichaya Chomchaiya",
-      desc: ["Senior Vice President-Head of Registrar Dept.", "Thailand Securities Depository Co., Ltd.", "Panelist"],
+      name: "Phan Bội Thắng",
+      desc: ["Giáo viên dạy Toán", "9 năm kinh nghiệm dạy học"],
       avatar: speaker_5,
     },
     {
       id: 6,
-      name: "Wallace Chu",
-      desc: ["ESG Product Manager", "Taiwan Depository & Clearing Corporation (TDCC)", "Panelist"],
+      name: "Cô Nguyễn Thị Xuân",
+      desc: ["Giáo viên dạy Văn", "7 năm kinh nghiệm dạy học"],
       avatar: speaker_4,
     },
     {
       id: 7,
-      name: "Nguyen Thuy Van",
-      desc: ["Head of Asia Business Strategy", "Clearstream Banking S.A, HongKong", "Panelist"],
+      name: "Cô Nguyen Thuy Van",
+      desc: ["Giáo viên dạy Văn", "8 năm kinh nghiệm dạy học"],
       avatar: speaker_12,
     },
     {
@@ -205,7 +205,7 @@ const Home = () => {
         <div className="home__speakers">
           <div className="container">
             <div className="heading d-flex justify-content-between">
-              Speakers
+              Đội ngũ giáo viên
               <div className="swiper-button-wrap">
                 <button className="swiper-button-prev-cs" onClick={handlePrevClick}>
                   <img src={arrow_right_sw} alt="arrow" />
@@ -331,7 +331,7 @@ const Home = () => {
 
         <div className="home__sponsors">
           <div className="container">
-            <div className="heading">Hosted by VSDC</div>
+            <div className="heading">Hosted by Duy Manh Vu</div>
 
             <div className="home__sponsors-list">{/* Sponsors */}</div>
           </div>
