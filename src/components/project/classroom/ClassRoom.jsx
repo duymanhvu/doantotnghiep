@@ -323,6 +323,7 @@ const ClassRoom = () => {
                 <div className="col-lg-4">
                   <Form.Item label={"Số lượng hs"} name={"Capacity"} className="req">
                     <InputNumber
+                    className="input-number--modify"
                       formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                       parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                       onKeyPress={(event) => {
