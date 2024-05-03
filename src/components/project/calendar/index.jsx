@@ -3,6 +3,19 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 
 import scroll_down from "../../../assets/img/ic_scroll_down.svg";
 
+const genarateSlotLabel = (value) => {
+  if (!value) return "";
+  if (value === "07") {
+    return "Sáng";
+  }
+  if (value === "12") {
+    return "Chiều";
+  }
+  if (value === "17") {
+    return "Tối";
+  }
+};
+
 const events = [
   {
     id: 1,
@@ -45,17 +58,13 @@ export function CalendarSchedule() {
           locale={"vi"}
           timeZone="local"
           allDaySlot={false}
-          slotDuration={"06:00:00"}
+          slotDuration={"5:00:00"}
           slotMinTime={"07:00:00"}
-          slotMaxTime={"15:00:00"}
-          contentHeight={850}
+          slotMaxTime={"21:00:00"}
+          contentHeight={950}
           eventMinHeight={40}
           slotLabelContent={(e) => {
-            if (e.text === "07") {
-              return "Sáng";
-            } else {
-              return "Chiều";
-            }
+            return genarateSlotLabel(e.text);
           }}
           plugins={[timeGridPlugin]}
           initialView="timeGridWeek"

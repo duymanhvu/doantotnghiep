@@ -8545,6 +8545,12 @@ ant-input-password-icon {
 }
 .fc-timegrid-slots{
   tr{
-    height: 400px;
+    height: 300px;
   }
+}
+.fc-timegrid-slot-label-cushion{
+  font-weight: 700;
+}
+.fc-timegrid-slot-label{
+  background-color: #2180a6;
 }
