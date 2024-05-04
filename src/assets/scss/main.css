@@ -8545,7 +8545,7 @@ ant-input-password-icon {
 }
 .fc-timegrid-slots{
   tr{
-    height: 400px;
+    height: 300px;
   }
 }
 .form-comfirm{
@@ -8566,4 +8566,10 @@ ant-input-password-icon {
   border-radius: 16px;
   overflow: auto;
   max-height: calc(100vh - 100px);
+}
+.fc-timegrid-slot-label-cushion{
+  font-weight: 700;
+}
+.fc-timegrid-slot-label{
+  background-color: #2180a6;
 }
