@@ -9,7 +9,7 @@ import AOS from "aos";
 
 import CreateAccount from "./components/CreateAccount/components/CreateAccount";
 import Layout from "./components/Layout";
-import { CalendarSchedule } from "./components/project/calendar";
+import { CalendarSchedule } from "./components/project/calendar/index";
 import ClassRoom from "./components/project/classroom/ClassRoom";
 import Parent from "./components/project/parent/Parent";
 import Student from "./components/project/student/Student";
@@ -58,7 +58,7 @@ function App() {
           <Route path="/teacher" element={<Teacher />} />
           <Route path="/parent" element={<Parent />} />
           <Route path="/student" element={<Student />} />
-          <Route path="/calendar" element={<CreateAccountjs />} />
+          <Route path="/calendar" element={<CalendarSchedule/>} />
           <Route path="/subject" element={<Subject/>} />
           <Route path="/classroom" element={<ClassRoom/>} />
           <Route path="/calender" element={<CalendarSchedule/>} />
