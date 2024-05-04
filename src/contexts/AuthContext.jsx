@@ -39,21 +39,18 @@ const AuthContextProvider = ({ children }) => {
   //   Login
   const loginUser = async (data) => {
     try {
-      const response = await client.post(`auth/login`, data);
-
-      if (response.data.status === 1) {
-        localStorage.setItem("user", JSON.stringify(response.data.userInfor));
-        //set auth vào cookie
-        // console.log("response.data.token", response.data.token)
+      const response = await client.post(`/api/Authentication/Login`, data);
+      if (response.data.StatusCode === 1) {
+        localStorage.setItem("user", JSON.stringify(response.data.UserType));
         setCookie(
           "AUTH",
-          JSON.stringify({ ...response.data.token.original, user: undefined }),
-          response.data.token.original.expires_in,
+          JSON.stringify({ ...response.data.Token, user: undefined }),
+          response.data.Token,
         );
         localStorage.setItem("isAuthenticated", true);
         dispatch({
           type: "SET_AUTH",
-          payload: { isAuthenticated: true, user: response.data.userInfor },
+          payload: { isAuthenticated: true, user: response.data.UserType },
         });
       }
       return response.data;
@@ -133,6 +130,7 @@ const AuthContextProvider = ({ children }) => {
   // Logout
   const logoutUser = async () => {
     const token = JSON.parse(getCookie("AUTH") ?? "{}");
+    
     let config = {};
     let response = {};
 

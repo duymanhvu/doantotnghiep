@@ -303,11 +303,11 @@ const Header = () => {
               </NavDropdown>
               {isAuthenticated ? (
                 <Nav.Link onClick={logoutUser}>
-                  {/* LOGOUT */}
+                  LOGOUT
                   </Nav.Link>
               ) : (
                 <Nav.Link as={Link} to="/login">
-                  {/* LOGIN */}
+                  LOGIN
                 </Nav.Link>
               )}
             </Nav>

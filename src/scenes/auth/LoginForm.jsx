@@ -7,7 +7,7 @@ import { Form } from "react-bootstrap";
 
 import { AuthContext } from "../../contexts/AuthContext";
 
-import logo from "../../assets/img/logo_login.svg";
+import logo from "../../assets/logoSen.png";
 
 import username from "../../assets/img/ic_username.svg";
 import pass_word from "../../assets/img/ic_password.svg";
@@ -29,9 +29,9 @@ const LoginForm = () => {
     try {
       const loginData = await loginUser({ email, password });
 
-      if (loginData.status === 1) {
-        toast.success(loginData.message);
-        navigate("/registration");
+      if (loginData.StatusCode === 1) {
+        toast.success("đăng nhập thành công");
+        navigate("/home");
       } else {
         toast.error(loginData);
         setEmail("");
