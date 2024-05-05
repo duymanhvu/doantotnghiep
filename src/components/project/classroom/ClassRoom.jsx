@@ -32,64 +32,52 @@ const ClassRoom = () => {
 
   const columns = MapColumnsANT([
     {
-      title: t("Họ và tên"),
-      dataIndex: "Fullname",
-      key: "Fullname",
+      title: t("Phòng học"),
+      dataIndex: "ClassroomNo",
+      key: "ClassroomNo",
       align: "center",
     },
     {
-      title: t("Số điện thoại"),
-      dataIndex: "Phone",
-      key: "Phone",
+      title: t("Ngày bắt đầu"),
+      dataIndex: "StartDate",
+      key: "StartDate",
       align: "center",
     },
     {
-      title: t("Email"),
-      dataIndex: "Email",
-      key: "Email",
+      title: t("Ngày kết thúc"),
+      dataIndex: "EndDate",
+      key: "EndDate",
       align: "center",
     },
     {
-      title: t("Tài Khoản"),
-      dataIndex: "Username",
-      key: "Username",
+      title: t("Môn Học"),
+      dataIndex: "SubjectId",
+      key: "SubjectId",
       align: "center",
     },
     {
-      title: t("Mật khẩu"),
-      dataIndex: "Password",
-      key: "Password",
+      title: t("Thầy dạy"),
+      dataIndex: "TeacherId",
+      key: "TeacherId",
       align: "center",
     },
     {
-      title: t("Môn dạy"),
-      dataIndex: "SubjectType",
-      key: "SubjectType",
+      title: t("Số lượng học sinh"),
+      dataIndex: "Capacity",
+      key: "Capacity",
       align: "center",
-      render: (value) => {
-        switch (value) {
-          case 0:
-            return "Toán";
-          case 1:
-            return "Văn";
-          case 2:
-            return "Tiếng Anh";
-          default:
-            return value;
-        }
-      },
-    },
-    {
-      title: t("Trạng thái"),
-      dataIndex: "Status",
-      key: "Status",
-      align: "center",
-    },
-    {
-      title: t("Trạng thái Admin"),
-      dataIndex: "IsAdmin",
-      key: "IsAdmin",
-      align: "center",
+      // render: (value) => {
+      //   switch (value) {
+      //     case 0:
+      //       return "Toán";
+      //     case 1:
+      //       return "Văn";
+      //     case 2:
+      //       return "Tiếng Anh";
+      //     default:
+      //       return value;
+      //   }
+      // },
     },
     {
       title: t("Chức năng"),
@@ -172,26 +160,15 @@ const ClassRoom = () => {
   console.log(listData, "listDatalistData");
   const handleEditClick = (record) => {
     setSelectedRow(true);
-    const subjectTypeString = (() => {
-      switch (record?.SubjectType) {
-        case 0:
-          return "Toán";
-        case 1:
-          return "Văn";
-        case 2:
-          return "Tiếng Anh";
-        default:
-          return record?.SubjectType;
-      }
-    })();
+
     formCASign.setFieldsValue({
       Id: record?.Id,
-      Fullname: record?.Fullname,
-      Phone: record?.Phone,
-      Email: record?.Email,
-      Password: record?.Password,
-      Username: record?.Username,
-      SubjectType: subjectTypeString,
+      ClassroomNo: record?.ClassroomNo,
+      StartDate: record?.StartDate,
+      EndDate: record?.EndDate,
+      SubjectId: record?.SubjectId,
+      TeacherId: record?.TeacherId,
+      Capacity: record?.Capacity,
     });
   };
 
@@ -201,20 +178,17 @@ const ClassRoom = () => {
       .validateFields()
       .then(async (values) => {
         const newData = {
-          fullname: values?.Fullname,
-          phone: values?.Phone,
-          email: values?.Email,
-          password: values?.Password,
-          subjectType: values?.SubjectType,
-          username: values?.Username,
-          isAdmin: true,
+          classroomNo: values?.ClassroomNo,
+          startDate: values?.StartDate,
+          endDate: values?.EndDate,
+          subjectId: values?.SubjectId,
+          teacherId: values?.TeacherId,
+          capacity: values?.Capacity,
           status: true,
         };
         if (values) {
-          const response = await axios.post("/api/Teacher/Insert", newData);
-          console.log(response, "response");
-
-          if (response.data?.StatusCode >= 0) {
+          const response = await axios.post("/api/Classroom/Insert", newData);
+          if (response.data?.StatusCode > 0) {
             toast.success("Processing complete!");
             handleGetLisDigitalSignature();
             formCASign.resetFields();
@@ -240,7 +214,7 @@ const ClassRoom = () => {
           ...values,
         };
         if (values) {
-          const response = await axios.post("/api/Teacher/Update", newData);
+          const response = await axios.post("/api/Classroom/Update", newData);
           if (response.data?.StatusCode >= 0) {
             message.success("Processing complete!");
             handleGetLisDigitalSignature();
@@ -260,10 +234,10 @@ const ClassRoom = () => {
   };
   const handleDelete = (autoId) => {
     axios
-      .post(`/api/Teacher/Delete?id=${autoId}?Token=abcd123`)
+      .post(`/api/Classroom/Delete?id=${autoId}`)
       .then((response) => {
-        if (response.status === 200 && response.data.StatusCode >= 0) {
-          notificationShare(0, response.data.errorMsg, t("thanhCong"));
+        if (response.status === 200 && response.data.StatusCode > 0) {
+          toast.success("Xóa thành công!");
         } else {
           notificationShare(-1, response.data.errorMsg, t("thatBai"));
         }
@@ -310,7 +284,7 @@ const ClassRoom = () => {
                   <Form.Item label={"Tên Phòng"} name={"ClassroomNo"} className="req">
                     <Select className="select--modify" placeholder="Choose">
                       {convertToArray(listRoom).map((e, key) => (
-                        <Option key={key} value={e.Key}>
+                        <Option key={key} value={e.Value}>
                           {e.Value}
                         </Option>
                       ))}

@@ -8,6 +8,7 @@ import { useAxios } from "../../apiCore/apiHelper";
 import moment from "moment";
 import Modal from "react-bootstrap/Modal";
 import { MapColumnsANT } from "../../apiCore/dataSetCollection";
+import { toast } from "react-toastify";
 
 const { Option } = Select;
 const Teacher = () => {
@@ -165,8 +166,8 @@ const Teacher = () => {
           const response = await axios.post("/api/Teacher/Insert", newData);
           console.log(response, "response");
 
-          if (response.data?.StatusCode >= 0) {
-            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
+          if (response.data?.StatusCode > 0) {
+            toast.success("thêm thành công");
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
@@ -194,8 +195,8 @@ const Teacher = () => {
         };
         if (values) {
           const response = await axios.post("/api/Teacher/Update", newData);
-          if (response.data?.StatusCode >= 0) {
-            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
+          if (response.data?.StatusCode > 0) {
+            toast.success("sửa thành công");
 
             handleGetLisDigitalSignature();
             formCASign.resetFields();
