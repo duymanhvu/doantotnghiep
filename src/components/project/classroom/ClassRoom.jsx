@@ -8,6 +8,7 @@ import { useAxios } from "../../apiCore/apiHelper";
 import moment from "moment";
 import Modal from "react-bootstrap/Modal";
 import { MapColumnsANT } from "../../apiCore/dataSetCollection";
+import { toast } from "react-toastify";
 
 const { Option } = Select;
 const ClassRoom = () => {
@@ -27,6 +28,7 @@ const ClassRoom = () => {
   };
   const [listSubject, setListSubject] = useState([]);
   const [listTeacher, setListTeacher] = useState([]);
+  const [listRoom, setListRoom] = useState([]);
 
   const columns = MapColumnsANT([
     {
@@ -117,7 +119,32 @@ const ClassRoom = () => {
       .catch(function (err) {
         setListSubject([]);
       });
-    AxiosAPI.getTeacherGetList()
+    AxiosAPI.getClassRoomGetListRoom()
+      .then((res) => {
+        if (res.status === 200) {
+          setListRoom(convertToArray(res?.data?.Data));
+        } else {
+          setListRoom([]);
+        }
+      })
+      .catch(function (err) {
+        setListRoom([]);
+      });
+    handleGetLisDigitalSignature();
+  }, []);
+  console.log(listSubject, "setListSubjectsetListSubjectsetListSubject", listTeacher);
+
+  const handleGetListTeacher = (value) => {
+    const params = {
+      pageSize: 10,
+      pageIndex: 1,
+      sortBy: "Id",
+      orderBy: "desc",
+      keyword: "",
+      subjectType: value,
+    };
+    axios
+      .post("/api/Teacher/GetTeacherBySubjectType", params)
       .then((res) => {
         if (res.status === 200) {
           setListTeacher(convertToArray(res?.data?.Data));
@@ -128,10 +155,7 @@ const ClassRoom = () => {
       .catch(function (err) {
         setListTeacher([]);
       });
-    handleGetLisDigitalSignature();
-  }, []);
-  console.log(listSubject, "setListSubjectsetListSubjectsetListSubject",listTeacher);
-
+  };
   const handleGetLisDigitalSignature = () => {
     AxiosAPI.getClassRoomGetList()
       .then((res) => {
@@ -191,13 +215,13 @@ const ClassRoom = () => {
           console.log(response, "response");
 
           if (response.data?.StatusCode >= 0) {
-            message.success("Processing complete!");
+            toast.success("Processing complete!");
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
+            toast.error("Error!");
           }
         }
       })
@@ -284,7 +308,13 @@ const ClassRoom = () => {
               <div className="row">
                 <div className="col-lg-4">
                   <Form.Item label={"Tên Phòng"} name={"ClassroomNo"} className="req">
-                    <Input />
+                    <Select className="select--modify" placeholder="Choose">
+                      {convertToArray(listRoom).map((e, key) => (
+                        <Option key={key} value={e.Key}>
+                          {e.Value}
+                        </Option>
+                      ))}
+                    </Select>
                   </Form.Item>
                 </div>
                 <div className="col-lg-4">
@@ -300,7 +330,14 @@ const ClassRoom = () => {
                 </div>
                 <div className="col-lg-4">
                   <Form.Item label={"Môn học"} name={"SubjectId"} className="req">
-                    <Select className="select--modify" placeholder="Choose">
+                    <Select
+                      className="select--modify"
+                      placeholder="Choose"
+                      onChange={(value) => {
+                        const subject = convertToArray(listSubject).find((e) => e.Id === value)?.SubjectType;
+                        handleGetListTeacher(subject);
+                      }}
+                    >
                       {convertToArray(listSubject).map((e, key) => (
                         <Option key={key} value={e.Id}>
                           {e.Name}
@@ -323,7 +360,7 @@ const ClassRoom = () => {
                 <div className="col-lg-4">
                   <Form.Item label={"Số lượng hs"} name={"Capacity"} className="req">
                     <InputNumber
-                    className="input-number--modify"
+                      className="input-number--modify"
                       formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                       parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                       onKeyPress={(event) => {

@@ -18,8 +18,8 @@ export const useShareOrderApi = () => {
 
       return httpRequest.post(`/api/Classroom/GetList`, params);
     },
-    getClassRoomGetById: (jsonData) => {
-      return httpRequest.get(`/api/Classroom/GetById`, jsonData);
+    getClassRoomGetListRoom: (jsonData) => {
+      return httpRequest.get(`/api/Classroom/GetClassroomFacility`, jsonData);
     },
     getClassRoomInsert: (jsonData) => {
       return httpRequest.post(`/api/Classroom/Insert`, jsonData);
