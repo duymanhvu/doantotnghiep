@@ -141,7 +141,7 @@ const CreateAccountjs = () => {
 
         <div className="btn-login">
           <Form.Text>
-            <Link to="/home">Quay lại</Link>
+            <Link to="/login">Quay lại</Link>
           </Form.Text>
         </div>
       </div>

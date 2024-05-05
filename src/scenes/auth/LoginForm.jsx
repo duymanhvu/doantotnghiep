@@ -71,7 +71,7 @@ const LoginForm = () => {
               <h3 className="heading">Login to My Page</h3>
               <Form.Group className="form-box-id">
                 <img src={username} alt="username" />
-                <Form.Label>ID</Form.Label>
+                <Form.Label>Tài khoản / Email</Form.Label>
                 <Form.Control
                   type="email"
                   placeholder="Registered Email Address"
@@ -86,7 +86,7 @@ const LoginForm = () => {
                   alt="passwords"
                   className="form-box-password-ic"
                 />
-                <Form.Label>Password</Form.Label>
+                <Form.Label>Mật khẩu</Form.Label>
                 <Form.Control
                   type={showPass}
                   placeholder="Confirmation Code"
@@ -109,19 +109,19 @@ const LoginForm = () => {
             </div>
 
             <button type="submit" className="btn btn-login">
-              LOGIN
+              Đăng nhập
             </button>
           </>
         )}
 
         <div className="form-login-sup">
           <Form.Text>
-            Forgot password? Please click <Link to="/forgot">here</Link>
+            Nếu bạn quên mật khẩu? Hãy chọn vào <Link to="/forgot">đây</Link>
           </Form.Text>
 
           <Form.Text>
-            Haven’t registered yet? Please sign up{" "}
-            <Link to="/registration">here</Link>
+            Nếu bạn chưa có tài khoản? Hãy đăng ký tại{" "}
+            <Link to="/registration">đây</Link>
           </Form.Text>
         </div>
       </div>

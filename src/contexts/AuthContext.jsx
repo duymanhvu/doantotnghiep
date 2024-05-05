@@ -10,6 +10,7 @@ const AuthContextProvider = ({ children }) => {
     authLoading: true,
     isAuthenticated: localStorage.getItem("isAuthenticated") ?? false,
     user: JSON.parse(localStorage.getItem("user") ?? "{}"),
+    email: JSON.parse(localStorage.getItem("email") ?? "{}"),
   });
 
   const client = axios.create({
@@ -33,7 +34,7 @@ const AuthContextProvider = ({ children }) => {
       }
 
       return Promise.reject(error);
-    },
+    }
   );
 
   //   Login
@@ -41,16 +42,13 @@ const AuthContextProvider = ({ children }) => {
     try {
       const response = await client.post(`/api/Authentication/Login`, data);
       if (response.data.StatusCode === 1) {
-        localStorage.setItem("user", JSON.stringify(response.data.UserType));
-        setCookie(
-          "AUTH",
-          JSON.stringify({ ...response.data.Token, user: undefined }),
-          response.data.Token,
-        );
+        localStorage.setItem("user", JSON.stringify(response.data.Token));
+        localStorage.setItem("email", JSON.stringify(response.data.Email));
+        setCookie("AUTH", JSON.stringify({ ...response.data.Token, user: undefined }), response.data.Token);
         localStorage.setItem("isAuthenticated", true);
         dispatch({
           type: "SET_AUTH",
-          payload: { isAuthenticated: true, user: response.data.UserType },
+          payload: { isAuthenticated: true, user: response.data },
         });
       }
       return response.data;
@@ -104,7 +102,7 @@ const AuthContextProvider = ({ children }) => {
           Authorization: "Bearer " + token?.access_token,
         };
       }
-      
+
       const response = await client.post(`profile`, data, config);
       if (response.data.success === 1) {
         dispatch({
@@ -130,7 +128,7 @@ const AuthContextProvider = ({ children }) => {
   // Logout
   const logoutUser = async () => {
     const token = JSON.parse(getCookie("AUTH") ?? "{}");
-    
+
     let config = {};
     let response = {};
 
@@ -168,11 +166,7 @@ const AuthContextProvider = ({ children }) => {
   };
 
   //   Return provider
-  return (
-    <AuthContext.Provider value={authContextData}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={authContextData}>{children}</AuthContext.Provider>;
 };
 
 function setCookie(name, value, seconds) {
@@ -195,5 +189,4 @@ function getCookie(name) {
   }
   return null;
 }
-
 export default AuthContextProvider;

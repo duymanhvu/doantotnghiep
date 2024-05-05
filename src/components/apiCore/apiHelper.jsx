@@ -69,11 +69,12 @@ const client = axios.create({
 });
 
 client.interceptors.request.use(async (config) => {
-  config.headers["Authorization"] = `Bearer ${getToken()}`;
-  config.headers["App-Language"] = localStorage.getItem("6442047A0753470C83107037F72D197B");
-  config.headers["Device-Id"] = `name`;
-  if (getIpMac() !== null && getIpMac()) {
-    config.headers["Ip-Address"] = getIpMac();
+  const token = localStorage.getItem("user")?.replace(/^"(.*)"$/, '$1') || ""; // Lấy token từ localStorage
+  const email = localStorage.getItem("email")?.replace(/^"(.*)"$/, '$1') || ""; // Lấy token từ localStorage
+  console.log(token,"kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+  if (token && email) {
+    config.headers.Token = `${token}`; // Đính kèm token vào header Authorization
+    config.headers.Email = `${email}`;
   }
   return config;
 });
@@ -84,7 +85,7 @@ client.interceptors.response.use(
   function (error) {
     console.log(error.response);
 
-    if (error.response?.status === 500) {
+    if (error.response?.status === 401) {
       // notificationShare(-1, "Kết nối đến server thất bại");
       return Promise.reject(error);
     } else {

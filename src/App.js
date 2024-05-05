@@ -37,7 +37,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginForm />} />
             {/* <Route path="/forgot" element={<ForgotPass />} /> */}
-            {/* <Route path="/registration" element={<Registration />} /> */}
+            <Route path="/registration" element={<CreateAccountjs />} />
             {/* <Route path="/registration:id" element={<Registration />} /> */}
             <Route
               path="/registrationAccommodation"
