@@ -12,22 +12,28 @@ const { Option } = Select;
 const genarateSlotLabel = (value) => {
   if (!value) return "";
   if (value === "07") {
-    return <>
-    <p>Sáng</p>
-    <span>Ca 1</span>
-    </>;
+    return (
+      <>
+        <p>Sáng</p>
+        <span>Ca 1</span>
+      </>
+    );
   }
   if (value === "12") {
-    return <>
-    <p>Chiều</p>
-    <span>Ca 2</span>
-    </>;;
+    return (
+      <>
+        <p>Chiều</p>
+        <span>Ca 2</span>
+      </>
+    );
   }
   if (value === "17") {
-    return <>
-    <p>Tối</p>
-    <span>Ca 3</span>
-    </>;;
+    return (
+      <>
+        <p>Tối</p>
+        <span>Ca 3</span>
+      </>
+    );
   }
 };
 
@@ -37,9 +43,6 @@ export function CalendarSchedule() {
   const AxiosAPI = useShareOrderApi();
   const [listRoom, setListRoom] = useState([]);
   const [listData, setListData] = useState([]);
-  console.log("====================================");
-  console.log(listData);
-  console.log("====================================");
   useEffect(() => {
     AxiosAPI.getClassRoomGetList()
       .then((res) => {
@@ -63,7 +66,9 @@ export function CalendarSchedule() {
         const startDate = values?.StartDate;
         const endDate = values?.EndDate;
         if (values) {
-          const response = await axios.get(`/api/Schedule/GetSchedulesByClass?classId=${classId}&startDate=${startDate}&endDate=${endDate}`);
+          const response = await axios.get(
+            `/api/Schedule/GetSchedulesByClass?classId=${classId}&startDate=${startDate}&endDate=${endDate}`
+          );
           if (response.data?.StatusCode > 0) {
             toast.success("Tìm kiếm thành công");
             setListData(
@@ -72,7 +77,7 @@ export function CalendarSchedule() {
                 title: item?.Title + item?.Classroom?.Teacher?.Fullname,
                 start: item?.StartTime,
                 end: item?.EndTime,
-                description: "abc"
+                description: "abc",
               }))
             );
           } else {
@@ -104,7 +109,12 @@ export function CalendarSchedule() {
             </div>
           </div>
         </div>
-        <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm}>
+        <Form
+          id="form"
+          className="form"
+          form={formCASign}
+          onFinish={handleFinishForm}
+        >
           <div className="registration__form">
             <div className="registration__form-wrap">
               <div className="heading v1 text-center"></div>
@@ -112,7 +122,11 @@ export function CalendarSchedule() {
               <Form.Item name={"Id"} hidden></Form.Item>
               <div className="row">
                 <div className="col-lg-4">
-                  <Form.Item label={"Tên Phòng"} name={"ClassroomNo"} className="req">
+                  <Form.Item
+                    label={"Tên Phòng"}
+                    name={"ClassroomNo"}
+                    className="req"
+                  >
                     <Select className="select--modify" placeholder="Choose">
                       {convertToArray(listRoom).map((e, key) => (
                         <Option key={key} value={e.Id}>
@@ -123,19 +137,31 @@ export function CalendarSchedule() {
                   </Form.Item>
                 </div>
                 <div className="col-lg-4">
-                  <Form.Item label={"Ngày bắt đầu"} name={"StartDate"} className="req">
+                  <Form.Item
+                    label={"Ngày bắt đầu"}
+                    name={"StartDate"}
+                    className="req"
+                  >
                     <Input type="date" />
                   </Form.Item>
                 </div>
 
                 <div className="col-lg-4">
-                  <Form.Item label={"Ngày kết thúc"} name={"EndDate"} className="req">
+                  <Form.Item
+                    label={"Ngày kết thúc"}
+                    name={"EndDate"}
+                    className="req"
+                  >
                     <Input type="date" />
                   </Form.Item>
                 </div>
                 <div className="col-lg-4">
                   <Form.Item label={"Thao tác"} className="req">
-                    <button className="btn btn-action" type="submit" onClick={handleSearch}>
+                    <button
+                      className="btn btn-action"
+                      type="submit"
+                      onClick={handleSearch}
+                    >
                       {<span>Tìm kiếm</span>}
                     </button>
                   </Form.Item>
@@ -169,11 +195,13 @@ export function CalendarSchedule() {
 
 // a custom render function
 function renderEventContent(eventInfo) {
+  console.log(eventInfo);
   return (
     <>
       <b>{eventInfo.timeText}</b>
       <i>{eventInfo.event.title}</i>
-      <i>{eventInfo.event.description}</i>
+      <br />
+      <i>{eventInfo.event.extendedProps.description}</i>
     </>
   );
 }
