@@ -1,15 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import scroll_down from "../../../assets/img/ic_scroll_down.svg";
-import {
-  Input,
-  Form,
-  Tooltip,
-  Button,
-  Popconfirm,
-  Table,
-  Checkbox,
-  Select,
-} from "antd";
+import { Input, Form, Tooltip, Button, Popconfirm, Table, Checkbox, Select } from "antd";
 import { useTranslation } from "react-i18next";
 import { useShareOrderApi } from "../../apiCore/apiProcess";
 import { convertToArray, notificationShare } from "../../apiCore/convertObject";
@@ -17,10 +8,15 @@ import { useAxios } from "../../apiCore/apiHelper";
 import Modal from "react-bootstrap/Modal";
 import { useGlobalConst } from "../../apiCore/useGlobalConst";
 import moment from "moment";
-
+import { notification } from "antd";
+import { toast } from "react-toastify";
 const { Option } = Select;
 
-const Student = () => {
+const makeid = () => {
+  return parseInt(new Date().getTime());
+};
+
+const ThoiKhoaBieu = () => {
   const { t } = useTranslation();
   const [listData, setListData] = useState([]);
   const AxiosAPI = useShareOrderApi();
@@ -28,8 +24,9 @@ const Student = () => {
   const axios = useAxios();
   const [selectedRow, setSelectedRow] = useState(false);
   const [checkFinish, setCheckFinish] = useState(false);
-  const [listParent, setlistParent] = useState([]);
+  const [listClassRoom, setListClassRoom] = useState([]);
   const [show, setShow] = useState(false);
+  const [isLoad, setIsLoad] = useState(false);
   const globalConst = useGlobalConst(t);
 
   const handleClose = () => setShow(false);
@@ -40,55 +37,36 @@ const Student = () => {
   };
 
   useEffect(() => {
-    AxiosAPI.getParentGetList()
+    AxiosAPI.getClassRoomGetList()
       .then((res) => {
         if (res.status === 200) {
-          setlistParent(convertToArray(res?.data?.Data));
+          setListClassRoom(convertToArray(res?.data?.Data));
         } else {
-          setlistParent([]);
+          setListClassRoom([]);
         }
       })
       .catch(function (err) {
-        setlistParent([]);
+        setListClassRoom([]);
       });
   }, []);
 
-
   const columns = [
     {
-      title: t("Họ và tên"),
-      dataIndex: "Fullname",
-      key: "Fullname",
+      title: t("Phòng"),
+      dataIndex: "ClassroomId",
+      key: "ClassroomId",
       align: "center",
     },
     {
-      title: t("Ngày sinh"),
-      dataIndex: "Dob",
-      key: "Dob",
+      title: t("Ngày bắt đầu"),
+      dataIndex: "Date",
+      key: "Date",
       align: "center",
     },
     {
-      title: t("Cha mẹ"),
-      dataIndex: "ParentId",
-      key: "ParentId",
-      align: "center",
-    },
-    {
-      title: t("Email"),
-      dataIndex: "Email",
-      key: "Email",
-      align: "center",
-    },
-    {
-      title: t("Mật khẩu"),
-      dataIndex: "Password",
-      key: "Password",
-      align: "center",
-    },
-    {
-      title: t("isDeleted"),
-      dataIndex: "isDeleted",
-      key: "isDeleted",
+      title: t("Ca học"),
+      dataIndex: "Slot",
+      key: "Slot",
       align: "center",
     },
     {
@@ -111,8 +89,16 @@ const Student = () => {
     handleGetLisDigitalSignature();
   }, []);
 
+  const showDuplicateDayNotification = () => {
+    notification.error({
+      message: "Lỗi",
+      description: "Thứ đã bị trùng, vui lòng chọn thứ khác.",
+      duration: 0,
+    });
+  };
+
   const handleGetLisDigitalSignature = () => {
-    AxiosAPI.getStudentGetList()
+    AxiosAPI.getScheduleGetList()
       .then((res) => {
         if (res.status === 200) {
           setListData(convertToArray(res?.data?.Data));
@@ -130,7 +116,7 @@ const Student = () => {
     formCASign.setFieldsValue({
       Id: record?.Id,
       Fullname: record?.Fullname,
-      Dob: moment(record?.Dob).format('YYYY-MM-DD'),
+      Dob: moment(record?.Dob).format("YYYY-MM-DD"),
       Email: record?.Email,
       Password: record?.Password,
       ParentId: record?.ParentId,
@@ -142,32 +128,28 @@ const Student = () => {
     formCASign.submit();
     formCASign
       .validateFields()
-      .then(async (values) => {
-        const newData = {
-          fullname: values?.Fullname,
-          dob: moment(values?.Dob).format('YYYY-MM-DDTHH:mm:ss'),
-          email: values?.Email,
-          password: values?.Password,
-          parentId: values?.ParentId,
-          isDeleted: true
-        };
-        if (values) {
-          const response = await axios.post("/api/Student/Insert", newData);
 
-          if (response.data?.StatusCode >= 0) {
-            notificationShare(0, response.data?.ErrorMessage, t("thanhCong"));
+      .then(async (values) => {
+        const classId = values?.classId;
+        const startDate = values?.startDate;
+        const newData = values?.scheduleList;
+        if (values) {
+          const response = await axios.post(`/api/Schedule/CreateSchedules?classId=${classId}&startDate=${startDate}`, newData);
+
+          if (response.data?.StatusCode > 0) {
+            toast.success("Processing complete!");
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
+            toast.error(response?.data?.ErrorMessage);
           }
         }
       })
       .catch((err) => {
-        if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
+        if (err.response.config.data && err.response.config.data !== undefined) {
+          toast.error(err.response.data.title);
         }
       });
   };
@@ -178,7 +160,7 @@ const Student = () => {
       .then(async (values) => {
         const newData = {
           ...values,
-          dob:  moment(values?.Dob).format('YYYY-MM-DDTHH:mm:ss'),
+          dob: moment(values?.Dob).format("YYYY-MM-DDTHH:mm:ss"),
         };
         if (values) {
           const response = await axios.post("/api/Student/Update", newData);
@@ -223,16 +205,102 @@ const Student = () => {
         formCASign.resetFields();
       });
   };
+  const handleDeleteSchedule = (item) => {
+    const { scheduleList } = formCASign.getFieldsValue();
+    formCASign.setFieldValue(
+      "scheduleList",
+      convertToArray(scheduleList).filter((value, i) => value?.autoId !== item?.autoId)
+    );
+  };
+  const LichThu = [
+    { value: "1", content: "Thứ Hai" },
+    { value: "2", content: "Thứ Ba" },
+    { value: "3", content: "Thứ Tư" },
+    { value: "4", content: "Thứ Năm" },
+    { value: "5", content: "Thứ Sáu" },
+    { value: "6", content: "Thứ Bảy" },
+    { value: "0", content: "Chủ Nhật" },
+  ];
+  const handleChangeFormValues = (changedValues, allValues) => {
+    console.log("====================================");
+    console.log(changedValues, allValues);
+    console.log("====================================");
+  };
+
+  const ScheduleForm = ({ item, index, onClick, getFieldsValue }) => {
+    const { scheduleList } = getFieldsValue();
+
+    return (
+      <div className="row" key={index}>
+        <div className="col-lg-4">
+          <Form.Item label="Thứ" name={["scheduleList", index, "dayInWeek"]} className="req">
+            <Select
+              onChange={(e) => {
+                if (convertToArray(scheduleList).filter((value) => value.dayInWeek === e).length > 0) {
+                  showDuplicateDayNotification()
+
+                  formCASign.setFieldValue(
+                    "scheduleList",
+                    scheduleList.map((value, key) => {
+                      if (key === index) {
+                        return {
+                          ...value,
+                          dayInWeekL: undefined,
+                        };
+                      }
+                      return {
+                        ...value,
+                      };
+                    })
+                  );
+                  setIsLoad(!isLoad);
+                }
+              }}
+            >
+              {LichThu.map((item, key) => {
+                return (
+                  <Option value={item?.value} key={key}>
+                    {item?.content}
+                  </Option>
+                );
+              })}
+            </Select>
+          </Form.Item>
+        </div>
+        <div className="col-lg-4">
+          <Form.Item label="Ca học" name={["scheduleList", index, "slot"]} className="req">
+            <Select>
+              <Option value="0">Ca 1</Option>
+              <Option value="1">Ca 2</Option>
+              <Option value="2">Ca 3</Option>
+            </Select>
+          </Form.Item>
+        </div>
+        <div className="col-lg-4">
+          <Button type="danger" onClick={() => handleDeleteSchedule(item)}>
+            Xóa
+          </Button>
+        </div>
+      </div>
+    );
+  };
   const handleFinishForm = () => {
     formCASign.validateFields().then((values) => {});
   };
-
+  const handleAddRow = (getFieldsValue) => {
+    const { scheduleList } = getFieldsValue || {};
+    if (convertToArray(scheduleList).length === 0) {
+      formCASign.setFieldValue("scheduleList", [{ dayInWeek: undefined, slot: undefined, autoId: makeid() }]);
+    } else {
+      formCASign.setFieldValue("scheduleList", [...scheduleList, { dayInWeek: undefined, slot: undefined, autoId: makeid() }]);
+    }
+  };
   return (
     <div className="registration">
       <div className="registration__container">
         <div className="background">
           <div className="background__hook">
-            <h1 className="animate__animated animate__fadeInUp">Student</h1>
+            <h1 className="animate__animated animate__fadeInUp">Schedule</h1>
           </div>
 
           <div className="scroll">
@@ -242,74 +310,56 @@ const Student = () => {
             </div>
           </div>
         </div>
-        <Form
-          id="form"
-          className="form"
-          form={formCASign}
-          onFinish={handleFinishForm}
-        >
+        <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm} onValuesChange={handleChangeFormValues}>
           <div className="registration__form">
             <div className="registration__form-wrap">
-              <div className="heading v1 text-center">Student</div>
+              <div className="heading v1 text-center">Schedule</div>
               <div className="heading v2">Thông Tin</div>
               <Form.Item name={"Id"} hidden></Form.Item>
+              <Form.Item name={"scheduleList"} hidden></Form.Item>
               <div className="row">
                 <div className="col-lg-4">
-                  <Form.Item
-                    label={"Họ và Tên"}
-                    name={"Fullname"}
-                    className="req"
-                  >
-                    <Input />
-                  </Form.Item>
-                </div>
-                <div className="col-lg-4">
-                  <Form.Item label={"Ngày sinh"} name={"Dob"} className="req">
-                    <Input type="date" />
-                  </Form.Item>
-                </div>
-                <div className="col-lg-4">
-                  <Form.Item label={"Cha mẹ"} name={"ParentId"} className="req">
-                    <Select  className="select--modify" placeholder="Choose">
-                      {convertToArray(listParent).map((e, key) => (
+                  <Form.Item label={"Lớp học"} name={"classId"} className="req">
+                    <Select className="select--modify" placeholder="Choose">
+                      {convertToArray(listClassRoom).map((e, key) => (
                         <Option key={key} value={e.Id}>
-                          {e.Fullname}
+                          {e.ClassroomNo}
                         </Option>
                       ))}
                     </Select>
                   </Form.Item>
                 </div>
                 <div className="col-lg-4">
-                  <Form.Item label={"Email"} name={"Email"} className="req">
-                    <Input />
+                  <Form.Item label={"Ngày bắt đầu"} name={"startDate"} className="req">
+                    <Input type="date" />
                   </Form.Item>
                 </div>
-                <div className="col-lg-4">
-                  <Form.Item
-                    label={"Mật khẩu"}
-                    name={"Password"}
-                    className="req"
-                  >
-                    <Input.Password />
-                  </Form.Item>
-                </div>
+
+                <Form.Item noStyle shouldUpdate={(prevValues, currentValues) => prevValues?.scheduleList !== currentValues?.scheduleList}>
+                  {({ getFieldValue, getFieldsValue }) => {
+                    let scheduleData = convertToArray(getFieldValue("scheduleList"));
+                    return (
+                      <>
+                        <div className="col-lg-4">
+                          <Button type="primary" onClick={() => handleAddRow(getFieldsValue())}>
+                            Tạo lịch học
+                          </Button>
+                        </div>
+                        {scheduleData.map((item, index) => (
+                          <ScheduleForm item={item} key={index} index={index} getFieldsValue={getFieldsValue} />
+                        ))}
+                      </>
+                    );
+                  }}
+                </Form.Item>
+                {/* {scheduleData.map((item, index) => (
+                  <ScheduleForm item={item} key={index} index={index} onClick={(index) => setScheduleList(scheduleList.filter((_, i) => i !== index))} />
+                ))} */}
                 <div className="col-lg-4"></div>
                 <div className="col-lg-4">
                   <Form.Item label={"Thao tác"} className="req">
-                    <button
-                      className="btn btn-action"
-                      type="submit"
-                      onClick={
-                        selectedRow
-                          ? handleEditDigitalSignature
-                          : handleAddDigitalSignature
-                      }
-                    >
-                      {selectedRow ? (
-                        <span>{t("Lưu")}</span>
-                      ) : (
-                        <span>{t("Thêm")}</span>
-                      )}
+                    <button className="btn btn-action" type="submit" onClick={selectedRow ? handleEditDigitalSignature : handleAddDigitalSignature}>
+                      {selectedRow ? <span>{t("Lưu")}</span> : <span>{t("Thêm")}</span>}
                     </button>
                   </Form.Item>
                 </div>
@@ -357,4 +407,4 @@ const Student = () => {
   );
 };
 
-export default Student;
+export default ThoiKhoaBieu;

@@ -33,7 +33,7 @@ const LoginForm = () => {
         toast.success("đăng nhập thành công");
         navigate("/home");
       } else {
-        toast.error(loginData);
+        toast.error(loginData.ErrorMessage);
         setEmail("");
         setPassword("");
       }

@@ -9,7 +9,7 @@ export const useShareOrderApi = () => {
   return {
     getClassRoomGetList: () => {
       const params = {
-        pageSize: 10,
+        pageSize: 20,
         pageIndex: 1,
         sortBy: "Id",
         orderBy: "desc",
@@ -17,6 +17,17 @@ export const useShareOrderApi = () => {
       };
 
       return httpRequest.post(`/api/Classroom/GetList`, params);
+    },
+    getScheduleGetList: () => {
+      const params = {
+        pageSize: 20,
+        pageIndex: 1,
+        sortBy: "Id",
+        orderBy: "desc",
+        keyword: "",
+      };
+
+      return httpRequest.post(`/api/Schedule/GetList`, params);
     },
     getClassRoomGetListRoom: (jsonData) => {
       return httpRequest.get(`/api/Classroom/GetClassroomFacility`, jsonData);
@@ -32,7 +43,7 @@ export const useShareOrderApi = () => {
     },
     getParentGetList: () => {
       const params = {
-        pageSize: 10,
+        pageSize: 20,
         pageIndex: 1,
         sortBy: "Id",
         orderBy: "desc",
@@ -55,7 +66,7 @@ export const useShareOrderApi = () => {
     },
     getStudentGetList: () => {
       const params = {
-        pageSize: 10,
+        pageSize: 20,
         pageIndex: 1,
         sortBy: "Id",
         orderBy: "desc",
@@ -66,7 +77,7 @@ export const useShareOrderApi = () => {
     },
     getTeacherGetList: () => {
       const params = {
-        pageSize: 10,
+        pageSize: 20,
         pageIndex: 1,
         sortBy: "Id",
         orderBy: "desc",
@@ -77,7 +88,7 @@ export const useShareOrderApi = () => {
     },
     getSubjectGetList: () => {
       const params = {
-        pageSize: 10,
+        pageSize: 20,
         pageIndex: 1,
         sortBy: "Id",
         orderBy: "desc",

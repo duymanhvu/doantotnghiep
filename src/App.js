@@ -27,6 +27,7 @@ import Overview from "./scenes/overview/Overview";
 import Photos from "./scenes/photos/Photos";
 import Program from "./scenes/program/Program";
 import Tour from "./scenes/tour/Tour";
+import ThoiKhoaBieu from "./components/project/thoiKhoaBieu/thoiKhoaBieu";
 function App() {
   AOS.init();
   return (
@@ -37,7 +38,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginForm />} />
             {/* <Route path="/forgot" element={<ForgotPass />} /> */}
-            <Route path="/registration" element={<CreateAccountjs />} />
+            
             {/* <Route path="/registration:id" element={<Registration />} /> */}
             <Route
               path="/registrationAccommodation"
@@ -51,9 +52,10 @@ function App() {
             <Route path="/program" element={<Program />} />
             <Route path="/tour" element={<Tour />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/speakers" element={<LoginForm />} />
+            <Route path="/speakers" element={<ThoiKhoaBieu />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
+          <Route path="/registration" element={<CreateAccountjs />} />
           <Route path="/test" element={<CreateAccount/>} />
           <Route path="/teacher" element={<Teacher />} />
           <Route path="/parent" element={<Parent />} />

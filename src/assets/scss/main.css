@@ -6751,7 +6751,7 @@
   box-shadow: 0px 4px 16px rgba(112, 144, 176, 0.25);
   border-radius: 16px;
   overflow: auto;
-  max-height: calc(100vh - 100px);
+  max-height: calc(110vh - 100px);
 }
 @media screen and (max-width: 991px) {
   .form-login-wrap {

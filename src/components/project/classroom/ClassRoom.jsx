@@ -54,12 +54,18 @@ const ClassRoom = () => {
       dataIndex: "SubjectId",
       key: "SubjectId",
       align: "center",
+      render: (text)=> {
+        const name = listSubject?.find(e => e.Id === text)?.Name
+        return <span>
+          {name}
+        </span>
+      }
     },
     {
       title: t("Thầy dạy"),
       dataIndex: "TeacherId",
       key: "TeacherId",
-      align: "center",
+      align: "center", 
     },
     {
       title: t("Số lượng học sinh"),

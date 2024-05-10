@@ -2,43 +2,93 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 
 import scroll_down from "../../../assets/img/ic_scroll_down.svg";
-
+import { Form, Input, Select } from "antd";
+import { useAxios } from "../../apiCore/apiHelper";
+import { convertToArray } from "../../apiCore/convertObject";
+import { useEffect, useState } from "react";
+import { useShareOrderApi } from "../../apiCore/apiProcess";
+import { toast } from "react-toastify";
+const { Option } = Select;
 const genarateSlotLabel = (value) => {
   if (!value) return "";
   if (value === "07") {
-    return "Sáng";
+    return <>
+    <p>Sáng</p>
+    <span>Ca 1</span>
+    </>;
   }
   if (value === "12") {
-    return "Chiều";
+    return <>
+    <p>Chiều</p>
+    <span>Ca 2</span>
+    </>;;
   }
   if (value === "17") {
-    return "Tối";
+    return <>
+    <p>Tối</p>
+    <span>Ca 3</span>
+    </>;;
   }
 };
 
-const events = [
-  {
-    id: 1,
-    title: " Lịch học Toán",
-    start: "2024-05-01T09:30:00",
-    end: "2024-05-01T10:30:00",
-  },
-  {
-    id: 2,
-    title: " Lịch học Văn",
-    start: "2024-05-01T10:30:00",
-    end: "2024-05-01T11:30:00",
-  },
-  {
-    id: 3,
-    title: " Lịch học Tiếng anh",
-    start: "2024-05-01T11:30:00",
-    end: "2024-05-01T12:30:00",
-  },
-  { title: "Meeting", start: new Date() },
-];
-
 export function CalendarSchedule() {
+  const [formCASign] = Form.useForm();
+  const axios = useAxios();
+  const AxiosAPI = useShareOrderApi();
+  const [listRoom, setListRoom] = useState([]);
+  const [listData, setListData] = useState([]);
+  console.log("====================================");
+  console.log(listData);
+  console.log("====================================");
+  useEffect(() => {
+    AxiosAPI.getClassRoomGetList()
+      .then((res) => {
+        if (res.status === 200) {
+          setListRoom(convertToArray(res?.data?.Data));
+        } else {
+          setListRoom([]);
+        }
+      })
+      .catch(function (err) {
+        setListRoom([]);
+      });
+  }, []);
+
+  const handleSearch = async () => {
+    formCASign.submit();
+    formCASign
+      .validateFields()
+      .then(async (values) => {
+        const classId = values?.ClassroomNo;
+        const startDate = values?.StartDate;
+        const endDate = values?.EndDate;
+        if (values) {
+          const response = await axios.get(`/api/Schedule/GetSchedulesByClass?classId=${classId}&startDate=${startDate}&endDate=${endDate}`);
+          if (response.data?.StatusCode > 0) {
+            toast.success("Tìm kiếm thành công");
+            setListData(
+              convertToArray(response?.data?.Data).map((item) => ({
+                id: item?.Id,
+                title: item?.Title + item?.Classroom?.Teacher?.Fullname,
+                start: item?.StartTime,
+                end: item?.EndTime,
+                description: "abc"
+              }))
+            );
+          } else {
+            toast.error("Error!");
+          }
+        }
+      })
+      .catch((err) => {
+        if (err.response && err.response !== undefined) {
+          toast.error("Error!");
+        }
+      });
+  };
+  const handleFinishForm = () => {
+    formCASign.validateFields().then((values) => {});
+  };
   return (
     <div className="registration">
       <div className="registration__container">
@@ -54,6 +104,46 @@ export function CalendarSchedule() {
             </div>
           </div>
         </div>
+        <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm}>
+          <div className="registration__form">
+            <div className="registration__form-wrap">
+              <div className="heading v1 text-center"></div>
+              <div className="heading v2">Thông Tin</div>
+              <Form.Item name={"Id"} hidden></Form.Item>
+              <div className="row">
+                <div className="col-lg-4">
+                  <Form.Item label={"Tên Phòng"} name={"ClassroomNo"} className="req">
+                    <Select className="select--modify" placeholder="Choose">
+                      {convertToArray(listRoom).map((e, key) => (
+                        <Option key={key} value={e.Id}>
+                          {e.ClassroomNo}
+                        </Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Ngày bắt đầu"} name={"StartDate"} className="req">
+                    <Input type="date" />
+                  </Form.Item>
+                </div>
+
+                <div className="col-lg-4">
+                  <Form.Item label={"Ngày kết thúc"} name={"EndDate"} className="req">
+                    <Input type="date" />
+                  </Form.Item>
+                </div>
+                <div className="col-lg-4">
+                  <Form.Item label={"Thao tác"} className="req">
+                    <button className="btn btn-action" type="submit" onClick={handleSearch}>
+                      {<span>Tìm kiếm</span>}
+                    </button>
+                  </Form.Item>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Form>
         <FullCalendar
           locale={"vi"}
           timeZone="local"
@@ -69,7 +159,7 @@ export function CalendarSchedule() {
           plugins={[timeGridPlugin]}
           initialView="timeGridWeek"
           weekends={false}
-          events={events}
+          events={listData}
           eventContent={renderEventContent}
         />
       </div>
@@ -83,6 +173,7 @@ function renderEventContent(eventInfo) {
     <>
       <b>{eventInfo.timeText}</b>
       <i>{eventInfo.event.title}</i>
+      <i>{eventInfo.event.description}</i>
     </>
   );
 }

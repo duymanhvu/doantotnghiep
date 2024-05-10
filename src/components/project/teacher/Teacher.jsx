@@ -9,6 +9,7 @@ import moment from "moment";
 import Modal from "react-bootstrap/Modal";
 import { MapColumnsANT } from "../../apiCore/dataSetCollection";
 import { toast } from "react-toastify";
+import add from "../../../assets/image/icon/ic_add.svg";
 
 const { Option } = Select;
 const Teacher = () => {
@@ -26,7 +27,6 @@ const Teacher = () => {
     setRecordToDelete(autoId);
     setShow(true);
   };
-  
 
   const columns = MapColumnsANT([
     {
@@ -75,19 +75,23 @@ const Teacher = () => {
           default:
             return value;
         }
-      }
+      },
     },
     {
       title: t("Trạng thái"),
       dataIndex: "Status",
       key: "Status",
       align: "center",
-    },
-    {
-      title: t("Trạng thái Admin"),
-      dataIndex: "IsAdmin",
-      key: "IsAdmin",
-      align: "center",
+      render: (value) => {
+        switch (value) {
+          case true:
+            return "Đã Duyệt";
+          case false:
+            return "Chưa Duyệt";
+          default:
+            return value;
+        }
+      },
     },
     {
       title: t("Chức năng"),
@@ -104,10 +108,45 @@ const Teacher = () => {
         </div>
       ),
     },
+    {
+      title: t("Duyệt"),
+      dataIndex: "check",
+      key: "check",
+      align: "center",
+      render: (value, record) => (
+        <div className="d-flex justify-content-center align-items-center">
+          {record.Status === true ? (
+            <div style={{ opacity: 0.5, pointerEvents: "none" ,cursor: "not-allowed"}}>
+              <img src={add} alt="add" />
+            </div>
+          ) : (
+            <div onClick={() => handleApproveChange(record)}>
+              <img src={add} alt="add" />
+            </div>
+          )}
+        </div>
+      ),
+    },
   ]);
   useEffect(() => {
     handleGetLisDigitalSignature();
   }, []);
+  const handleApproveChange = async (record) => {
+    try {
+      const response = await axios.get(`/api/Teacher/AcceptTeacher/${record.Id}`);
+
+      if (response.data?.StatusCode > 0) {
+        toast.success("đã duyệt thành công");
+        handleGetLisDigitalSignature();
+      } else {
+        toast.error("Thất Bại");
+      }
+    } catch (err) {
+      if (err.response && err.response !== undefined) {
+        toast.error("Thất Bại");
+      }
+    }
+  };
 
   const handleGetLisDigitalSignature = () => {
     AxiosAPI.getTeacherGetList()
@@ -183,7 +222,7 @@ const Teacher = () => {
         }
       });
   };
-  
+
   const handleEditDigitalSignature = async () => {
     formCASign.submit();
     formCASign
@@ -191,7 +230,7 @@ const Teacher = () => {
       .then(async (values) => {
         const newData = {
           ...values,
-          SubjectType: values?.SubjectType === "Toán" ? "0" : values?.SubjectType === "Văn" ? "1" : values?.SubjectType === "Tiếng Anh" ? "2" : values?.SubjectType
+          SubjectType: values?.SubjectType === "Toán" ? "0" : values?.SubjectType === "Văn" ? "1" : values?.SubjectType === "Tiếng Anh" ? "2" : values?.SubjectType,
         };
         if (values) {
           const response = await axios.post("/api/Teacher/Update", newData);
@@ -238,7 +277,6 @@ const Teacher = () => {
   const handleFinishForm = () => {
     formCASign.validateFields().then((values) => {});
   };
-  
 
   return (
     <div className="registration">
@@ -290,8 +328,7 @@ const Teacher = () => {
                 </div>
                 <div className="col-lg-4">
                   <Form.Item label={"Môn dạy"} name={"SubjectType"} className="req">
-                    <Select className="select--modify" placeholder="Choose"
-                    >
+                    <Select className="select--modify" placeholder="Choose">
                       <Option value="0">Toán</Option>
                       <Option value="1">Văn</Option>
                       <Option value="2">Tiếng Anh</Option>

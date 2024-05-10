@@ -84,6 +84,14 @@ const Header = () => {
     setShowAgenda(false);
     setShowResources(false);
     setShowRegistration(false);
+    const email = JSON.parse(localStorage.getItem("email"));
+    if (email !== "aomathe@gmai.com") {
+      // Nếu email không phải là "aomathe@gmail.com", ẩn các tab "TabNew" và "Teacher"
+      const resourcesLinks = document.querySelectorAll('a[href="/student"], a[href="/teacher"],a[href="/parent"],a[href="/calendar"],a[href="/subject"],a[href="/classroom"]');
+      resourcesLinks.forEach((link) => {
+        link.style.display = "none";
+      });
+    }
   };
 
   const setHeader = () => {
@@ -103,41 +111,17 @@ const Header = () => {
 
   return (
     <header className="header">
-      <Navbar
-        collapseOnSelect
-        expand="lg"
-        className={`fixed-top ${stickyHeader ? "bg-light" : ""} ${
-          toggleMenu ? "is-mobile" : ""
-        }`}
-      >
+      <Navbar collapseOnSelect expand="lg" className={`fixed-top ${stickyHeader ? "bg-light" : ""} ${toggleMenu ? "is-mobile" : ""}`}>
         <Container>
           <Nav.Link as={Link} to="/home" className="navbar-brand">
             <img src={logo} alt="logo" />
           </Nav.Link>
-          <Navbar.Toggle
-            aria-controls="basic-navbar-nav"
-            onClick={handleToggleMenu}
-          >
-            {toggleMenu ? (
-              <img src={close} alt="close" />
-            ) : (
-              <img src={navbar} alt="open" />
-            )}
+          <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={handleToggleMenu}>
+            {toggleMenu ? <img src={close} alt="close" /> : <img src={navbar} alt="open" />}
           </Navbar.Toggle>
-          <Navbar.Collapse className="justify-content-end" style={{paddingRight: "16px"}}>
+          <Navbar.Collapse className="justify-content-end" style={{ paddingRight: "16px" }}>
             <Nav>
-              <NavDropdown
-                title="REGISTRATION"
-                show={showRegistration}
-                onToggle={handleRegistrationClick}
-                renderMenuOnMount
-                className={
-                  isNavLinkActive("/registration") ||
-                  isNavLinkActive("/registrationAccommodation")
-                    ? "active"
-                    : ""
-                }
-              >
+              <NavDropdown title="REGISTRATION" show={showRegistration} onToggle={handleRegistrationClick} renderMenuOnMount className={isNavLinkActive("") || isNavLinkActive("/registrationAccommodation") ? "active" : ""}>
                 {/* <Nav.Link
                   as={Link}
                   to="/registration"
@@ -146,165 +130,65 @@ const Header = () => {
                 >
                   Conference
                 </Nav.Link> */}
-                <Nav.Link
-                  as={Link}
-                  to="/registrationAccommodation"
-                  onClick={handleLinkClick}
-                  eventKey="2"
-                >
+                <Nav.Link as={Link} to="/registrationAccommodation" onClick={handleLinkClick} eventKey="2">
                   Accommodation
                 </Nav.Link>
               </NavDropdown>
-              <NavDropdown
-                title="ABOUT"
-                show={showAbout}
-                onToggle={handleAboutClick}
-                renderMenuOnMount
-                className={
-                  isNavLinkActive("/overview") || isNavLinkActive("/message")
-                    ? "active"
-                    : ""
-                }
-              >
-                <Nav.Link
-                  as={Link}
-                  to="/overview"
-                  onClick={handleLinkClick}
-                  eventKey="3"
-                >
+              <NavDropdown title="ABOUT" show={showAbout} onToggle={handleAboutClick} renderMenuOnMount className={isNavLinkActive("/overview") || isNavLinkActive("/message") ? "active" : ""}>
+                <Nav.Link as={Link} to="/overview" onClick={handleLinkClick} eventKey="3">
                   Overview
                 </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/message"
-                  onClick={handleLinkClick}
-                  eventKey="4"
-                >
+                <Nav.Link as={Link} to="/message" onClick={handleLinkClick} eventKey="4">
                   Message from the Host
                 </Nav.Link>
               </NavDropdown>
-              <NavDropdown
-                title="AGENDA"
-                show={showAgenda}
-                onToggle={handleAgendaClick}
-                renderMenuOnMount
-              >
-                <Nav.Link
-                  as={Link}
-                  to="/program"
-                  onClick={handleLinkClick}
-                  eventKey="5"
-                >
+              <NavDropdown title="AGENDA" show={showAgenda} onToggle={handleAgendaClick} renderMenuOnMount>
+                <Nav.Link as={Link} to="/program" onClick={handleLinkClick} eventKey="5">
                   Program
                 </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/speakers"
-                  onClick={handleLinkClick}
-                  eventKey="6"
-                >
+                <Nav.Link as={Link} to="/speakers" onClick={handleLinkClick} eventKey="6">
                   Speakers
                 </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/tour"
-                  onClick={handleLinkClick}
-                  eventKey="7"
-                >
+                <Nav.Link as={Link} to="/tour" onClick={handleLinkClick} eventKey="7">
                   Optional Tour
                 </Nav.Link>
               </NavDropdown>
-              <NavDropdown
-                title="RESOURCES"
-                show={showResources}
-                onToggle={handleResourcesClick}
-                renderMenuOnMount
-              >
-                <Nav.Link
-                  as={Link}
-                  to="/photos"
-                  onClick={handleLinkClick}
-                  eventKey="8"
-                >
+              <NavDropdown title="RESOURCES" show={showResources} onToggle={handleResourcesClick} renderMenuOnMount>
+                <Nav.Link as={Link} to="/photos" onClick={handleLinkClick} eventKey="8">
                   Conference Photos
                 </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/local"
-                  onClick={handleLinkClick}
-                  eventKey="9"
-                >
+                <Nav.Link as={Link} to="/local" onClick={handleLinkClick} eventKey="9">
                   Local Information
                 </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/contact"
-                  onClick={handleLinkClick}
-                  eventKey="10"
-                >
+                <Nav.Link as={Link} to="/contact" onClick={handleLinkClick} eventKey="10">
                   Contact
                 </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/test"
-                  onClick={handleLinkClick}
-                  eventKey="10"
-                >
+                <Nav.Link as={Link} to="/test" onClick={handleLinkClick} eventKey="10">
                   TabNew
                 </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/teacher"
-                  onClick={handleLinkClick}
-                  eventKey="10"
-                >
+                <Nav.Link as={Link} to="/teacher" onClick={handleLinkClick} eventKey="10">
                   Teacher
                 </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/student"
-                  onClick={handleLinkClick}
-                  eventKey="10"
-                >
+                <Nav.Link as={Link} to="/student" onClick={handleLinkClick} eventKey="10">
                   Student
                 </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/parent"
-                  onClick={handleLinkClick}
-                  eventKey="10"
-                >
+                <Nav.Link as={Link} to="/parent" onClick={handleLinkClick} eventKey="10">
                   Parent
                 </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/calendar"
-                  onClick={handleLinkClick}
-                  eventKey="10"
-                >
+                <Nav.Link as={Link} to="/calendar" onClick={handleLinkClick} eventKey="10">
                   Calendar
                 </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/subject"
-                  onClick={handleLinkClick}
-                  eventKey="10"
-                >
+                <Nav.Link as={Link} to="/subject" onClick={handleLinkClick} eventKey="10">
                   Subject
                 </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/classroom"
-                  onClick={handleLinkClick}
-                  eventKey="10"
-                >
+                <Nav.Link as={Link} to="/classroom" onClick={handleLinkClick} eventKey="10">
                   ClassRoom
                 </Nav.Link>
               </NavDropdown>
               {isAuthenticated ? (
-                <Nav.Link onClick={logoutUser}>
+                <Nav.Link onClick={logoutUser} as={Link} to="/login">
                   LOGOUT
-                  </Nav.Link>
+                </Nav.Link>
               ) : (
                 <Nav.Link as={Link} to="/login">
                   LOGIN

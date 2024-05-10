@@ -3,8 +3,10 @@ import axios from "axios";
 
 import { authReducer } from "../reducers/authReducer";
 import { apiUrl, LOCAL_STORAGE_TOKEN_NAME } from "./constants";
-export const AuthContext = createContext();
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
+export const AuthContext = createContext();
 const AuthContextProvider = ({ children }) => {
   const [authState, dispatch] = useReducer(authReducer, {
     authLoading: true,
@@ -67,7 +69,7 @@ const AuthContextProvider = ({ children }) => {
   //   register
   const registerUser = async (data) => {
     try {
-      const response = await client.post(`auth/signup`, data);
+      const response = await client.post(`/api/Authentication/Register`, data);
       return response.data;
     } catch (error) {
       if (error.response.data) return error.response.data;
@@ -127,8 +129,8 @@ const AuthContextProvider = ({ children }) => {
 
   // Logout
   const logoutUser = async () => {
+    toast.success('Đăng xuất thành công!');
     const token = JSON.parse(getCookie("AUTH") ?? "{}");
-
     let config = {};
     let response = {};
 
@@ -144,6 +146,7 @@ const AuthContextProvider = ({ children }) => {
     });
 
     localStorage.removeItem("user");
+    localStorage.removeItem("email");
     localStorage.removeItem("isAuthenticated");
     setCookie("AUTH", null, 1);
     dispatch({
