@@ -90,11 +90,12 @@ const ThoiKhoaBieu = () => {
   }, []);
 
   const showDuplicateDayNotification = () => {
-    notification.error({
-      message: "Lỗi",
-      description: "Thứ đã bị trùng, vui lòng chọn thứ khác.",
-      duration: 0,
-    });
+    toast.error("Thứ đã bị trùng, vui lòng chọn ngày khác !");
+    // notification.error({
+    //   message: "Lỗi",
+    //   description: "Thứ đã bị trùng, vui lòng chọn thứ khác.",
+    //   duration: 0,
+    // });
   };
 
   const handleGetLisDigitalSignature = () => {
