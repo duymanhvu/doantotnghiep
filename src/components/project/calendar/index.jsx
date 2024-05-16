@@ -74,7 +74,7 @@ export function CalendarSchedule() {
             setListData(
               convertToArray(response?.data?.Data).map((item) => ({
                 id: item?.Id,
-                title: item?.Title + item?.Classroom?.Teacher?.Fullname,
+                title: `Giáo viên: ${item?.Title + item?.Classroom?.Teacher?.Fullname}`,
                 start: item?.StartTime,
                 end: item?.EndTime,
                 description: "abc",
@@ -198,10 +198,10 @@ function renderEventContent(eventInfo) {
   console.log(eventInfo);
   return (
     <>
-      <b>{eventInfo.timeText}</b>
+      <p>{eventInfo.timeText}</p>
       <i>{eventInfo.event.title}</i>
       <br />
-      <i>{eventInfo.event.extendedProps.description}</i>
+      <h3 style={{color:"red"}}>{eventInfo.event.extendedProps.description}</h3>
     </>
   );
 }
