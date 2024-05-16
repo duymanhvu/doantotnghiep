@@ -37,7 +37,7 @@ const genarateSlotLabel = (value) => {
   }
 };
 
-export function CalendarSchedule() {
+export function CalendarScheduleNew() {
   const [formCASign] = Form.useForm();
   const axios = useAxios();
   const AxiosAPI = useShareOrderApi();
@@ -62,12 +62,11 @@ export function CalendarSchedule() {
     formCASign
       .validateFields()
       .then(async (values) => {
-        const classId = values?.ClassroomNo;
         const startDate = values?.StartDate;
         const endDate = values?.EndDate;
         if (values) {
           const response = await axios.get(
-            `/api/Schedule/GetSchedulesByClass?classId=${classId}&startDate=${startDate}&endDate=${endDate}`
+            `/api/Schedule/GetSchedulesByDates?startDate=${startDate}&endDate=${endDate}`
           );
           if (response.data?.StatusCode > 0) {
             toast.success("Tìm kiếm thành công");
@@ -123,7 +122,7 @@ export function CalendarSchedule() {
               <div className="heading v2">Thông Tin</div>
               <Form.Item name={"Id"} hidden></Form.Item>
               <div className="row">
-                <div className="col-lg-4">
+                {/* <div className="col-lg-4">
                   <Form.Item
                     label={"Tên Phòng"}
                     name={"ClassroomNo"}
@@ -137,7 +136,7 @@ export function CalendarSchedule() {
                       ))}
                     </Select>
                   </Form.Item>
-                </div>
+                </div> */}
                 <div className="col-lg-4">
                   <Form.Item
                     label={"Ngày bắt đầu"}

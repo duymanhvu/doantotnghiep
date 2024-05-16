@@ -5,10 +5,10 @@ import { useTranslation } from "react-i18next";
 import { useShareOrderApi } from "../../apiCore/apiProcess";
 const { Option } = Select;
 
-const StepTwo = () => {
+const StepTwo = ({ formData }) => {
   const { t } = useTranslation();
   const AxiosAPI = useShareOrderApi();
-
+console.log(formData ,"{ formData }{ formData }{ formData }");
   const [listParent, setlistParent] = useState([]);
   useEffect(() => {
     AxiosAPI.getParentGetList()
@@ -27,17 +27,17 @@ const StepTwo = () => {
     <>
       <h3 className="">Chọn lịch học phù hợp</h3>
       <div className="ant-form-createacc">
-        <Form.Item label={"Chọn Lớp"} name={"SubjectType"} className="req">
+        <Form.Item label={"Chọn Giáo Viên"} name={"SubjectType"} className="req">
           <Select className="select--modify" placeholder="Choose">
             <Option value="0">Lớp A</Option>
             <Option value="1">Lớp B</Option>
             <Option value="3">Lớp C</Option>
           </Select>
         </Form.Item>
-        <Form.Item label={"Ngày bắt đầu"} name={"Dob"} className="req">
+        <Form.Item label={"Chọn Môn Học"} name={"Dob"} className="req">
           <Input type="date" />
         </Form.Item>
-        <Form.Item label={"Ngày"} name={"SubjectType"} className="req">
+        <Form.Item label={"Chọn thứ"} name={"SubjectType"} className="req">
           <Select className="select--modify" placeholder="Choose">
             <Option value="0">thú 2</Option>
             <Option value="1">thú 3</Option>

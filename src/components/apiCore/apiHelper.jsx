@@ -72,7 +72,6 @@ client.interceptors.request.use(async (config) => {
   const token = localStorage.getItem("user")?.replace(/^"(.*)"$/, '$1') || ""; // Lấy token từ localStorage
   const email = localStorage.getItem("email")?.replace(/^"(.*)"$/, '$1') || ""; // Lấy token từ localStorage
   const userType = localStorage.getItem("userType")?.replace(/^"(.*)"$/, '$1') || ""; // Lấy token từ localStorage
-  console.log(token,"kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
   if (token && email) {
     config.headers.Token = `${token}`; // Đính kèm token vào header Authorization
     config.headers.Email = `${email}`;

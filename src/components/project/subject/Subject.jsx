@@ -8,6 +8,7 @@ import { useAxios } from "../../apiCore/apiHelper";
 import Modal from "react-bootstrap/Modal";
 import { useGlobalConst } from "../../apiCore/useGlobalConst";
 import moment from "moment";
+import { toast } from "react-toastify";
 
 const { Option } = Select;
 
@@ -157,19 +158,19 @@ const Subject = () => {
           const response = await axios.post("/api/Subject/Insert", newData);
 
           if (response.data?.StatusCode >= 0) {
-            message.success("Processing complete!");
+            toast.success("Thành công!");
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
+            toast.error("Thất bại!");
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          message.error("Error!");
+          toast.error("Thất bại!");
         }
       });
   };
@@ -190,37 +191,36 @@ console.log(values,"llllllllllllllllllllllllll");
           const response = await axios.post("/api/Subject/Update", newData);
 
           if (response.data?.StatusCode >= 0) {
-            message.success("Processing complete!");
+            toast.success("Thành công!");
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            message.error("Error!");
+           toast.error("Thất bại!");
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          message.error("Error!");
+         toast.error("Thất bại!");
         }
       });
   };
   const handleDelete = (autoId) => {
     axios
-      .post(`/api/Subject/Delete?id=${autoId}&Token=abcd123`)
+      .post(`/api/Subject/Delete?id=${autoId}`)
       .then((response) => {
         if (response.status === 200 && response.data.StatusCode >= 0) {
-          message.success("Processing complete!");
+          toast.success("Thành công!");
         } else {
-          message.error("Error!");
+          toast.error("Thất bại!");
+
         }
       })
       .catch((err) => {
-        console.error(err);
-
         if (err.response && err.response.data) {
-          notificationShare(-1, err.response.data, t("thatBai"));
+          toast.error("Thất bại!");
         }
       })
       .finally(() => {

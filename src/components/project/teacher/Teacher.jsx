@@ -212,13 +212,13 @@ const Teacher = () => {
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
+            toast.error("Thất Bại");
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
+          toast.error("Thất Bại");
         }
       });
   };
@@ -242,31 +242,31 @@ const Teacher = () => {
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
+            toast.error("Thất Bại");
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
+          toast.error("Thất Bại");
         }
       });
   };
   const handleDelete = (autoId) => {
     axios
-      .post(`/api/Teacher/Delete?id=${autoId}&Token=abcd123`)
+      .post(`/api/Teacher/Delete?id=${autoId}`)
       .then((response) => {
         if (response.status === 200 && response.data.StatusCode >= 0) {
-          notificationShare(0, response.data.errorMsg, t("thanhCong"));
+          toast.success("Xóa thành công!");
         } else {
-          notificationShare(-1, response.data.errorMsg, t("thatBai"));
+          toast.error("Thất Bại");
         }
       })
       .catch((err) => {
         console.error(err);
 
         if (err.response && err.response.data) {
-          notificationShare(-1, err.response.data, t("thatBai"));
+          toast.error("Thất Bại");
         }
       })
       .finally(() => {

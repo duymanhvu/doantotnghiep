@@ -91,11 +91,7 @@ const ThoiKhoaBieu = () => {
 
   const showDuplicateDayNotification = () => {
     toast.error("Thứ đã bị trùng, vui lòng chọn ngày khác !");
-    // notification.error({
-    //   message: "Lỗi",
-    //   description: "Thứ đã bị trùng, vui lòng chọn thứ khác.",
-    //   duration: 0,
-    // });
+    
   };
 
   const handleGetLisDigitalSignature = () => {
@@ -186,7 +182,7 @@ const ThoiKhoaBieu = () => {
   };
   const handleDelete = (autoId) => {
     axios
-      .post(`/api/Student/Delete?id=${autoId}&Token=abcd123`)
+      .post(`/api/Student/Delete?id=${autoId}`)
       .then((response) => {
         if (response.status === 200 && response.data.errorCode >= 0) {
           notificationShare(0, response.data.errorMsg, t("thanhCong"));

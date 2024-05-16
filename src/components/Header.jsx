@@ -85,7 +85,7 @@ const Header = () => {
     setShowResources(false);
     setShowRegistration(false);
     const email = JSON.parse(localStorage.getItem("email"));
-    if (email !== "aomathe@gmai.com") {
+    if (email !== "teacher2@gmail.com") {
       // Nếu email không phải là "aomathe@gmail.com", ẩn các tab "TabNew" và "Teacher"
       const resourcesLinks = document.querySelectorAll('a[href="/student"], a[href="/teacher"],a[href="/parent"],a[href="/calendar"],a[href="/subject"],a[href="/classroom"]');
       resourcesLinks.forEach((link) => {
@@ -121,7 +121,7 @@ const Header = () => {
           </Navbar.Toggle>
           <Navbar.Collapse className="justify-content-end" style={{ paddingRight: "16px" }}>
             <Nav>
-              <NavDropdown title="REGISTRATION" show={showRegistration} onToggle={handleRegistrationClick} renderMenuOnMount className={isNavLinkActive("") || isNavLinkActive("/registrationAccommodation") ? "active" : ""}>
+              <NavDropdown title="Trang chủ" show={showRegistration} onToggle={handleRegistrationClick} renderMenuOnMount className={isNavLinkActive("") || isNavLinkActive("/registrationAccommodation") ? "active" : ""}>
                 {/* <Nav.Link
                   as={Link}
                   to="/registration"
@@ -131,10 +131,10 @@ const Header = () => {
                   Conference
                 </Nav.Link> */}
                 <Nav.Link as={Link} to="/registrationAccommodation" onClick={handleLinkClick} eventKey="2">
-                  Accommodation
+                  Thông tin
                 </Nav.Link>
               </NavDropdown>
-              <NavDropdown title="ABOUT" show={showAbout} onToggle={handleAboutClick} renderMenuOnMount className={isNavLinkActive("/overview") || isNavLinkActive("/message") ? "active" : ""}>
+              <NavDropdown title="Về Sen" show={showAbout} onToggle={handleAboutClick} renderMenuOnMount className={isNavLinkActive("/overview") || isNavLinkActive("/message") ? "active" : ""}>
                 <Nav.Link as={Link} to="/overview" onClick={handleLinkClick} eventKey="3">
                   Overview
                 </Nav.Link>

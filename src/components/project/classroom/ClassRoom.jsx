@@ -245,7 +245,7 @@ const ClassRoom = () => {
         if (response.status === 200 && response.data.StatusCode > 0) {
           toast.success("Xóa thành công!");
         } else {
-          notificationShare(-1, response.data.errorMsg, t("thatBai"));
+          toast.error("Xóa thất bại!");
         }
       })
       .catch((err) => {

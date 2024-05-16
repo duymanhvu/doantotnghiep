@@ -17,6 +17,7 @@ import { useAxios } from "../../apiCore/apiHelper";
 import Modal from "react-bootstrap/Modal";
 import { useGlobalConst } from "../../apiCore/useGlobalConst";
 import moment from "moment";
+import { toast } from "react-toastify";
 
 const { Option } = Select;
 
@@ -155,19 +156,19 @@ const Student = () => {
           const response = await axios.post("/api/Student/Insert", newData);
 
           if (response.data?.StatusCode >= 0) {
-            notificationShare(0, response.data?.ErrorMessage, t("thanhCong"));
+            toast.success("Thành công!");
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
+            toast.error("Thất bại!");
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
+          toast.error("Thất bại!");
         }
       });
   };
@@ -184,38 +185,37 @@ const Student = () => {
           const response = await axios.post("/api/Student/Update", newData);
 
           if (response.data?.errorCode >= 0) {
-            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
-
+            toast.success("Thành công!");
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
+            toast.error("Thất bại!");
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
+          toast.error("Thất bại!");
         }
       });
   };
   const handleDelete = (autoId) => {
     axios
-      .post(`/api/Student/Delete?id=${autoId}&Token=abcd123`)
+      .post(`/api/Student/Delete?id=${autoId}`)
       .then((response) => {
         if (response.status === 200 && response.data.errorCode >= 0) {
-          notificationShare(0, response.data.errorMsg, t("thanhCong"));
+          toast.success("Thành công!");
         } else {
-          notificationShare(-1, response.data.errorMsg, t("thatBai"));
+          toast.error("Thất bại!");
         }
       })
       .catch((err) => {
         console.error(err);
 
         if (err.response && err.response.data) {
-          notificationShare(-1, err.response.data, t("thatBai"));
+          toast.error("Thất bại!");
         }
       })
       .finally(() => {

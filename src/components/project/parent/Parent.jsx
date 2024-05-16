@@ -7,6 +7,7 @@ import { useShareOrderApi } from "../../apiCore/apiProcess";
 import { convertToArray, notificationShare } from "../../apiCore/convertObject";
 import Modal from "react-bootstrap/Modal";
 import moment from "moment";
+import { toast } from "react-toastify";
 
 const Parent = () => {
   const { t } = useTranslation();
@@ -95,7 +96,7 @@ const Parent = () => {
     formCASign.setFieldsValue({
       Id: record?.Id,
       Fullname: record?.Fullname,
-      Dob:  moment(record?.Dob).format('YYYY-MM-DD'),
+      Dob: moment(record?.Dob).format("YYYY-MM-DD"),
       Phone: record?.Phone,
       Email: record?.Email,
       Password: record?.Password,
@@ -109,7 +110,7 @@ const Parent = () => {
       .then(async (values) => {
         const newData = {
           fullname: values?.Fullname,
-          dob:  moment(values?.Dob).format('YYYY-MM-DDTHH:mm:ss'),
+          dob: moment(values?.Dob).format("YYYY-MM-DDTHH:mm:ss"),
           phone: values?.Phone,
           email: values?.Email,
           password: values?.Password,
@@ -118,19 +119,20 @@ const Parent = () => {
           const response = await axios.post("/api/Parent/Insert", newData);
 
           if (response.data?.StatusCode >= 0) {
-            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
+            toast.success("Thành công!");
+
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
+            toast.error("Thất bại!");
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
+          toast.error("Thất bại!");
         }
       });
   };
@@ -141,38 +143,37 @@ const Parent = () => {
       .then(async (values) => {
         const newData = {
           ...values,
-          dob:  moment(values?.Dob).format('YYYY-MM-DDTHH:mm:ss'),
+          dob: moment(values?.Dob).format("YYYY-MM-DDTHH:mm:ss"),
         };
         if (values) {
           const response = await axios.post("/api/Parent/Update", newData);
 
           if (response.data?.StatusCode >= 0) {
-            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
+            toast.success("Thành công!");
 
             handleGetLisDigitalSignature();
             formCASign.resetFields();
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
+            toast.error("Thất bại!");
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
+          toast.error("Thất bại!");
         }
       });
-      
   };
   const handleDelete = (autoId) => {
     axios
-      .post(`/api/Parent/Delete?id=${autoId}&Token=abcd123`)
+      .post(`/api/Parent/Delete?id=${autoId}`)
       .then((response) => {
         if (response.status === 200 && response.data.errorCode >= 0) {
-          notificationShare(0, t("thanhCong"));
+          toast.success("Thành công!");
         } else {
-          notificationShare(-1, t("thatBai"));
+          toast.error("Thất bại!");
         }
       })
       .catch((err) => {
@@ -189,9 +190,7 @@ const Parent = () => {
   };
 
   const handleFinishForm = () => {
-    formCASign.validateFields().then((values) => {
-      
-    });
+    formCASign.validateFields().then((values) => {});
   };
   return (
     <div className="registration">
@@ -240,9 +239,7 @@ const Parent = () => {
                     <Input />
                   </Form.Item>
                 </div>
-                <div className="col-lg-4">
-                 
-                </div>
+                <div className="col-lg-4"></div>
                 <div className="col-lg-4">
                   <Form.Item label={"Thao tác"} className="req">
                     <button className="btn btn-action" type="submit" onClick={selectedRow ? handleEditDigitalSignature : handleAddDigitalSignature}>

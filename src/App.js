@@ -19,7 +19,6 @@ import AuthContextProvider from "./contexts/AuthContext";
 import CreateAccountjs from "./scenes/auth/CreatAc";
 import LoginForm from "./scenes/auth/LoginForm";
 import RegistrationAccommodation from "./scenes/auth/RegistrationAccommodation";
-import Contact from "./scenes/contact/Contact";
 import Home from "./scenes/home/Home";
 import Local from "./scenes/local/Local";
 import Message from "./scenes/message/Message";
@@ -28,6 +27,7 @@ import Photos from "./scenes/photos/Photos";
 import Program from "./scenes/program/Program";
 import Tour from "./scenes/tour/Tour";
 import ThoiKhoaBieu from "./components/project/thoiKhoaBieu/thoiKhoaBieu";
+import { CalendarScheduleNew } from "./components/project/calendar/allcalendar";
 function App() {
   AOS.init();
   return (
@@ -51,7 +51,7 @@ function App() {
             <Route path="/photos" element={<Photos />} />
             <Route path="/program" element={<Program />} />
             <Route path="/tour" element={<Tour />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/contact" element={<CalendarScheduleNew/>} />
             <Route path="/speakers" element={<ThoiKhoaBieu />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>

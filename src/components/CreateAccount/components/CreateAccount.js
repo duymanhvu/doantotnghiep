@@ -15,16 +15,20 @@ import StepTwo from "../step-create/StepTwo";
 const CreateAccount = () => {
   const history = useNavigate();
   const { t, i18n } = useTranslation();
-
+  const [formData, setFormData] = useState([]);
   const globalConst = useGlobalConst();
+  const handleFormData = (data) => {
+    setFormData(data);  
+  };
+  console.log(formData,"datadatadatadatadatadata");
   const steps = [
     {
       title: "Thông tin cá nhân",
-      content: <StepOne/>,
+      content: <StepOne handleFormData={handleFormData}/>,
     },
     {
       title: "Lịch học",
-      content: <StepTwo/>,
+      content: <StepTwo formData={formData}/>,
     },
     {
       title: "Xác nhận",

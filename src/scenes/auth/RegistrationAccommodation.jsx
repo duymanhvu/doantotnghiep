@@ -165,7 +165,7 @@ const RegistrationAccommodation = () => {
         <div className="background">
           <div className="background__hook">
             <h1 className="animate__animated animate__fadeInUp">
-              accomodation
+              Thông tin về cơ sở
             </h1>
           </div>
 
@@ -186,7 +186,7 @@ const RegistrationAccommodation = () => {
             {hotel.name === "Furama Resort Danang" ? (
               <h3 className="heading">Furama Resort Danang (Meeting hotel)</h3>
             ) : (
-              <h3 className="heading">Accomodation</h3>
+              <h3 className="heading">Thông tin</h3>
             )}
 
             {/* <div className="accommodation__content">
