@@ -73,7 +73,7 @@ export const useShareOrderApi = () => {
         keyword: "",
       };
 
-      return httpRequest.post(`/api/Student/GetList`, params);
+      return httpRequest.post(`/api/Student/GetFilter`, params);
     },
     getTeacherGetList: () => {
       const params = {

@@ -46,6 +46,7 @@ const AuthContextProvider = ({ children }) => {
       if (response.data.StatusCode === 1) {
         localStorage.setItem("user", JSON.stringify(response.data.Token));
         localStorage.setItem("email", JSON.stringify(response.data.Email));
+        localStorage.setItem("userType", JSON.stringify(response.data.UserType));
         setCookie("AUTH", JSON.stringify({ ...response.data.Token, user: undefined }), response.data.Token);
         localStorage.setItem("isAuthenticated", true);
         dispatch({
