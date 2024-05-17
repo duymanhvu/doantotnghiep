@@ -1,12 +1,11 @@
-import { Form, Input, Select } from "antd";
+import { Button, Form, Input, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { convertToArray } from "../../apiCore/convertObject";
 import { useTranslation } from "react-i18next";
 import { useShareOrderApi } from "../../apiCore/apiProcess";
 const { Option } = Select;
 
-const StepOne = ({ handleFormData }) => {
-  console.log(handleFormData,"llllllllllllllllllllllllllllllll");
+const StepOne = ({ formData, next, setFormData }) => {
   const { t } = useTranslation();
   const AxiosAPI = useShareOrderApi();
   const [formCASign] = Form.useForm();
@@ -25,14 +24,17 @@ const StepOne = ({ handleFormData }) => {
         setlistParent([]);
       });
   }, []);
-  const handleFinishForm = (values) => {
-    console.log(values,"kkkkkkkkkkkkkkkkkkkkkkkkkk");
-    handleFormData(values);
+  const handleNextForm = () => {
+    formCASign.validateFields().then((values) => {
+      const data = { ...formData, ...values };
+      setFormData(data);
+      next();
+    });
   };
   return (
     <>
       <h3 className="">Nhập thông tin của con</h3>
-      <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm}>
+      <Form id="form" className="form" form={formCASign}>
         <div className="ant-form-createacc">
           <Form.Item label={"Họ và Tên"} name={"Fullname"} className="req">
             <Input />
@@ -40,19 +42,11 @@ const StepOne = ({ handleFormData }) => {
           <Form.Item label={"Ngày sinh"} name={"Dob"} className="req">
             <Input type="date" />
           </Form.Item>
-          {/* <Form.Item label={"Lớp"} name={"SubjectType"} className="req">
-            <Select className="select--modify" placeholder="Choose">
-              <Option value="0">Lớp 6</Option>
-              <Option value="1">Lớp 9</Option>
-            </Select>
+          <Form.Item>
+            <Button type="primary" onClick={handleNextForm}>
+              Next
+            </Button>
           </Form.Item>
-          <Form.Item label={"Môn học"} name={"SubjectType"} className="req">
-            <Select className="select--modify" placeholder="Choose">
-              <Option value="0">Toán</Option>
-              <Option value="1">Văn</Option>
-              <Option value="2">Tiếng Anh</Option>
-            </Select>
-          </Form.Item> */}
         </div>
       </Form>
     </>
