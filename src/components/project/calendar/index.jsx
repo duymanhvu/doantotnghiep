@@ -78,8 +78,7 @@ export function CalendarSchedule() {
                 title: `Giáo viên: ${item?.Classroom?.Teacher?.Fullname}`,
                 start: item?.StartTime,
                 end: item?.EndTime,
-                subject: `Môn: ${item?.Title}`
-                
+                subject: `Môn: ${item?.Title}`,
               }))
             );
           } else {
@@ -186,9 +185,9 @@ export function CalendarSchedule() {
           }}
           plugins={[timeGridPlugin]}
           initialView="timeGridWeek"
-          weekends={false}
           events={listData}
           eventContent={renderEventContent}
+         
         />
       </div>
     </div>
@@ -201,11 +200,10 @@ function renderEventContent(eventInfo) {
   return (
     <>
       <h4>{eventInfo.timeText}</h4>
-      <h4 style={{color:""}}>{eventInfo.event.extendedProps.description}</h4>
+      <h4 style={{ color: "" }}>{eventInfo.event.extendedProps.description}</h4>
       <h5>{eventInfo.event.title}</h5>
       <h5>{eventInfo.event.extendedProps.subject}</h5>
       <br />
-     
     </>
   );
 }
