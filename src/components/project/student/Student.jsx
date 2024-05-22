@@ -155,7 +155,7 @@ const Student = () => {
         if (values) {
           const response = await axios.post("/api/Student/Insert", newData);
 
-          if (response.data?.StatusCode >= 0) {
+          if (response.data?.StatusCode > 0) {
             toast.success("Thành công!");
             handleGetLisDigitalSignature();
             formCASign.resetFields();
@@ -184,7 +184,7 @@ const Student = () => {
         if (values) {
           const response = await axios.post("/api/Student/Update", newData);
 
-          if (response.data?.errorCode >= 0) {
+          if (response.data?.StatusCode > 0) {
             toast.success("Thành công!");
             handleGetLisDigitalSignature();
             formCASign.resetFields();

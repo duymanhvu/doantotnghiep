@@ -1,62 +1,82 @@
-/** @format */
-
-import React, { useState, useEffect, forwardRef, useImperativeHandle, useMemo, useRef } from "react";
-import { Form, Select, Space, Tag, Button, Tooltip, Input, Modal, Upload, Slider } from "antd";
-import { useStore } from "react-redux";
-import _ from "lodash";
+import { Button, Form, Input, Select } from "antd";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import "react-phone-number-input/style.css";
-import { UploadOutlined, EditOutlined, RotateLeftOutlined, RotateRightOutlined } from "@ant-design/icons";
-import AvatarEditor from "react-avatar-editor";
-import ImageUpload from "./ImageUpload";
-import { useGlobalConst } from "../../apiCore/useGlobalConst";
+import { useShareOrderApi } from "../../apiCore/apiProcess";
+import { toast } from "react-toastify";
+import moment from "moment";
+import { useAxios } from "../../apiCore/apiHelper";
+const { Option } = Select;
 
-const Step3 = forwardRef((props, ref) => {
-  const store = useStore();
+const Step3 = ({ formData, next, setFormData,student,setStudent,prev}) => {
   const { t } = useTranslation();
-  const globalConst = useGlobalConst();
-  const [editedImage, setEditedImage] = useState(null);
-  const [editedImage2, setEditedImage2] = useState(null);
+  const AxiosAPI = useShareOrderApi();
+  const [formCASign] = Form.useForm();
+  const axios = useAxios();
+  const [isAddStudentSuccessful, setIsAddStudentSuccessful] = useState(false); 
 
-  console.log(editedImage, "editedImage");
+  console.log(formData,"kkkkkkkkkkkkkkkkkkkkkkkk");
+  const [listParent, setlistParent] = useState([]);
+  const handleThanhToan = () => {
+      const params = {
+        studentId: formData.studentId,
+        name:"",
+        carts: [
+          {
+            classroomId: formData.Id,
+            subjectId: formData.Subject.Id,
+            buyingPrice: formData.Subject.CurrentPrice
+          }
+        ]
+
+      };
+      console.log(params,"paramsparamsparamsparams");
+      axios
+        .post("/api/Classroom/CheckOut", params)
+        .then((res) => {
+          if (res.status === 200) {
+            
+          } else {
+            
+          }
+        })
+        .catch(function (err) {
+          
+        });
+    };
+  const handleNextForm = () => {
+    formCASign.validateFields().then((values) => {
+      const data = { ...formData, ...values };
+      setFormData(data);
+      
+    });
+  };
+  const handleSubmitAndNext = async () => {
+    await handleThanhToan(); 
+    // if (isAddStudentSuccessful) {
+    //   // Chỉ chuyển sang bước tiếp theo nếu thêm sinh viên thành công
+    //   handleNextForm();
+    // }
+    handleNextForm();
+  };
   return (
     <>
-      <h3 className="m-0 text-left">{t("chupAnhCMNDCCCD")}</h3>
-      <div className="createacc__photo">
-        <ul>
-          <li>{t("damBaoThietBiDaDuocCapQuyen")}</li>
-          <li>{t("giayToTuyThanChinhChu")}</li>
-        </ul>
-
-          <div className="createacc__photo-wrap">
-            <div className="box">
-              <div className="head">{t("cmndCCCDMatTruoc")}</div>
-              <ImageUpload editedImage={editedImage} setEditedImage={setEditedImage} />
-              {!editedImage || (editedImage === null && <div className="ant-form-item-explain-error">{t("khongDuocDeTrong3")}</div>)}
-            </div>
-            <div className="box">
-              <div className="head">{t("cmndCCCDMatSau")}</div>
-              <ImageUpload editedImage={editedImage2} setEditedImage={setEditedImage2} />
-            </div>
-          </div>
-
-          <div className="createacc__photo-tutorial">
-            <div className="box">
-              <img src="/static/img/icon/ic_tutorial_camera_1.png" />
-              <div className="desc">{t("khongChupQuaMo")}</div>
-            </div>
-            <div className="box">
-              <img src="/static/img/icon/ic_tutorial_camera_2.png" />
-              <div className="desc">{t("khongChupMatGoc")}</div>
-            </div>
-            <div className="box">
-              <img src="/static/img/icon/ic_tutorial_camera_3.png" />
-              <div className="desc">{t("khongChupToiHoacLoaSang")}</div>
-            </div>
-          </div>
-      </div>
+      <h3 className="">Thanh toán</h3>
+      <Form id="form" className="form" form={formCASign}>
+        <div className="ant-form-createacc">
+          <div className="req">Môn học bạn đã chọn: {formData.Subject.Name}</div>
+          <div className="req">Số tiền bạn cần thanh toán: {formData.Subject.CurrentPrice} đồng</div>
+          <Form.Item>
+            <Button type="primary" onClick={handleThanhToan} >
+              Thanh Toán
+            </Button>
+            <Button type="primary" onClick={prev}>
+              Quay lại
+            </Button>
+          </Form.Item>
+        </div>
+      </Form>
     </>
   );
-});
+};
 
 export default Step3;

@@ -1,6 +1,7 @@
 /** @format */
 
 import { Badge, Dropdown, Input, Menu, Space, Table, Tooltip } from "antd";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -94,7 +95,7 @@ export const MapColumnsANT = (columnList) => {
         return (
           <Cell>
             <Tooltip placement="top" title={value}>
-              <span> {value}</span>
+              <span> { moment(value).format("YYYY-MM-DD")}</span>
             </Tooltip>
           </Cell>
         );

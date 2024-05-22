@@ -7,9 +7,13 @@ const ftv = (val) => {
 export const useShareOrderApi = () => {
   const httpRequest = useAxios();
   return {
+    getClassRoomGetList123: () => {
+
+      return httpRequest.get(`/api/Classroom/GetAllClassroom?PageSize=10000&PageIndex=1&SortBy=Id&OrderBy=desc`,);
+    },
     getClassRoomGetList: () => {
       const params = {
-        pageSize: 20,
+        pageSize: 1000,
         pageIndex: 1,
         sortBy: "Id",
         orderBy: "desc",
@@ -18,16 +22,39 @@ export const useShareOrderApi = () => {
 
       return httpRequest.post(`/api/Classroom/GetList`, params);
     },
+    getThoiKhoaBieu: () => {
+      const params = {
+        pageSize: 1000,
+        pageIndex: 1,
+        sortBy: "Id",
+        orderBy: "desc",
+        keyword: "",
+        classId: "",
+        subjectId: [],
+        teacherId: [],
+        dayNumber: [],
+        startDate: "",
+        endDate: "",
+      };
+
+      return httpRequest.post(`/api/Schedule/GetSchedules`, params);
+    },
     getScheduleGetList: () => {
       const params = {
-        pageSize: 20,
+        pageSize: 10000,
         pageIndex: 1,
         sortBy: "Id",
         orderBy: "desc",
         keyword: "",
       };
 
-      return httpRequest.post(`/api/Schedule/GetList`, params);
+      return httpRequest.post(`/api/Schedule/GetFilter`, params);
+    },
+    getListTeacherAll: (jsonData) => {
+      return httpRequest.get(`/api/Teacher/GetAll`, jsonData);
+    },
+    getListSubjectAll: (jsonData) => {
+      return httpRequest.get(`/api/Subject/GetAll`, jsonData);
     },
     getClassRoomGetListRoom: (jsonData) => {
       return httpRequest.get(`/api/Classroom/GetClassroomFacility`, jsonData);
@@ -43,7 +70,7 @@ export const useShareOrderApi = () => {
     },
     getParentGetList: () => {
       const params = {
-        pageSize: 20,
+        pageSize: 1000,
         pageIndex: 1,
         sortBy: "Id",
         orderBy: "desc",
@@ -66,7 +93,7 @@ export const useShareOrderApi = () => {
     },
     getStudentGetList: () => {
       const params = {
-        pageSize: 20,
+        pageSize: 1000,
         pageIndex: 1,
         sortBy: "Id",
         orderBy: "desc",
@@ -77,7 +104,7 @@ export const useShareOrderApi = () => {
     },
     getTeacherGetList: () => {
       const params = {
-        pageSize: 20,
+        pageSize: 1000,
         pageIndex: 1,
         sortBy: "Id",
         orderBy: "desc",
@@ -88,7 +115,7 @@ export const useShareOrderApi = () => {
     },
     getSubjectGetList: () => {
       const params = {
-        pageSize: 20,
+        pageSize: 1000,
         pageIndex: 1,
         sortBy: "Id",
         orderBy: "desc",

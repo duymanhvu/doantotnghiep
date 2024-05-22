@@ -37,7 +37,7 @@ const ThoiKhoaBieu = () => {
   };
 
   useEffect(() => {
-    AxiosAPI.getClassRoomGetList()
+    AxiosAPI.getClassRoomGetList123()
       .then((res) => {
         if (res.status === 200) {
           setListClassRoom(convertToArray(res?.data?.Data));
@@ -288,6 +288,7 @@ const ThoiKhoaBieu = () => {
     const { scheduleList } = getFieldsValue || {};
     if (convertToArray(scheduleList).length === 0) {
       formCASign.setFieldValue("scheduleList", [{ dayInWeek: undefined, slot: undefined, autoId: makeid() }]);
+      console.log(convertToArray(scheduleList).length,"kkkkkkkkkkkkkkkkkkk");
     } else {
       formCASign.setFieldValue("scheduleList", [...scheduleList, { dayInWeek: undefined, slot: undefined, autoId: makeid() }]);
     }
@@ -320,7 +321,7 @@ const ThoiKhoaBieu = () => {
                     <Select className="select--modify" placeholder="Choose">
                       {convertToArray(listClassRoom).map((e, key) => (
                         <Option key={key} value={e.Id}>
-                          {e.ClassroomNo}
+                          {`${e.ClassroomNo} - ${e.Subject.Name} - ${e.Teacher.Fullname}`}
                         </Option>
                       ))}
                     </Select>
@@ -370,7 +371,7 @@ const ThoiKhoaBieu = () => {
                     ...e,
                     key: e?.autoId,
                   }))}
-                  pagination={false}
+                  pagination={true}
                   // scroll={{
                   //   x: "100%",
                   // }}

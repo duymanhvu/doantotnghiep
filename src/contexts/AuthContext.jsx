@@ -13,6 +13,7 @@ const AuthContextProvider = ({ children }) => {
     isAuthenticated: localStorage.getItem("isAuthenticated") ?? false,
     user: JSON.parse(localStorage.getItem("user") ?? "{}"),
     email: JSON.parse(localStorage.getItem("email") ?? "{}"),
+    ID: JSON.parse(localStorage.getItem("ID") ?? "{}"),
   });
 
   const client = axios.create({
@@ -46,6 +47,7 @@ const AuthContextProvider = ({ children }) => {
       if (response.data.StatusCode === 1) {
         localStorage.setItem("user", JSON.stringify(response.data.Token));
         localStorage.setItem("email", JSON.stringify(response.data.Email));
+        localStorage.setItem("ID", JSON.stringify(response.data.Id));
         localStorage.setItem("userType", JSON.stringify(response.data.UserType));
         setCookie("AUTH", JSON.stringify({ ...response.data.Token, user: undefined }), response.data.Token);
         localStorage.setItem("isAuthenticated", true);
@@ -148,6 +150,7 @@ const AuthContextProvider = ({ children }) => {
 
     localStorage.removeItem("user");
     localStorage.removeItem("email");
+    localStorage.removeItem("ID");
     localStorage.removeItem("isAuthenticated");
     setCookie("AUTH", null, 1);
     dispatch({

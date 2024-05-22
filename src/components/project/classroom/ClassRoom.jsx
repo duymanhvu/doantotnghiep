@@ -37,18 +37,18 @@ const ClassRoom = () => {
       key: "ClassroomNo",
       align: "center",
     },
-    {
-      title: t("Ngày bắt đầu"),
-      dataIndex: "StartDate",
-      key: "StartDate",
-      align: "center",
-    },
-    {
-      title: t("Ngày kết thúc"),
-      dataIndex: "EndDate",
-      key: "EndDate",
-      align: "center",
-    },
+    // {
+    //   title: t("Ngày bắt đầu"),
+    //   dataIndex: "StartDate",
+    //   key: "StartDate",
+    //   align: "center",
+    // },
+    // {
+    //   title: t("Ngày kết thúc"),
+    //   dataIndex: "EndDate",
+    //   key: "EndDate",
+    //   align: "center",
+    // },
     {
       title: t("Môn Học"),
       dataIndex: "SubjectId",
@@ -63,8 +63,8 @@ const ClassRoom = () => {
     },
     {
       title: t("Thầy dạy"),
-      dataIndex: "TeacherId",
-      key: "TeacherId",
+      dataIndex: "teacherName",
+      key: "teacherName",
       align: "center", 
     },
     {
@@ -151,10 +151,18 @@ const ClassRoom = () => {
       });
   };
   const handleGetLisDigitalSignature = () => {
-    AxiosAPI.getClassRoomGetList()
+    AxiosAPI.getClassRoomGetList123()
       .then((res) => {
         if (res.status === 200) {
-          setListData(convertToArray(res?.data?.Data));
+          console.log(convertToArray(res?.data?.Data).map((item) => ({
+            ...item,
+            teacherName: item.Teacher.Fullname
+          })),"lllllllllllllllllllll");
+          setListData(convertToArray(res?.data?.Data).map((item) => ({
+            ...item,
+            teacherName: item.Teacher.Fullname
+          }))
+        );
         } else {
           setListData([]);
         }
@@ -166,7 +174,6 @@ const ClassRoom = () => {
   console.log(listData, "listDatalistData");
   const handleEditClick = (record) => {
     setSelectedRow(true);
-
     formCASign.setFieldsValue({
       Id: record?.Id,
       ClassroomNo: record?.ClassroomNo,
@@ -297,7 +304,7 @@ const ClassRoom = () => {
                     </Select>
                   </Form.Item>
                 </div>
-                <div className="col-lg-4">
+                {/* <div className="col-lg-4">
                   <Form.Item label={"Ngày bắt đầu"} name={"StartDate"} className="req">
                     <Input type="date" />
                   </Form.Item>
@@ -307,7 +314,7 @@ const ClassRoom = () => {
                   <Form.Item label={"Ngày kết thúc"} name={"EndDate"} className="req">
                     <Input type="date" />
                   </Form.Item>
-                </div>
+                </div> */}
                 <div className="col-lg-4">
                   <Form.Item label={"Môn học"} name={"SubjectId"} className="req">
                     <Select
@@ -365,7 +372,8 @@ const ClassRoom = () => {
                 <Table
                   className="ant-table-default"
                   columns={columns}
-                  dataSource={listData?.map((e, i) => ({
+                  // dataSource={[]}
+                  dataSource={listData.map((e, i) => ({
                     ...e,
                     key: e?.autoId,
                   }))}

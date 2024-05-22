@@ -5,9 +5,11 @@ import React, { useEffect, useState } from "react";
 import { Button, Steps, message } from "antd";
 import StepOne from "../step-create/StepOne";
 import StepTwo from "../step-create/StepTwo";
+import Step3 from "../step-create/Step3";
 
 const CreateAccount = () => {
   const [formData, setFormData] = useState({});
+  const [student, setStudent] = useState({});
   const [current, setCurrent] = useState(0);
   const handleFormData = (data) => {
     setFormData(data);
@@ -19,24 +21,27 @@ const CreateAccount = () => {
     setCurrent(current - 1);
   };
   useEffect(() => {
-    console.log(formData);
+    
   }, [formData]);
+  console.log(formData,"console.log(formData);console.log(formData);");
   const steps = [
     {
       title: "Thông tin cá nhân",
       content: (
-        <StepOne formData={formData} next={next} setFormData={setFormData} />
+        <StepOne formData={formData} next={next} setFormData={setFormData} student={student} setStudent={setStudent}/>
       ),
     },
     {
       title: "Lịch học",
       content: (
-        <StepTwo formData={formData} next={next} setFormData={setFormData} />
+        <StepTwo formData={formData} next={next} prev={prev} setFormData={setFormData} student={student}/>
       ),
     },
     {
       title: "Xác nhận",
-      content: "Thanh Toán",
+      content: (
+        <Step3 formData={formData} next={next} prev={prev} setFormData={setFormData} student={student}/>
+      ),
     },
   ];
 
@@ -64,16 +69,15 @@ const CreateAccount = () => {
               Done
             </Button>
           )}
-          {current > 0 && (
+          */}
+          {/* {current > 0 && (
             <Button
-              style={{
-                margin: "0 8px",
-              }}
               onClick={() => prev()}
+              // className="form-button"
             >
               Previous
             </Button>
-          )} */}
+          )}  */}
         </div>
       </div>
     </div>

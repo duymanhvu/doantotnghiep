@@ -155,7 +155,7 @@ const Subject = () => {
           isDeleted: 0,
         };
         if (values) {
-          const response = await axios.post("/api/Subject/Insert", newData);
+          const response = await axios.post("/api/Subject/Create", newData);
 
           if (response.data?.StatusCode >= 0) {
             toast.success("Thành công!");
@@ -164,7 +164,7 @@ const Subject = () => {
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-            toast.error("Thất bại!");
+            toast.error(response.data.ErrorMessage);
           }
         }
       })
