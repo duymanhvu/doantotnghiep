@@ -323,7 +323,7 @@ const Student = () => {
                     ...e,
                     key: e?.autoId,
                   }))}
-                  pagination={false}
+                  pagination={true}
                   // scroll={{
                   //   x: "100%",
                   // }}

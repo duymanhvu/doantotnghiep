@@ -219,9 +219,6 @@ const ThoiKhoaBieu = () => {
     { value: "0", content: "Chủ Nhật" },
   ];
   const handleChangeFormValues = (changedValues, allValues) => {
-    console.log("====================================");
-    console.log(changedValues, allValues);
-    console.log("====================================");
   };
 
   const ScheduleForm = ({ item, index, onClick, getFieldsValue }) => {
