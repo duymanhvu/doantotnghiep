@@ -9,21 +9,40 @@ import { convertToArray } from "../../apiCore/convertObject";
 import { Link } from "react-router-dom";
 const { Option } = Select;
 
-const Step3 = ({ formData, next, setFormData, student, setStudent, prev, formCASign, listSchedule }) => {
+const Step3 = ({
+  formData,
+  next,
+  setFormData,
+  student,
+  setStudent,
+  prev,
+  formCASign,
+  listSchedule,
+}) => {
   const { t } = useTranslation();
   const AxiosAPI = useShareOrderApi();
   const axios = useAxios();
 
-  console.log(formCASign.getFieldValue("scheduleList"), "formCASignformCASignformCASign");
-  let valueS = convertToArray(formCASign.getFieldValue("scheduleList")).map((item) => item?.subject);
-  const listDanhSach = convertToArray(listSchedule).filter((e) => valueS.includes(e?.Id));
+  console.log(
+    formCASign.getFieldValue("scheduleList"),
+    "formCASignformCASignformCASign"
+  );
+  let valueS = convertToArray(formCASign.getFieldValue("scheduleList")).map(
+    (item) => item?.subject
+  );
+  const listDanhSach = convertToArray(listSchedule).filter((e) =>
+    valueS.includes(e?.Id)
+  );
   const datas = listDanhSach.map((item) => ({
     classroomId: item?.Id,
     subjectId: item?.Subject?.Id,
     buyingPrice: item?.Subject?.CurrentPrice,
   }));
   const monHoc = listDanhSach.map((obj) => obj.Subject.Name);
-  const totalBuyingPrice = datas.reduce((sum, item) => sum + item.buyingPrice, 0);
+  const totalBuyingPrice = datas.reduce(
+    (sum, item) => sum + item.buyingPrice,
+    0
+  );
   const handleThanhToan = () => {
     const params = {
       studentId: student,
@@ -55,13 +74,19 @@ const Step3 = ({ formData, next, setFormData, student, setStudent, prev, formCAS
 
       <div className="ant-form-createacc">
         <div className="req">Môn học bạn đã chọn: {monHoc}</div>
-        <div className="req">Số tiền bạn cần thanh toán: {totalBuyingPrice} đồng</div>
-        <Form.Item>
-          <Button type="primary" onClick={handleThanhToan}>
-            Thanh Toán
-          </Button>
-          <Button type="primary" onClick={prev}>
+        <div className="req">
+          Số tiền bạn cần thanh toán: {totalBuyingPrice} đồng
+        </div>
+        <Form.Item style={{ display: "flex", justifyContent: "center" }}>
+          <Button type="primary" danger onClick={prev}>
             Quay lại
+          </Button>
+          <Button
+            type="primary"
+            onClick={handleThanhToan}
+            style={{ marginLeft: 20, marginTop: 50 }}
+          >
+            <Link to="/home">Thanh Toán</Link>
           </Button>
         </Form.Item>
       </div>
