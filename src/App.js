@@ -28,6 +28,7 @@ import Program from "./scenes/program/Program";
 import Tour from "./scenes/tour/Tour";
 import ThoiKhoaBieu from "./components/project/thoiKhoaBieu/thoiKhoaBieu";
 import { CalendarScheduleNew } from "./components/project/calendar/allcalendar";
+import { LichHocCaNhan } from "./components/project/calendar/LichHocCaNhan";
 function App() {
   AOS.init();
   return (
@@ -49,7 +50,7 @@ function App() {
             <Route path="/message" element={<Message />} />
             <Route path="/overview" element={<Overview />} />
             <Route path="/photos" element={<Photos />} />
-            <Route path="/program" element={<Program />} />
+            <Route path="/program" element={<LichHocCaNhan />} />
             <Route path="/tour" element={<Tour />} />
             <Route path="/contact" element={<CalendarScheduleNew/>} />
             <Route path="/speakers" element={<ThoiKhoaBieu />} />

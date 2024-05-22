@@ -58,7 +58,7 @@ const Step3 = ({ formData, next, setFormData, student, setStudent, prev, formCAS
         <div className="req">Số tiền bạn cần thanh toán: {totalBuyingPrice} đồng</div>
         <Form.Item>
           <Button type="primary" onClick={handleThanhToan}>
-            <Link to="/home">Thanh Toán</Link>
+            Thanh Toán
           </Button>
           <Button type="primary" onClick={prev}>
             Quay lại

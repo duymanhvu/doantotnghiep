@@ -22,6 +22,17 @@ export const useShareOrderApi = () => {
 
       return httpRequest.post(`/api/Classroom/GetList`, params);
     },
+    getLichHocCaNhan: () => {
+      const params = {
+        pageSize: 1000,
+        pageIndex: 1,
+        sortBy: "Id",
+        orderBy: "desc",
+        keyword: "",
+      };
+
+      return httpRequest.post(`/api/Schedule/GetFilter`, params);
+    },
     getThoiKhoaBieu: () => {
       const params = {
         pageSize: 1000,

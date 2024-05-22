@@ -77,7 +77,7 @@ const StepTwo = ({ formData, next, setFormData, student, prev, formCASign, setSt
       handleAddStudent()
       const data = { ...formData, ...values,};
       setFormData(data);
-      next();
+      
     });
   };
   const handleGetListTeacher = async () => {
@@ -148,8 +148,8 @@ const StepTwo = ({ formData, next, setFormData, student, prev, formCASign, setSt
         .post("/api/Student/Insert", params)
         .then((response) => {
           if (response.data?.StatusCode > 0) {
-            console.log("responseresponseresponse");
             setStudent(response.data.Id);
+            next();
           } else {
             toast.error("Thất bại!");
           }
