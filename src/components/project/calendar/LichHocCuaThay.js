@@ -37,7 +37,7 @@ const genarateSlotLabel = (value) => {
   }
 };
 
-export function LichHocCaNhan() {
+export function LichDayCuaThay() {
   const [formCASign] = Form.useForm();
   const axios = useAxios();
   const AxiosAPI = useShareOrderApi();
@@ -45,22 +45,20 @@ export function LichHocCaNhan() {
   const [listData, setListData] = useState([]);
   const [listStudent, setListStudent] = useState([]);
   useEffect(() => {
-    AxiosAPI.getStudentGetList()
-      .then((res) => {
-        if (res.status === 200) {
-          setListStudent(convertToArray(res?.data?.Data));
-        } else {
-          setListStudent([]);
-        }
-      })
-      .catch(function (err) {
-        setListStudent([]);
-      });
+    
     axios
       .get(`/api/Schedule/GetSchedulesByTime?pageSize=100000&pageIndex=1`)
       .then((response) => {
         if (response.data?.StatusCode > 0) {
-          setListRoom(convertToArray(response?.data?.Data));
+          setListRoom(convertToArray(response?.data?.Data).map((item) => ({
+            id: item?.Id,
+            description: `Phòng: ${item?.Classroom?.ClassroomNo}`,
+            title: `Giáo viên: ${item?.Classroom?.Teacher?.Fullname}`,
+            start: item?.StartTime,
+            end: item?.EndTime,
+            subject: `Môn: ${item?.Title}`
+            
+          })));
         } else {
           toast.error("Thất bại!");
         }
@@ -132,9 +130,9 @@ export function LichHocCaNhan() {
           <div className="registration__form">
             <div className="registration__form-wrap">
               <div className="heading v1 text-center"></div>
-              <div className="heading v2">Thông Tin</div>
+              <div className="heading v2">Thông Tin Lịch Dạy Của Bạn</div>
               <Form.Item name={"Id"} hidden></Form.Item>
-              <div className="row">
+              {/* <div className="row">
                 <div className="col-lg-4">
                   <Form.Item
                     label={"Tên của con"}
@@ -161,7 +159,7 @@ export function LichHocCaNhan() {
                     </button>
                   </Form.Item>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </Form>
@@ -179,7 +177,7 @@ export function LichHocCaNhan() {
           }}
           plugins={[timeGridPlugin]}
           initialView="timeGridWeek"
-          events={listData}
+          events={listRoom}
           eventContent={renderEventContent}
         />
       </div>

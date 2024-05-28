@@ -85,9 +85,10 @@ const Header = () => {
     setShowResources(false);
     setShowRegistration(false);
     const email = JSON.parse(localStorage.getItem("email"));
+    const userType = JSON.parse(localStorage.getItem("userTypel"));
     if (email !== "teacher2@gmail.com") {
       // Nếu email không phải là "aomathe@gmail.com", ẩn các tab "TabNew" và "Teacher"
-      const resourcesLinks = document.querySelectorAll('a[href="/student"], a[href="/teacher"],a[href="/parent"],a[href="/calendar"],a[href="/subject"],a[href="/classroom"]');
+      const resourcesLinks = document.querySelectorAll('a[href="/student"], a[href="/teacher"],a[href="/parent"],a[href="/calendar"],a[href="/subject"],a[href="/classroom"],a[href="/speakers"]');
       resourcesLinks.forEach((link) => {
         link.style.display = "none";
       });
@@ -142,20 +143,20 @@ const Header = () => {
                   Message from the Host
                 </Nav.Link>
               </NavDropdown>
-              <NavDropdown title="AGENDA" show={showAgenda} onToggle={handleAgendaClick} renderMenuOnMount>
+              <NavDropdown title="Thời khóa biểu" show={showAgenda} onToggle={handleAgendaClick} renderMenuOnMount>
                 <Nav.Link as={Link} to="/program" onClick={handleLinkClick} eventKey="5">
-                  Program
+                  Thời khóa biểu của con
                 </Nav.Link>
-                <Nav.Link as={Link} to="/speakers" onClick={handleLinkClick} eventKey="6">
-                  Speakers
+                <Nav.Link as={Link} to="/concuaban" onClick={handleLinkClick} eventKey="6">
+                  Thông tin con của bạn
                 </Nav.Link>
-                <Nav.Link as={Link} to="/tour" onClick={handleLinkClick} eventKey="7">
-                  Optional Tour
+                <Nav.Link as={Link} to="/lichcuathay" onClick={handleLinkClick} eventKey="7">
+                  Lịch dạy giáo viên
                 </Nav.Link>
               </NavDropdown>
-              <NavDropdown title="RESOURCES" show={showResources} onToggle={handleResourcesClick} renderMenuOnMount>
-                <Nav.Link as={Link} to="/photos" onClick={handleLinkClick} eventKey="8">
-                  Conference Photos
+              <NavDropdown title="Chức năng" show={showResources} onToggle={handleResourcesClick} renderMenuOnMount>
+                <Nav.Link as={Link} to="/danhsachhs" onClick={handleLinkClick} eventKey="8">
+                  Danh sách học sinh
                 </Nav.Link>
                 <Nav.Link as={Link} to="/local" onClick={handleLinkClick} eventKey="9">
                   Local Information
@@ -163,35 +164,38 @@ const Header = () => {
                 <Nav.Link as={Link} to="/contact" onClick={handleLinkClick} eventKey="10">
                   Contact
                 </Nav.Link>
-                <Nav.Link as={Link} to="/test" onClick={handleLinkClick} eventKey="10">
-                  TabNew
+                <Nav.Link as={Link} to="/speakers" onClick={handleLinkClick} eventKey="11">
+                  Thêm lịch dạy
                 </Nav.Link>
-                <Nav.Link as={Link} to="/teacher" onClick={handleLinkClick} eventKey="10">
-                  Teacher
+                <Nav.Link as={Link} to="/test" onClick={handleLinkClick} eventKey="12">
+                  Đăng ký lịch học
                 </Nav.Link>
-                <Nav.Link as={Link} to="/student" onClick={handleLinkClick} eventKey="10">
-                  Student
+                <Nav.Link as={Link} to="/teacher" onClick={handleLinkClick} eventKey="13">
+                  Quản lý giáo viên
                 </Nav.Link>
-                <Nav.Link as={Link} to="/parent" onClick={handleLinkClick} eventKey="10">
-                  Parent
+                <Nav.Link as={Link} to="/student" onClick={handleLinkClick} eventKey="14">
+                  Quản lý học sinh
                 </Nav.Link>
-                <Nav.Link as={Link} to="/calendar" onClick={handleLinkClick} eventKey="10">
-                  Calendar
+                <Nav.Link as={Link} to="/parent" onClick={handleLinkClick} eventKey="15">
+                  Quản lý phụ huynh
                 </Nav.Link>
-                <Nav.Link as={Link} to="/subject" onClick={handleLinkClick} eventKey="10">
-                  Subject
+                <Nav.Link as={Link} to="/calendar" onClick={handleLinkClick} eventKey="16">
+                  Thời khóa biểu
                 </Nav.Link>
-                <Nav.Link as={Link} to="/classroom" onClick={handleLinkClick} eventKey="10">
-                  ClassRoom
+                <Nav.Link as={Link} to="/subject" onClick={handleLinkClick} eventKey="17">
+                  Quản lý môn học
+                </Nav.Link>
+                <Nav.Link as={Link} to="/classroom" onClick={handleLinkClick} eventKey="18">
+                  Quản lý phòng học
                 </Nav.Link>
               </NavDropdown>
               {isAuthenticated ? (
                 <Nav.Link onClick={logoutUser} as={Link} to="/login">
-                  LOGOUT
+                  Đăng Xuất
                 </Nav.Link>
               ) : (
                 <Nav.Link as={Link} to="/login">
-                  LOGIN
+                  Đăng Nhập
                 </Nav.Link>
               )}
             </Nav>

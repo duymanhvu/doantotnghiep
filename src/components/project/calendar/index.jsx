@@ -43,6 +43,7 @@ export function CalendarSchedule() {
   const AxiosAPI = useShareOrderApi();
   const [listRoom, setListRoom] = useState([]);
   const [listData, setListData] = useState([]);
+  const [listThoiKhoaBieu, setListThoiKhoaBieu] = useState([]);
   useEffect(() => {
     AxiosAPI.getClassRoomGetList()
       .then((res) => {
@@ -55,8 +56,25 @@ export function CalendarSchedule() {
       .catch(function (err) {
         setListRoom([]);
       });
+    axios
+      .get(`/api/Schedule/GetSchedulesByTime?pageSize=100000&pageIndex=1`)
+      .then((response) => {
+        if (response.data?.StatusCode > 0) {
+          console.log("responseresponseresponse");
+          setListThoiKhoaBieu(response.data.Id);
+        } else {
+          toast.error("Thất bại!");
+        }
+      })
+      .catch((err) => {
+        if (err.response && err.response !== undefined) {
+          toast.error("Thất bại!");
+        }
+      });
   }, []);
 
+  const handleGetThoiKhoaBieu = () => {};
+  console.log(listThoiKhoaBieu, "listThoiKhoaBieu");
   const handleSearch = async () => {
     formCASign.submit();
     formCASign
@@ -66,9 +84,7 @@ export function CalendarSchedule() {
         const startDate = values?.StartDate;
         const endDate = values?.EndDate;
         if (values) {
-          const response = await axios.get(
-            `/api/Schedule/GetSchedulesByClass?classId=${classId}&startDate=${startDate}&endDate=${endDate}`
-          );
+          const response = await axios.get(`/api/Schedule/GetSchedulesByClass?classId=${classId}&startDate=${startDate}&endDate=${endDate}`);
           if (response.data?.StatusCode > 0) {
             toast.success("Tìm kiếm thành công");
             setListData(
@@ -110,12 +126,7 @@ export function CalendarSchedule() {
             </div>
           </div>
         </div>
-        <Form
-          id="form"
-          className="form"
-          form={formCASign}
-          onFinish={handleFinishForm}
-        >
+        <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm}>
           <div className="registration__form">
             <div className="registration__form-wrap">
               <div className="heading v1 text-center"></div>
@@ -123,11 +134,7 @@ export function CalendarSchedule() {
               <Form.Item name={"Id"} hidden></Form.Item>
               <div className="row">
                 <div className="col-lg-4">
-                  <Form.Item
-                    label={"Tên Phòng"}
-                    name={"ClassroomNo"}
-                    className="req"
-                  >
+                  <Form.Item label={"Tên Phòng"} name={"ClassroomNo"} className="req">
                     <Select className="select--modify" placeholder="Choose">
                       {convertToArray(listRoom).map((e, key) => (
                         <Option key={key} value={e.Id}>
@@ -138,31 +145,19 @@ export function CalendarSchedule() {
                   </Form.Item>
                 </div>
                 <div className="col-lg-4">
-                  <Form.Item
-                    label={"Ngày bắt đầu"}
-                    name={"StartDate"}
-                    className="req"
-                  >
+                  <Form.Item label={"Ngày bắt đầu"} name={"StartDate"} className="req">
                     <Input type="date" />
                   </Form.Item>
                 </div>
 
                 <div className="col-lg-4">
-                  <Form.Item
-                    label={"Ngày kết thúc"}
-                    name={"EndDate"}
-                    className="req"
-                  >
+                  <Form.Item label={"Ngày kết thúc"} name={"EndDate"} className="req">
                     <Input type="date" />
                   </Form.Item>
                 </div>
                 <div className="col-lg-4">
                   <Form.Item label={"Thao tác"} className="req">
-                    <button
-                      className="btn btn-action"
-                      type="submit"
-                      onClick={handleSearch}
-                    >
+                    <button className="btn btn-action" type="submit" onClick={handleSearch}>
                       {<span>Tìm kiếm</span>}
                     </button>
                   </Form.Item>
@@ -187,7 +182,6 @@ export function CalendarSchedule() {
           initialView="timeGridWeek"
           events={listData}
           eventContent={renderEventContent}
-         
         />
       </div>
     </div>

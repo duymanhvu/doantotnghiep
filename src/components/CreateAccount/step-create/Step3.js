@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { useAxios } from "../../apiCore/apiHelper";
 import { convertToArray } from "../../apiCore/convertObject";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const { Option } = Select;
 
 const Step3 = ({
@@ -22,9 +22,9 @@ const Step3 = ({
   const { t } = useTranslation();
   const AxiosAPI = useShareOrderApi();
   const axios = useAxios();
-
+  const navigate = useNavigate();
   console.log(
-    formCASign.getFieldValue("scheduleList"),
+    formData.studentId,
     "formCASignformCASignformCASign"
   );
   let valueS = convertToArray(formCASign.getFieldValue("scheduleList")).map(
@@ -45,21 +45,24 @@ const Step3 = ({
   );
   const handleThanhToan = () => {
     const params = {
-      studentId: student,
+      studentId: formData.studentId,
       name: "Thanh toán",
       carts: datas,
     };
     axios
       .post("/api/Classroom/CheckOut", params)
       .then((res) => {
-        if (res.status === 200) {
-          const link = res.data;
-          console.log(res, "lllllllllllllllllllllllll");
-          window.open(link, "_blank");
+        if (res.data.StatusCode > 0) {
+          const link = res.data.Data;
+          // window.open(link, "_blank");
+          window.location.assign(link)
         } else {
+          toast.error(res.data.ErrorMessage);
         }
       })
-      .catch(function (err) {});
+      .catch(function (err) {
+        toast.error("Error!");
+      });
   };
   const handleNextForm = () => {
     formCASign.validateFields().then((values) => {
@@ -86,7 +89,7 @@ const Step3 = ({
             onClick={handleThanhToan}
             style={{ marginLeft: 20, marginTop: 50 }}
           >
-            <Link to="/home">Thanh Toán</Link>
+            Thanh toán
           </Button>
         </Form.Item>
       </div>

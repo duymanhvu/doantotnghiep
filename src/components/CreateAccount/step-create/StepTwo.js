@@ -12,25 +12,19 @@ const { Option } = Select;
 const makeid = () => {
   return parseInt(new Date().getTime());
 };
-const StepTwo = ({
-  formData,
-  next,
-  setFormData,
-  student,
-  prev,
-  formCASign,
-  setStudent,
-  listTeacher,
-  listSubject,
-  listSchedule,
-}) => {
+const StepTwo = ({ formData, next, setFormData, student, prev, formCASign, setStudent, listTeacher, listSubject, listSchedule }) => {
   const { t } = useTranslation();
   const axios = useAxios();
   const [listData, setListData] = useState([]);
   const [isLoad, setIsLoad] = useState(false);
   const parentId = localStorage.getItem("ID");
-
   const columns = MapColumnsANT([
+    {
+      title: t("Lớp"),
+      dataIndex: "ClassId",
+      key: "ClassId",
+      align: "center",
+    },
     {
       title: t("Phòng học"),
       dataIndex: "ClassroomNo",
@@ -85,10 +79,16 @@ const StepTwo = ({
   ]);
   const handleNextForm = () => {
     formCASign.validateFields().then((values) => {
-      handleAddStudent();
+      const { scheduleList } = values;
+      if (convertToArray(scheduleList).length === 0) {
+        // Hiển thị thông báo yêu cầu chọn lịch học
+        toast.error("Vui lòng chọn lịch học");
+        return;
+      }
+
       const data = { ...formData, ...values };
       setFormData(data);
-      
+      next();
     });
   };
   const handleGetListTeacher = async () => {
@@ -110,10 +110,7 @@ const StepTwo = ({
           endDate: "",
         };
         if (values) {
-          const response = await axios.post(
-            "/api/Schedule/GetSchedules",
-            newData
-          );
+          const response = await axios.post("/api/Schedule/GetSchedules", newData);
           if (response.data?.StatusCode > 0) {
             setListData(
               convertToArray(response.data?.Data).map((item) => ({
@@ -121,6 +118,7 @@ const StepTwo = ({
                 SubjectId: item.Subject.Name,
                 TeacherId: item.Teacher.Fullname,
                 Price: item.Subject.CurrentPrice,
+                ClassId: `A${item.Id}`
               }))
             );
             toast.success("Complete!");
@@ -142,9 +140,7 @@ const StepTwo = ({
     const { scheduleList } = formCASign.getFieldsValue();
     formCASign.setFieldValue(
       "scheduleList",
-      convertToArray(scheduleList).filter(
-        (value, i) => value?.autoId !== item?.autoId
-      )
+      convertToArray(scheduleList).filter((value, i) => value?.autoId !== item?.autoId)
     );
   };
   const handleChangeFormValues = (changedValues, allValues) => {};
@@ -164,7 +160,6 @@ const StepTwo = ({
         if (response.data?.StatusCode > 0) {
           console.log("responseresponseresponse");
           setStudent(response.data.Id);
-          next();
         } else {
           toast.error("Thất bại!");
         }
@@ -182,19 +177,11 @@ const StepTwo = ({
       <div className="row" key={index}>
         <div className="col-lg-4">
           <Form.Item name={["scheduleList", index, "autoId"]} hidden />
-          <Form.Item
-            label="Lịch học"
-            name={["scheduleList", index, "subject"]}
-            className="req"
-          >
+          <Form.Item label="Lịch học" name={["scheduleList", index, "subject"]} className="req">
             <Select
               allowClear
               onChange={(e) => {
-                if (
-                  convertToArray(scheduleList).filter(
-                    (value) => value.subject === e
-                  ).length > 0
-                ) {
+                if (convertToArray(scheduleList).filter((value) => value.subject === e).length > 0) {
                   showDuplicateDayNotification();
 
                   formCASign.setFieldValue(
@@ -218,7 +205,7 @@ const StepTwo = ({
               {convertToArray(listSchedule).map((item, key) => {
                 return (
                   <Option value={item?.Id} key={key}>
-                    {`${item?.ClassroomNo} - ${item?.Subject?.Name}`}
+                    {`${`A${item.Id}`} - ${item?.ClassroomNo} - ${item?.Subject?.Name}`}
                   </Option>
                 );
               })}
@@ -236,14 +223,9 @@ const StepTwo = ({
   const handleAddRow = (getFieldsValue) => {
     const { scheduleList } = getFieldsValue || {};
     if (convertToArray(scheduleList).length === 0) {
-      formCASign.setFieldValue("scheduleList", [
-        { subject: undefined, teacher: undefined, autoId: makeid() },
-      ]);
+      formCASign.setFieldValue("scheduleList", [{ subject: undefined, teacher: undefined, autoId: makeid() }]);
     } else {
-      formCASign.setFieldValue("scheduleList", [
-        ...scheduleList,
-        { subject: undefined, teacher: undefined, autoId: makeid() },
-      ]);
+      formCASign.setFieldValue("scheduleList", [...scheduleList, { subject: undefined, teacher: undefined, autoId: makeid() }]);
     }
   };
   return (
@@ -252,12 +234,7 @@ const StepTwo = ({
       {/* <Form id="form" className="form" form={formCASign} onValuesChange={handleChangeFormValues}> */}
       <div className="ant-form-createacc">
         <Form.Item label={"Tìm Giáo Viên"} name={"teacherId"} className="req">
-          <Select
-            className="select--modify"
-            placeholder="Choose"
-            allowClear
-            mode="multiple"
-          >
+          <Select className="select--modify" placeholder="Choose" allowClear mode="multiple">
             {convertToArray(listTeacher).map((e, key) => (
               <Option key={key} value={e.Id}>
                 {e.Fullname}
@@ -266,12 +243,7 @@ const StepTwo = ({
           </Select>
         </Form.Item>
         <Form.Item label={"Tìm Môn Học"} name={"subjectId"} className="req">
-          <Select
-            className="select--modify"
-            placeholder="Choose"
-            mode="multiple"
-            allowClear
-          >
+          <Select className="select--modify" placeholder="Choose" mode="multiple" allowClear>
             {convertToArray(listSubject).map((e, key) => (
               <Option key={key} value={e.Id}>
                 {e.Name}
@@ -280,12 +252,7 @@ const StepTwo = ({
           </Select>
         </Form.Item>
         <Form.Item label={"Tìm thứ"} name={"dayNumber"} className="req">
-          <Select
-            className="select--modify"
-            placeholder="Choose"
-            mode="multiple"
-            allowClear
-          >
+          <Select className="select--modify" placeholder="Choose" mode="multiple" allowClear>
             <Option value={1}>thứ 2</Option>
             <Option value={2}>thứ 3</Option>
             <Option value={3}>thứ 4</Option>
@@ -297,11 +264,7 @@ const StepTwo = ({
         </Form.Item>
         <div className="col-lg-4">
           <Form.Item label={"Thao tác"} className="req">
-            <button
-              className="btn btn-action"
-              type="submit"
-              onClick={handleGetListTeacher}
-            >
+            <button className="btn btn-action" type="submit" onClick={handleGetListTeacher}>
               {<span>{t("Tìm kiếm")}</span>}
             </button>
           </Form.Item>
@@ -323,31 +286,18 @@ const StepTwo = ({
           {/* <Pagination defaultCurrent={1} total={50} /> */}
         </div>
         <h3 className="">Chọn lịch học phù hợp</h3>
-        <Form.Item
-          noStyle
-          shouldUpdate={(prevValues, currentValues) =>
-            prevValues?.scheduleList !== currentValues?.scheduleList
-          }
-        >
+        <Form.Item noStyle shouldUpdate={(prevValues, currentValues) => prevValues?.scheduleList !== currentValues?.scheduleList}>
           {({ getFieldValue, getFieldsValue }) => {
             let scheduleData = convertToArray(getFieldValue("scheduleList"));
             return (
               <>
                 <div className="col-lg-4">
-                  <Button
-                    type="primary"
-                    onClick={() => handleAddRow(getFieldsValue())}
-                  >
+                  <Button type="primary" onClick={() => handleAddRow(getFieldsValue())}>
                     Chọn thêm lịch học
                   </Button>
                 </div>
                 {scheduleData.map((item, index) => (
-                  <ScheduleForm
-                    item={item}
-                    key={index}
-                    index={index}
-                    getFieldsValue={getFieldsValue}
-                  />
+                  <ScheduleForm item={item} key={index} index={index} getFieldsValue={getFieldsValue} />
                 ))}
               </>
             );
@@ -357,11 +307,7 @@ const StepTwo = ({
           <Button type="primary" danger onClick={prev}>
             Quay lại
           </Button>
-          <Button
-            type="primary"
-            onClick={handleNextForm}
-            style={{ marginLeft: 20, marginTop: 50 }}
-          >
+          <Button type="primary" onClick={handleNextForm} style={{ marginLeft: 20, marginTop: 50 }}>
             Tiếp theo
           </Button>
         </Form.Item>

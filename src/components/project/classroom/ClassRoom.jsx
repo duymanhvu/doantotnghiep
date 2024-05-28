@@ -32,6 +32,12 @@ const ClassRoom = () => {
 
   const columns = MapColumnsANT([
     {
+      title: t("Lớp"),
+      dataIndex: "ClassId",
+      key: "ClassId",
+      align: "center",
+    },
+    {
       title: t("Phòng học"),
       dataIndex: "ClassroomNo",
       key: "ClassroomNo",
@@ -154,13 +160,10 @@ const ClassRoom = () => {
     AxiosAPI.getClassRoomGetList123()
       .then((res) => {
         if (res.status === 200) {
-          console.log(convertToArray(res?.data?.Data).map((item) => ({
-            ...item,
-            teacherName: item.Teacher.Fullname
-          })),"lllllllllllllllllllll");
           setListData(convertToArray(res?.data?.Data).map((item) => ({
             ...item,
-            teacherName: item.Teacher.Fullname
+            teacherName: item.Teacher.Fullname,
+            ClassId: `A${item.Id}`
           }))
         );
         } else {

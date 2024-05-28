@@ -3,32 +3,31 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Button } from "antd";
 import { useTranslation } from "react-i18next";
-import { unstable_HistoryRouter } from "react-router-dom";
+import { Link, unstable_HistoryRouter } from "react-router-dom";
 
 export const ExportContentMoDau = (props) => {
   const { t } = useTranslation();
   const { setCurrentStep } = props;
-  
+
   return (
-    <>
-      <h3 className="pb-4">{t("moTaiKhoanChungKhoanTrucTuyen")}</h3>
+    <div className="registration">
+      <div className="registration__container">
+        <div className="background">
+          <div className="background__hook">
+            <h1 className="animate__animated animate__fadeInUp">Thanh toán thành công</h1>
+            
+          </div>
 
-      <div className="createacc__desc">
-        {t("chaoMungQuyKhachDangKyMoTaiKhoan")}
+          <div className="scroll">
+            <div className="scroll__down animate__animated animate__bounce animate__infinite animate__repeat-3">
+              <h1>
+              <Link to="/home">Quay lại</Link>
+              </h1>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div className="createacc__list">
-        <div className="createacc__item">1. {t("cmndHoacCCCDConHieuLuc")}</div>
-        <div className="createacc__item">2. {t("mayTinhHoacDienThoaiCoCamera")}</div>
-        <div className="createacc__item">3. {t("dienThoaiDiDongDeNhanMatKhauOTP")}</div>
-
-        <div className="createacc__item sub">{t("bamNutBatDauDeChuyenDenManHinh")}</div>
-
-        <Button type="primary" onClick={() => setCurrentStep(2)}>
-          <span>{t("batDau")}</span>
-        </Button>
-      </div>
-    </>
+    </div>
   );
 };
 

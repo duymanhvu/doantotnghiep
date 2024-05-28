@@ -52,32 +52,72 @@ const ThoiKhoaBieu = () => {
 
   const columns = [
     {
-      title: t("Phòng"),
-      dataIndex: "ClassroomId",
-      key: "ClassroomId",
+      title: t("Lớp"),
+      dataIndex: "ClassId",
+      key: "ClassId",
+      align: "center",
+    },
+    {
+      title: t("Phòng học"),
+      dataIndex: "ClassroomNo",
+      key: "ClassroomNo",
       align: "center",
     },
     {
       title: t("Ngày bắt đầu"),
-      dataIndex: "Date",
-      key: "Date",
+      dataIndex: "StartDate",
+      key: "StartDate",
+      align: "center",
+      render: (text) => {
+        const name = moment(text).format("DD-MM-YYYY");
+        return <span>{name}</span>;
+      },
+    },
+    {
+      title: t("Ngày kết thúc"),
+      dataIndex: "EndDate",
+      key: "EndDate",
+      align: "center",
+      render: (text) => {
+        const name = moment(text).format("DD-MM-YYYY");
+        return <span>{name}</span>;
+      },
+    },
+    {
+      title: t("Môn học"),
+      dataIndex: "SubjectId",
+      key: "SubjectId",
       align: "center",
     },
     {
-      title: t("Ca học"),
-      dataIndex: "Slot",
-      key: "Slot",
+      title: t("Thầy dạy"),
+      dataIndex: "TeacherId",
+      key: "TeacherId",
       align: "center",
     },
+    {
+      title: t("Thời gian học"),
+      dataIndex: "SlotName",
+      key: "SlotName",
+      align: "center",
+      width: "300px",
+    },
+    {
+      title: t("Số lượng học sinh"),
+      dataIndex: "Capacity",
+      key: "Capacity",
+      align: "center",
+    },
+
     {
       title: t("Chức năng"),
       key: "action",
       align: "center",
       render: (_, record) => (
         <div className="d-flex justify-content-center align-items-center">
-          <div onClick={() => handleEditClick(record)}>
+          {/* <div onClick={() => handleEditClick(record)}>
             <img src="/ic_edit.svg" alt="img" />
-          </div>
+          </div> */}
           <div onClick={() => handleShow(record.Id)}>
             <img src="/ic_delete.svg" alt="img" />
           </div>
@@ -91,14 +131,35 @@ const ThoiKhoaBieu = () => {
 
   const showDuplicateDayNotification = () => {
     toast.error("Thứ đã bị trùng, vui lòng chọn ngày khác !");
-    
   };
 
   const handleGetLisDigitalSignature = () => {
-    AxiosAPI.getScheduleGetList()
+    const params = {
+      pageSize: 1000,
+      pageIndex: 1,
+      sortBy: "Id",
+      orderBy: "desc",
+      keyword: "",
+      classId: "",
+      subjectId: [],
+      teacherId: [],
+      dayNumber: [],
+      startDate: "",
+      endDate: "",
+    };
+    axios
+      .post("/api/Schedule/GetSchedules", params)
       .then((res) => {
-        if (res.status === 200) {
-          setListData(convertToArray(res?.data?.Data));
+        if (res.data?.StatusCode > 0) {
+          setListData(
+            convertToArray(res.data?.Data).map((item) => ({
+              ...item,
+              SubjectId: item.Subject.Name,
+              TeacherId: item.Teacher.Fullname,
+              Price: item.Subject.CurrentPrice,
+              ClassId: `A${item.Id}`
+            }))
+          );
         } else {
           setListData([]);
         }
@@ -150,51 +211,51 @@ const ThoiKhoaBieu = () => {
         }
       });
   };
-  const handleEditDigitalSignature = async () => {
-    formCASign.submit();
-    formCASign
-      .validateFields()
-      .then(async (values) => {
-        const newData = {
-          ...values,
-          dob: moment(values?.Dob).format("YYYY-MM-DDTHH:mm:ss"),
-        };
-        if (values) {
-          const response = await axios.post("/api/Student/Update", newData);
+  // const handleEditDigitalSignature = async () => {
+  //   formCASign.submit();
+  //   formCASign
+  //     .validateFields()
+  //     .then(async (values) => {
+  //       const newData = {
+  //         ...values,
+  //         dob: moment(values?.Dob).format("YYYY-MM-DDTHH:mm:ss"),
+  //       };
+  //       if (values) {
+  //         const response = await axios.post("/api/Student/Update", newData);
 
-          if (response.data?.errorCode >= 0) {
-            notificationShare(0, response.data?.StatusCode, t("thanhCong"));
+  //         if (response.data?.errorCode >= 0) {
+  //           notificationShare(0, response.data?.StatusCode, t("thanhCong"));
 
-            handleGetLisDigitalSignature();
-            formCASign.resetFields();
-            setSelectedRow(false);
-            setCheckFinish(!checkFinish);
-          } else {
-            notificationShare(-1, response.data?.StatusCode, t("thatBai"));
-          }
-        }
-      })
-      .catch((err) => {
-        if (err.response && err.response !== undefined) {
-          notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
-        }
-      });
-  };
+  //           handleGetLisDigitalSignature();
+  //           formCASign.resetFields();
+  //           setSelectedRow(false);
+  //           setCheckFinish(!checkFinish);
+  //         } else {
+  //           notificationShare(-1, response.data?.StatusCode, t("thatBai"));
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       if (err.response && err.response !== undefined) {
+  //         notificationShare(-1, err.response?.data?.StatusCode, t("thatBai"));
+  //       }
+  //     });
+  // };
   const handleDelete = (autoId) => {
     axios
-      .post(`/api/Student/Delete?id=${autoId}`)
+      .post(`/api/Schedule/DeleteSchedules?classId=${autoId}`)
       .then((response) => {
         if (response.status === 200 && response.data.errorCode >= 0) {
-          notificationShare(0, response.data.errorMsg, t("thanhCong"));
+          toast.error("Xóa thành công");
         } else {
-          notificationShare(-1, response.data.errorMsg, t("thatBai"));
+          toast.error("Xóa thất bại");
         }
       })
       .catch((err) => {
         console.error(err);
 
         if (err.response && err.response.data) {
-          notificationShare(-1, err.response.data, t("thatBai"));
+          toast.error("Xóa thất bại");
         }
       })
       .finally(() => {
@@ -218,8 +279,7 @@ const ThoiKhoaBieu = () => {
     { value: "6", content: "Thứ Bảy" },
     { value: "0", content: "Chủ Nhật" },
   ];
-  const handleChangeFormValues = (changedValues, allValues) => {
-  };
+  const handleChangeFormValues = (changedValues, allValues) => {};
 
   const ScheduleForm = ({ item, index, onClick, getFieldsValue }) => {
     const { scheduleList } = getFieldsValue();
@@ -231,7 +291,7 @@ const ThoiKhoaBieu = () => {
             <Select
               onChange={(e) => {
                 if (convertToArray(scheduleList).filter((value) => value.dayInWeek === e).length > 0) {
-                  showDuplicateDayNotification()
+                  showDuplicateDayNotification();
 
                   formCASign.setFieldValue(
                     "scheduleList",
@@ -285,7 +345,6 @@ const ThoiKhoaBieu = () => {
     const { scheduleList } = getFieldsValue || {};
     if (convertToArray(scheduleList).length === 0) {
       formCASign.setFieldValue("scheduleList", [{ dayInWeek: undefined, slot: undefined, autoId: makeid() }]);
-      console.log(convertToArray(scheduleList).length,"kkkkkkkkkkkkkkkkkkk");
     } else {
       formCASign.setFieldValue("scheduleList", [...scheduleList, { dayInWeek: undefined, slot: undefined, autoId: makeid() }]);
     }
@@ -318,7 +377,7 @@ const ThoiKhoaBieu = () => {
                     <Select className="select--modify" placeholder="Choose">
                       {convertToArray(listClassRoom).map((e, key) => (
                         <Option key={key} value={e.Id}>
-                          {`${e.ClassroomNo} - ${e.Subject.Name} - ${e.Teacher.Fullname}`}
+                          {`${e.ClassroomNo} - ${`A${e.Id}`} - ${e.Subject.Name} - ${e.Teacher.Fullname}`}
                         </Option>
                       ))}
                     </Select>
@@ -353,8 +412,8 @@ const ThoiKhoaBieu = () => {
                 <div className="col-lg-4"></div>
                 <div className="col-lg-4">
                   <Form.Item label={"Thao tác"} className="req">
-                    <button className="btn btn-action" type="submit" onClick={selectedRow ? handleEditDigitalSignature : handleAddDigitalSignature}>
-                      {selectedRow ? <span>{t("Lưu")}</span> : <span>{t("Thêm")}</span>}
+                    <button className="btn btn-action" type="submit" onClick={handleAddDigitalSignature}>
+                      {<span>{t("Thêm")}</span>}
                     </button>
                   </Form.Item>
                 </div>

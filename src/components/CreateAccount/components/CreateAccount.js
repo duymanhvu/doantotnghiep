@@ -8,6 +8,7 @@ import StepTwo from "../step-create/StepTwo";
 import Step3 from "../step-create/Step3";
 import { useShareOrderApi } from "../../apiCore/apiProcess";
 import { convertToArray } from "../../apiCore/convertObject";
+import { Link } from "react-router-dom";
 
 const CreateAccount = () => {
   const AxiosAPI = useShareOrderApi();
@@ -28,11 +29,8 @@ const CreateAccount = () => {
   const prev = () => {
     setCurrent(current - 1);
   };
+  useEffect(() => {}, [formData]);
   useEffect(() => {
-    
-  }, [formData]);
-  useEffect(() => {
-    
     AxiosAPI.getListTeacherAll()
       .then((res) => {
         if (res.status === 200) {
@@ -70,21 +68,15 @@ const CreateAccount = () => {
   const steps = [
     {
       title: "Thông tin cá nhân",
-      content: (
-        <StepOne formData={formData} next={next} setFormData={setFormData} formCASign={formCASign}/>
-      ),
+      content: <StepOne formData={formData} next={next} setFormData={setFormData} formCASign={formCASign} />,
     },
     {
       title: "Lịch học",
-      content: (
-        <StepTwo formData={formData} next={next} prev={prev} setFormData={setFormData} student={student} setStudent={setStudent} formCASign={formCASign} listTeacher={listTeacher} listSubject={listSubject} listSchedule={listSchedule}/>
-      ),
+      content: <StepTwo formData={formData} next={next} prev={prev} setFormData={setFormData} student={student} setStudent={setStudent} formCASign={formCASign} listTeacher={listTeacher} listSubject={listSubject} listSchedule={listSchedule} />,
     },
     {
       title: "Xác nhận",
-      content: (
-        <Step3 formData={formData} next={next} prev={prev} setFormData={setFormData} student={student} setStudent={setStudent} formCASign={formCASign} listSchedule={listSchedule}/>
-      ),
+      content: <Step3 formData={formData} next={next} prev={prev} setFormData={setFormData} student={student} setStudent={setStudent} formCASign={formCASign} listSchedule={listSchedule} />,
     },
   ];
 
@@ -96,11 +88,11 @@ const CreateAccount = () => {
   return (
     <div className="form-login">
       <div className="form-comfirm">
-      <Form id="form" className="form" form={formCASign}>
-        <Steps current={current} items={items} />
-        <div className="steps-content">{steps[current].content}</div>
-        <div className="steps-action">
-          {/* {current < steps.length - 1 && (
+        <Form id="form" className="form" form={formCASign}>
+          <Steps current={current} items={items} />
+          <div className="steps-content">{steps[current].content}</div>
+          <div className="steps-action">
+            {/* {current < steps.length - 1 && (
             <Button type="primary" onClick={() => next()}>
               Next
             </Button>
@@ -114,7 +106,7 @@ const CreateAccount = () => {
             </Button>
           )}
           */}
-          {/* {current > 0 && (
+            {/* {current > 0 && (
             <Button
               onClick={() => prev()}
               // className="form-button"
@@ -122,7 +114,7 @@ const CreateAccount = () => {
               Previous
             </Button>
           )}  */}
-        </div>
+          </div>
         </Form>
       </div>
     </div>
