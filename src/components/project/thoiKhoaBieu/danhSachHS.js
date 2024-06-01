@@ -22,30 +22,34 @@ const DanhSachHS = () => {
 
   const columns = [
     {
-      title: t("Lớp"),
+      title: t("Học Sinh"),
       dataIndex: "Fullname",
       key: "Fullname",
       align: "center",
     },
-    {
-      title: t("Môn"),
-      dataIndex: "Dob",
-      key: "Dob",
-      align: "center",
-    },
-    {
-      title: t("Học Sinh"),
-      dataIndex: "ParentId",
-      key: "ParentId",
-      align: "center",
-    },
+    // {
+    //   title: t("Môn"),
+    //   dataIndex: "Dob",
+    //   key: "Dob",
+    //   align: "center",
+    // },
+    // {
+    //   title: t("Học Sinh"),
+    //   dataIndex: "ParentId",
+    //   key: "ParentId",
+    //   align: "center",
+    // },
   ];
   useEffect(() => {
     axios
       .get(`/api/Schedule/GetSchedulesByTime?pageSize=100000&pageIndex=1`)
       .then((response) => {
         if (response.data?.StatusCode > 0) {
-            setListClass(convertToArray(response?.data?.Data));
+            setListClass(convertToArray(response?.data?.Data).map((item) => ({
+              classroomId: item?.Classroom?.Id,
+            })).filter((item, index, arr) =>
+              arr.findIndex((obj) => obj.classroomId === item.classroomId) === index
+            ));
         } else {
           toast.error("Thất bại!");
         }
@@ -56,34 +60,20 @@ const DanhSachHS = () => {
         }
       });
   }, []);
+  console.log(listData,"kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
   const handleGetListTeacher = async () => {
     formCASign.submit();
     formCASign
       .validateFields()
       .then(async (values) => {
-        const newData = {
-          pageSize: 1000,
-          pageIndex: 1,
-          sortBy: "Id",
-          orderBy: "desc",
-          keyword: "",
-          classId: "",
-          subjectId: values?.subjectId ? values?.subjectId : [],
-          teacherId: values?.teacherId ? values?.teacherId : [],
-          dayNumber: values?.dayNumber ? values?.dayNumber : [],
-          startDate: "",
-          endDate: "",
-        };
+        console.log(values,"valuesvaluesvaluesvaluesvalues");
+        const newData = values.TeacherId
         if (values) {
-          const response = await axios.post("/api/Schedule/GetSchedules", newData);
+          const response = await axios.get(`/api/Student/GetStudentByClass?classId=${newData}` );
           if (response.data?.StatusCode > 0) {
             setListData(
               convertToArray(response.data?.Data).map((item) => ({
                 ...item,
-                SubjectId: item.Subject.Name,
-                TeacherId: item.Teacher.Fullname,
-                Price: item.Subject.CurrentPrice,
-                ClassId: `A${item.Id}`
               }))
             );
             toast.success("Complete!");
@@ -126,11 +116,11 @@ const DanhSachHS = () => {
               <Form.Item name={"Id"} hidden></Form.Item>
               <div className="row">
                 <div className="col-lg-4">
-                <Form.Item label={"Người dạy"} name={"TeacherId"} className="req">
+                <Form.Item label={"Lớp dạy"} name={"TeacherId"} className="req">
                     <Select className="select--modify" placeholder="Choose">
                       {convertToArray(listClass).map((e, key) => (
-                        <Option key={key} value={e.Id}>
-                          {e.Fullname}
+                        <Option key={key} value={e.classroomId}>
+                          {`A${e.classroomId}`}
                         </Option>
                       ))}
                     </Select>

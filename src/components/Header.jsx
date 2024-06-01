@@ -158,17 +158,18 @@ const Header = () => {
                 <Nav.Link as={Link} to="/danhsachhs" onClick={handleLinkClick} eventKey="8">
                   Danh sách học sinh
                 </Nav.Link>
-                <Nav.Link as={Link} to="/local" onClick={handleLinkClick} eventKey="9">
+                {/* <Nav.Link as={Link} to="/local" onClick={handleLinkClick} eventKey="9">
                   Local Information
                 </Nav.Link>
                 <Nav.Link as={Link} to="/contact" onClick={handleLinkClick} eventKey="10">
                   Contact
-                </Nav.Link>
-                <Nav.Link as={Link} to="/speakers" onClick={handleLinkClick} eventKey="11">
-                  Thêm lịch dạy
-                </Nav.Link>
-                <Nav.Link as={Link} to="/test" onClick={handleLinkClick} eventKey="12">
+                </Nav.Link> */}
+
+                <Nav.Link as={Link} to="/test" onClick={handleLinkClick} eventKey="11">
                   Đăng ký lịch học
+                </Nav.Link>
+                <Nav.Link as={Link} to="/speakers" onClick={handleLinkClick} eventKey="12">
+                  Quản lý thời khóa biểu
                 </Nav.Link>
                 <Nav.Link as={Link} to="/teacher" onClick={handleLinkClick} eventKey="13">
                   Quản lý giáo viên

@@ -33,12 +33,12 @@ const Parent = () => {
       key: "Fullname",
       align: "center",
     },
-    {
-      title: t("Ngày sinh"),
-      dataIndex: "Dob",
-      key: "Dob",
-      align: "center",
-    },
+    // {
+    //   title: t("Ngày sinh"),
+    //   dataIndex: "Dob",
+    //   key: "Dob",
+    //   align: "center",
+    // },
     {
       title: t("Số điện thoại"),
       dataIndex: "Phone",
@@ -197,7 +197,7 @@ const Parent = () => {
       <div className="registration__container">
         <div className="background">
           <div className="background__hook">
-            <h1 className="animate__animated animate__fadeInUp">Parent</h1>
+            <h1 className="animate__animated animate__fadeInUp">Phụ huynh</h1>
           </div>
 
           <div className="scroll">
@@ -210,7 +210,7 @@ const Parent = () => {
         <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm}>
           <div className="registration__form">
             <div className="registration__form-wrap">
-              <div className="heading v1 text-center">Parent</div>
+              <div className="heading v1 text-center">Phụ huynh</div>
               <div className="heading v2">Thông Tin</div>
               <Form.Item name={"Id"} hidden></Form.Item>
               <div className="row">
@@ -219,11 +219,11 @@ const Parent = () => {
                     <Input />
                   </Form.Item>
                 </div>
-                <div className="col-lg-4">
+                {/* <div className="col-lg-4">
                   <Form.Item label={"Ngày sinh"} name={"Dob"} className="req">
                     <Input type="date" />
                   </Form.Item>
-                </div>
+                </div> */}
                 <div className="col-lg-4">
                   <Form.Item label={"Số điện thoại"} name={"Phone"} className="req">
                     <Input />
@@ -239,7 +239,7 @@ const Parent = () => {
                     <Input />
                   </Form.Item>
                 </div>
-                <div className="col-lg-4"></div>
+                
                 <div className="col-lg-4">
                   <Form.Item label={"Thao tác"} className="req">
                     <button className="btn btn-action" type="submit" onClick={selectedRow ? handleEditDigitalSignature : handleAddDigitalSignature}>
@@ -257,7 +257,7 @@ const Parent = () => {
                     ...e,
                     key: e?.autoId,
                   }))}
-                  pagination={false}
+                  pagination={true}
                   scroll={{
                     x: "100%",
                   }}

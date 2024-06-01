@@ -106,27 +106,27 @@ const Subject = () => {
   const handleEditClick = (record) => {
     setSelectedRow(true);
     const subjectTypeString = (() => {
-        switch (record?.SubjectType) {
-          case 0:
-            return "Toán";
-          case 1:
-            return "Văn";
-          case 2:
-            return "Tiếng Anh";
-          default:
-            return record?.SubjectType;
-        }
-      })();
+      switch (record?.SubjectType) {
+        case 0:
+          return "Toán";
+        case 1:
+          return "Văn";
+        case 2:
+          return "Tiếng Anh";
+        default:
+          return record?.SubjectType;
+      }
+    })();
     const subjectLevelString = (() => {
-        switch (record?.SubjectLevel) {
-          case 1:
-            return "Khối 6";
-          case 2:
-            return "Khối 9";
-          default:
-            return record?.SubjectLevel;
-        }
-      })();
+      switch (record?.SubjectLevel) {
+        case 1:
+          return "Khối 6";
+        case 2:
+          return "Khối 9";
+        default:
+          return record?.SubjectLevel;
+      }
+    })();
 
     formCASign.setFieldsValue({
       Id: record?.Id,
@@ -180,12 +180,11 @@ const Subject = () => {
       .validateFields()
       .then(async (values) => {
         const name = formCASign.getFieldValue("Name");
-console.log(values,"llllllllllllllllllllllllll");
         const newData = {
           ...values,
           name: name,
           SubjectType: values?.SubjectType === "Toán" ? "0" : values?.SubjectType === "Văn" ? "1" : values?.SubjectType === "Tiếng Anh" ? "2" : values?.SubjectType,
-          SubjectLevel: values?.SubjectLevel === "Khối 6" ? "1" : values?.SubjectLevel === "Khối 9" ? "2" : values?.SubjectLevel 
+          SubjectLevel: values?.SubjectLevel === "Khối 6" ? "1" : values?.SubjectLevel === "Khối 9" ? "2" : values?.SubjectLevel,
         };
         if (values) {
           const response = await axios.post("/api/Subject/Update", newData);
@@ -197,13 +196,13 @@ console.log(values,"llllllllllllllllllllllllll");
             setSelectedRow(false);
             setCheckFinish(!checkFinish);
           } else {
-           toast.error("Thất bại!");
+            toast.error("Thất bại!");
           }
         }
       })
       .catch((err) => {
         if (err.response && err.response !== undefined) {
-         toast.error("Thất bại!");
+          toast.error("Thất bại!");
         }
       });
   };
@@ -215,7 +214,6 @@ console.log(values,"llllllllllllllllllllllllll");
           toast.success("Thành công!");
         } else {
           toast.error("Thất bại!");
-
         }
       })
       .catch((err) => {
@@ -259,7 +257,7 @@ console.log(values,"llllllllllllllllllllllllll");
       <div className="registration__container">
         <div className="background">
           <div className="background__hook">
-            <h1 className="animate__animated animate__fadeInUp">Subject</h1>
+            <h1 className="animate__animated animate__fadeInUp">Môn học</h1>
           </div>
 
           <div className="scroll">
@@ -272,7 +270,7 @@ console.log(values,"llllllllllllllllllllllllll");
         <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm}>
           <div className="registration__form">
             <div className="registration__form-wrap">
-              <div className="heading v1 text-center">Subject</div>
+              <div className="heading v1 text-center">Môn học</div>
               <div className="heading v2">Thông Tin</div>
               <Form.Item name={"Id"} hidden></Form.Item>
               <div className="row">
@@ -301,6 +299,7 @@ console.log(values,"llllllllllllllllllllllllll");
                 <div className="col-lg-4">
                   <Form.Item label={"Giá"} name={"CurrentPrice"} className="req">
                     <InputNumber
+                      className="input-number--modify"
                       formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                       parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                       onKeyPress={(event) => {
@@ -314,6 +313,7 @@ console.log(values,"llllllllllllllllllllllllll");
                 <div className="col-lg-4">
                   <Form.Item label={"Số buổi học"} name={"TotalSlot"} className="req">
                     <InputNumber
+                      className="input-number--modify"
                       formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                       parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                       onKeyPress={(event) => {
@@ -343,7 +343,7 @@ console.log(values,"llllllllllllllllllllllllll");
                     ...e,
                     key: e?.autoId,
                   }))}
-                  pagination={false}
+                  pagination={true}
                 />
               </div>
             </div>

@@ -56,7 +56,8 @@ export function LichDayCuaThay() {
             title: `Giáo viên: ${item?.Classroom?.Teacher?.Fullname}`,
             start: item?.StartTime,
             end: item?.EndTime,
-            subject: `Môn: ${item?.Title}`
+            subject: `Môn: ${item?.Title}`,
+            class: `Lớp: A${item?.Classroom?.Id}`
             
           })));
         } else {
@@ -194,6 +195,7 @@ function renderEventContent(eventInfo) {
       <h4 style={{color:""}}>{eventInfo.event.extendedProps.description}</h4>
       <h5>{eventInfo.event.title}</h5>
       <h5>{eventInfo.event.extendedProps.subject}</h5>
+      <h5>{eventInfo.event.extendedProps.class}</h5>
       <br />
      
     </>

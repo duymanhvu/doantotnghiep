@@ -245,7 +245,7 @@ const ThoiKhoaBieu = () => {
     axios
       .post(`/api/Schedule/DeleteSchedules?classId=${autoId}`)
       .then((response) => {
-        if (response.status === 200 && response.data.errorCode >= 0) {
+        if (response.data.StatusCode > 0) {
           toast.error("Xóa thành công");
         } else {
           toast.error("Xóa thất bại");
@@ -354,7 +354,7 @@ const ThoiKhoaBieu = () => {
       <div className="registration__container">
         <div className="background">
           <div className="background__hook">
-            <h1 className="animate__animated animate__fadeInUp">Schedule</h1>
+            <h1 className="animate__animated animate__fadeInUp">Quản lý thời khóa biểu</h1>
           </div>
 
           <div className="scroll">
@@ -367,7 +367,7 @@ const ThoiKhoaBieu = () => {
         <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm} onValuesChange={handleChangeFormValues}>
           <div className="registration__form">
             <div className="registration__form-wrap">
-              <div className="heading v1 text-center">Schedule</div>
+              <div className="heading v1 text-center">Quản lý thời khóa biểu</div>
               <div className="heading v2">Thông Tin</div>
               <Form.Item name={"Id"} hidden></Form.Item>
               <Form.Item name={"scheduleList"} hidden></Form.Item>

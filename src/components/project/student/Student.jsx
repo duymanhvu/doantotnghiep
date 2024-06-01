@@ -1,15 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import scroll_down from "../../../assets/img/ic_scroll_down.svg";
-import {
-  Input,
-  Form,
-  Tooltip,
-  Button,
-  Popconfirm,
-  Table,
-  Checkbox,
-  Select,
-} from "antd";
+import { Input, Form, Tooltip, Button, Popconfirm, Table, Checkbox, Select } from "antd";
 import { useTranslation } from "react-i18next";
 import { useShareOrderApi } from "../../apiCore/apiProcess";
 import { convertToArray, notificationShare } from "../../apiCore/convertObject";
@@ -54,7 +45,6 @@ const Student = () => {
       });
   }, []);
 
-
   const columns = [
     {
       title: t("Họ và tên"),
@@ -67,30 +57,20 @@ const Student = () => {
       dataIndex: "Dob",
       key: "Dob",
       align: "center",
+      render: (text) => {
+        const name = moment(text).format("DD-MM-YYYY");
+        return <span>{name}</span>;
+      },
     },
     {
       title: t("Cha mẹ"),
       dataIndex: "ParentId",
       key: "ParentId",
       align: "center",
-    },
-    {
-      title: t("Email"),
-      dataIndex: "Email",
-      key: "Email",
-      align: "center",
-    },
-    {
-      title: t("Mật khẩu"),
-      dataIndex: "Password",
-      key: "Password",
-      align: "center",
-    },
-    {
-      title: t("isDeleted"),
-      dataIndex: "isDeleted",
-      key: "isDeleted",
-      align: "center",
+      render: (text) => {
+        const name = listParent?.find((e) => e.Id === text)?.Fullname;
+        return <span>{name}</span>;
+      },
     },
     {
       title: t("Chức năng"),
@@ -131,7 +111,7 @@ const Student = () => {
     formCASign.setFieldsValue({
       Id: record?.Id,
       Fullname: record?.Fullname,
-      Dob: moment(record?.Dob).format('YYYY-MM-DD'),
+      Dob: moment(record?.Dob).format("YYYY-MM-DD"),
       Email: record?.Email,
       Password: record?.Password,
       ParentId: record?.ParentId,
@@ -146,11 +126,11 @@ const Student = () => {
       .then(async (values) => {
         const newData = {
           fullname: values?.Fullname,
-          dob: moment(values?.Dob).format('YYYY-MM-DDTHH:mm:ss'),
-          email: values?.Email,
-          password: values?.Password,
+          dob: moment(values?.Dob).format("YYYY-MM-DDTHH:mm:ss"),
+          Email: "",
+          Password: "",
           parentId: values?.ParentId,
-          isDeleted: true
+          isDeleted: false,
         };
         if (values) {
           const response = await axios.post("/api/Student/Insert", newData);
@@ -179,7 +159,10 @@ const Student = () => {
       .then(async (values) => {
         const newData = {
           ...values,
-          dob:  moment(values?.Dob).format('YYYY-MM-DDTHH:mm:ss'),
+          dob: moment(values?.Dob).format("YYYY-MM-DDTHH:mm:ss"),
+          Email: "",
+          Password: "",
+          isDeleted: false,
         };
         if (values) {
           const response = await axios.post("/api/Student/Update", newData);
@@ -232,7 +215,7 @@ const Student = () => {
       <div className="registration__container">
         <div className="background">
           <div className="background__hook">
-            <h1 className="animate__animated animate__fadeInUp">Student</h1>
+            <h1 className="animate__animated animate__fadeInUp">Học sinh</h1>
           </div>
 
           <div className="scroll">
@@ -242,24 +225,15 @@ const Student = () => {
             </div>
           </div>
         </div>
-        <Form
-          id="form"
-          className="form"
-          form={formCASign}
-          onFinish={handleFinishForm}
-        >
+        <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm}>
           <div className="registration__form">
             <div className="registration__form-wrap">
-              <div className="heading v1 text-center">Student</div>
+              <div className="heading v1 text-center">Học sinh</div>
               <div className="heading v2">Thông Tin</div>
               <Form.Item name={"Id"} hidden></Form.Item>
               <div className="row">
                 <div className="col-lg-4">
-                  <Form.Item
-                    label={"Họ và Tên"}
-                    name={"Fullname"}
-                    className="req"
-                  >
+                  <Form.Item label={"Họ và Tên"} name={"Fullname"} className="req">
                     <Input />
                   </Form.Item>
                 </div>
@@ -270,7 +244,7 @@ const Student = () => {
                 </div>
                 <div className="col-lg-4">
                   <Form.Item label={"Cha mẹ"} name={"ParentId"} className="req">
-                    <Select  className="select--modify" placeholder="Choose">
+                    <Select className="select--modify" placeholder="Choose">
                       {convertToArray(listParent).map((e, key) => (
                         <Option key={key} value={e.Id}>
                           {e.Fullname}
@@ -279,7 +253,7 @@ const Student = () => {
                     </Select>
                   </Form.Item>
                 </div>
-                <div className="col-lg-4">
+                {/* <div className="col-lg-4">
                   <Form.Item label={"Email"} name={"Email"} className="req">
                     <Input />
                   </Form.Item>
@@ -292,24 +266,12 @@ const Student = () => {
                   >
                     <Input.Password />
                   </Form.Item>
-                </div>
-                <div className="col-lg-4"></div>
+                </div> */}
+
                 <div className="col-lg-4">
                   <Form.Item label={"Thao tác"} className="req">
-                    <button
-                      className="btn btn-action"
-                      type="submit"
-                      onClick={
-                        selectedRow
-                          ? handleEditDigitalSignature
-                          : handleAddDigitalSignature
-                      }
-                    >
-                      {selectedRow ? (
-                        <span>{t("Lưu")}</span>
-                      ) : (
-                        <span>{t("Thêm")}</span>
-                      )}
+                    <button className="btn btn-action" type="submit" onClick={selectedRow ? handleEditDigitalSignature : handleAddDigitalSignature}>
+                      {selectedRow ? <span>{t("Lưu")}</span> : <span>{t("Thêm")}</span>}
                     </button>
                   </Form.Item>
                 </div>

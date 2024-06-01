@@ -47,12 +47,12 @@ const Teacher = () => {
       key: "Email",
       align: "center",
     },
-    {
-      title: t("Tài Khoản"),
-      dataIndex: "Username",
-      key: "Username",
-      align: "center",
-    },
+    // {
+    //   title: t("Tài Khoản"),
+    //   dataIndex: "Username",
+    //   key: "Username",
+    //   align: "center",
+    // },
     {
       title: t("Mật khẩu"),
       dataIndex: "Password",
@@ -197,9 +197,9 @@ const Teacher = () => {
           email: values?.Email,
           password: values?.Password,
           subjectType: values?.SubjectType,
-          username: values?.Username,
-          isAdmin: true,
-          status: true,
+          username: "taikhoan",
+          isAdmin: false,
+          status: false,
         };
         if (values) {
           const response = await axios.post("/api/Teacher/Insert", newData);
@@ -230,6 +230,7 @@ const Teacher = () => {
       .then(async (values) => {
         const newData = {
           ...values,
+          username: "taikhoan",
           SubjectType: values?.SubjectType === "Toán" ? "0" : values?.SubjectType === "Văn" ? "1" : values?.SubjectType === "Tiếng Anh" ? "2" : values?.SubjectType,
         };
         if (values) {
@@ -283,7 +284,7 @@ const Teacher = () => {
       <div className="registration__container">
         <div className="background">
           <div className="background__hook">
-            <h1 className="animate__animated animate__fadeInUp">Teacher</h1>
+            <h1 className="animate__animated animate__fadeInUp">Giáo viên</h1>
           </div>
 
           <div className="scroll">
@@ -296,7 +297,7 @@ const Teacher = () => {
         <Form id="form" className="form" form={formCASign} onFinish={handleFinishForm}>
           <div className="registration__form">
             <div className="registration__form-wrap">
-              <div className="heading v1 text-center">Teacher</div>
+              <div className="heading v1 text-center">Giáo viên</div>
               <div className="heading v2">Thông Tin</div>
               <Form.Item name={"Id"} hidden></Form.Item>
               <div className="row">
@@ -316,11 +317,11 @@ const Teacher = () => {
                     <Input />
                   </Form.Item>
                 </div>
-                <div className="col-lg-4">
+                {/* <div className="col-lg-4">
                   <Form.Item label={"Tài Khoản"} name={"Username"} className="req">
                     <Input />
                   </Form.Item>
-                </div>
+                </div> */}
                 <div className="col-lg-4">
                   <Form.Item label={"Mật khẩu"} name={"Password"} className="req">
                     <Input.Password />
@@ -352,7 +353,7 @@ const Teacher = () => {
                     ...e,
                     key: e?.autoId,
                   }))}
-                  pagination={false}
+                  pagination={true}
                   scroll={{
                     x: "100%",
                   }}
