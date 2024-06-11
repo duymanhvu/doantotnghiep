@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 const { Option } = Select;
 const genarateSlotLabel = (value) => {
   if (!value) return "";
-  if (value === "07") {
+  if (value.includes("07")) {
     return (
       <>
         <p>Sáng</p>
@@ -19,7 +19,7 @@ const genarateSlotLabel = (value) => {
       </>
     );
   }
-  if (value === "12") {
+  if (value.includes("12")) {
     return (
       <>
         <p>Chiều</p>
@@ -27,7 +27,7 @@ const genarateSlotLabel = (value) => {
       </>
     );
   }
-  if (value === "17") {
+  if (value.includes("17")) {
     return (
       <>
         <p>Tối</p>

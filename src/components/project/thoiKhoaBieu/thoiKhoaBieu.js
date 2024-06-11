@@ -246,7 +246,7 @@ const ThoiKhoaBieu = () => {
       .post(`/api/Schedule/DeleteSchedules?classId=${autoId}`)
       .then((response) => {
         if (response.data.StatusCode > 0) {
-          toast.error("Xóa thành công");
+          toast.success("Xóa thành công");
         } else {
           toast.error("Xóa thất bại");
         }

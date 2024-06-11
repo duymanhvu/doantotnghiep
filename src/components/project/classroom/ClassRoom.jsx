@@ -71,7 +71,7 @@ const ClassRoom = () => {
       title: t("Thầy dạy"),
       dataIndex: "teacherName",
       key: "teacherName",
-      align: "center", 
+      align: "center",
     },
     {
       title: t("Số lượng học sinh"),
@@ -132,7 +132,6 @@ const ClassRoom = () => {
       });
     handleGetLisDigitalSignature();
   }, []);
-  console.log(listSubject, "setListSubjectsetListSubjectsetListSubject", listTeacher);
 
   const handleGetListTeacher = (value) => {
     const params = {
@@ -174,7 +173,6 @@ const ClassRoom = () => {
         setListData([]);
       });
   };
-  console.log(listData, "listDatalistData");
   const handleEditClick = (record) => {
     setSelectedRow(true);
     formCASign.setFieldsValue({

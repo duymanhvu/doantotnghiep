@@ -57,7 +57,7 @@ const Step3 = ({
           // window.open(link, "_blank");
           window.location.assign(link)
         } else {
-          toast.error(res.data.ErrorMessage);
+          toast.error("Thiếu thông tin nào đó vui lòng kiểm tra lại");
         }
       })
       .catch(function (err) {
